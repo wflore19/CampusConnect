@@ -1,8 +1,26 @@
 # CampusConnect: Building Community on Campus
 
+## Table of Contents
+
+- [Hackathon](#hackathon)
+- [Elevator Pitch](#elevator-pitch)
+- [Track/Alignment](#trackalignment)
+- [Benefits](#benefits)
+- [Mission](#mission)
+- [Core Features](#core-features)
+- [Competitors Analysis](#competitors-analysis)
+- [SWOT Analysis](#swot-analysis)
+- [Pros & Cons](#pros--cons)
+- [Team Members](#team-members)
+- [High-Level Overview Diagram](#high-level-overview-diagram)
+- [Database Entity Relationship Diagram](#database-entity-relationship-diagram)
+- [Privacy and Safety](#privacy-and-safety)
+- [Monetization](#monetization)
+- [Issues](#issues)
+
 ## Hackathon
 
-https://makeuc.io/
+https://makeuc.io/  
 https://makeuc-2024.devpost.com/
 
 ## Elevator Pitch
