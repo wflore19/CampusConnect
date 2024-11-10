@@ -6,10 +6,6 @@ set -e
 # Print commands and their arguments as they are executed
 set -x
 
-# Change to the project directory
-# Replace this with the actual path to your project
-cd /path/to/your/CampusConnect
-
 # Pull the latest changes from GitHub
 git pull origin main
 
