@@ -1,13 +1,14 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 import { useState } from "react";
-import { Search, MapPin, Users } from "react-feather";
+import { Search, MapPin, Users, Book } from "react-feather";
 
 // Add type definitions for the icon components
 type IconProps = React.ComponentProps<"svg"> & { size?: number | string };
 const Icon = ({ size, ...props }: IconProps) => (
   <svg width={size} height={size} {...props} />
 );
-// const BookIcon = (props: IconProps) => <Icon {...props}><Book /></Icon>;
+const BookIcon = (props: IconProps) => <Icon {...props}><Book /></Icon>;
 const MapPinIcon = (props: IconProps) => <Icon {...props}><MapPin /></Icon>;
 const UsersIcon = (props: IconProps) => <Icon {...props}><Users /></Icon>;
 
@@ -38,7 +39,7 @@ const sampleFriends: Friend[] = [
     location: "West Campus",
     interests: ["Sustainability", "Hiking", "Photography"],
     friends: 52,
-    imageUrl: "/images/alex-rivera.jpg"
+    imageUrl: "https://ui-avatars.com/api/?name=Alex+Rivera"
   },
   {
     id: "2",
@@ -48,7 +49,7 @@ const sampleFriends: Friend[] = [
     location: "North Campus",
     interests: ["Robotics", "AI", "Rock Climbing"],
     friends: 38,
-    imageUrl: "/images/mia-thompson.jpg"
+    imageUrl: "https://ui-avatars.com/api/?name=Mia+Thompson"
   },
   {
     id: "3",
@@ -58,7 +59,7 @@ const sampleFriends: Friend[] = [
     location: "Off-campus",
     interests: ["Data Science", "Basketball", "Cooking"],
     friends: 65,
-    imageUrl: "/images/jamal-ahmed.jpg"
+    imageUrl: "https://ui-avatars.com/api/?name=Jamal+Ahmed"
   },
   {
     id: "4",
@@ -68,7 +69,7 @@ const sampleFriends: Friend[] = [
     location: "East Campus",
     interests: ["Medical Research", "Violin", "Volunteering"],
     friends: 23,
-    imageUrl: "/images/sophia-chen.jpg"
+    imageUrl: "https://ui-avatars.com/api/?name=Sophia+Chen"
   },
   {
     id: "5",
@@ -78,7 +79,7 @@ const sampleFriends: Friend[] = [
     location: "South Campus",
     interests: ["Debate", "Model UN", "Writing"],
     friends: 47,
-    imageUrl: "/images/ethan-goldstein.jpg"
+    imageUrl: "https://ui-avatars.com/api/?name=Ethan+Goldstein"
   },
   {
     id: "6",
@@ -88,7 +89,7 @@ const sampleFriends: Friend[] = [
     location: "Art District",
     interests: ["Digital Art", "Photography", "Yoga"],
     friends: 58,
-    imageUrl: "/images/zoe-nguyen.jpg"
+    imageUrl: "https://ui-avatars.com/api/?name=Zoe+Nguyen"
   },
   {
     id: "7",
@@ -98,7 +99,7 @@ const sampleFriends: Friend[] = [
     location: "Engineering Complex",
     interests: ["3D Printing", "Cycling", "Renewable Energy"],
     friends: 31,
-    imageUrl: "/images/lucas-fernandez.jpg"
+    imageUrl: "https://ui-avatars.com/api/?name=Lucas+Fernandez"
   }
 ];
 
@@ -130,11 +131,13 @@ export default function Friends() {
       <div className="space-y-4">
         {filteredFriends.map(friend => (
           <div key={friend.id} className="flex items-start space-x-4 border-b pb-4">
-            {/* <img src={friend.imageUrl} alt={friend.name} className="w-16 h-16 rounded-full object-cover" /> */}
+            <img src={friend.imageUrl} alt={friend.name} className="w-16 h-16 rounded-full object-cover" />
             <div className="flex-grow">
-              <h3 className="font-semibold text-lg">{friend.name}</h3>
+              <Link to={`/friends/${friend.id}`} className="hover:underline">
+                <h3 className="font-semibold text-lg">{friend.name}</h3>
+              </Link>
               <div className="text-sm text-gray-600 flex items-center">
-                {/* <BookIcon size={14} className="mr-1" /> */}
+                <BookIcon size={14} className="mr-1" />
                 <span>{friend.major} - {friend.year}</span>
               </div>
               <div className="text-sm text-gray-600 flex items-center">
