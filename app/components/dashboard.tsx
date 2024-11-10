@@ -142,7 +142,7 @@ Dashboard.NavigationLink = function NavigationLink({
 Dashboard.NavigationList = function NavigationList({
   children,
 }: PropsWithChildren) {
-  return <ul className="flex flex-col gap-2">{children}</ul>;
+  return <ul className="flex flex-col">{children}</ul>;
 };
 
 Dashboard.Page = function Page({
