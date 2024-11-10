@@ -56,17 +56,23 @@ Dashboard.CloseMenuButton = function CloseMenuButton() {
 
 Dashboard.CompanyLogo = function CompanyLogo() {
   return (
-    <Link to="/">
-      <img alt={`Company Wordmark`} height={2} src="/images/logo.png" width={60} />
-      <h1>CampusConnect</h1>
+    <Link to="/" className="flex items-center gap-1">
+      <img 
+        alt="Company Logo" 
+        src="/images/logo.png" 
+        className="h-8 w-auto"
+      />
+      <h1 className="text-xl font-bold text-gray-900">CampusConnect</h1>
     </Link>
   );
 };
 
 const itemClassName = cx(
-  'box-border flex w-full items-center gap-3 rounded-2xl p-3',
-  'hover:text-gray-600',
-  'aria-[current="page"]:bg-primary aria-[current="page"]:text-black aria-[current="page"]:hover:text-gray'
+  'box-border flex w-full items-center gap-3 rounded-lg p-4',
+  'bg-white shadow-sm transition-all duration-200',
+  'hover:bg-blue-50 hover:shadow-md',
+  'aria-[current="page"]:bg-blue-100 aria-[current="page"]:border-l-4 aria-[current="page"]:border-blue-600',
+  'aria-[current="page"]:shadow-md aria-[current="page"]:hover:bg-blue-200'
 );
 
 Dashboard.LogoutForm = function LogoutForm() {
