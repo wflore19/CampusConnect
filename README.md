@@ -118,11 +118,11 @@ The goal of CampusConnect is to connect people with the same interests on a univ
 
 ## High-Level Overview Diagram
 
-![High Level Overview](/images/high_level_overview.png)
+![High Level Overview](images/high_level_overview.png)
 
 ## Database Entity Relationship Diagram
 
-![Database ERD](/images/database_erd.png)
+![Database ERD](images/database_erd.png)
 
 ## Privacy and Safety
 
