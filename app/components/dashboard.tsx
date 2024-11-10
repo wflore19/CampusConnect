@@ -69,15 +69,15 @@ Dashboard.CompanyLogo = function CompanyLogo() {
 
 const itemClassName = cx(
   'box-border flex w-full items-center gap-3 rounded-lg p-4',
-  'bg-white shadow-sm transition-all duration-200',
-  'hover:bg-blue-50 hover:shadow-md',
+  'bg-white transition-all duration-200',
+  'hover:bg-blue-50',
   'aria-[current="page"]:bg-blue-100 aria-[current="page"]:border-l-4 aria-[current="page"]:border-blue-600',
-  'aria-[current="page"]:shadow-md aria-[current="page"]:hover:bg-blue-200'
+  'aria-[current="page"]:hover:bg-blue-200'
 );
 
 Dashboard.LogoutForm = function LogoutForm() {
   return (
-      <Link to="/" className={cx(itemClassName, 'hover:text-primary', 'mt-auto w-full')} type="submit">
+      <Link to="/" className={cx(itemClassName, 'hover:text-red', 'mt-auto w-full')} type="submit">
         <LogOut />
         Log Out
       </Link>
