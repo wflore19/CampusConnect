@@ -1,11 +1,15 @@
-module.exports = {
-  plugins: ["prettier-plugin-tailwindcss"],
-  printWidth: 80,
-  proseWrap: "always",
-  endOfLine: "lf",
-  semi: true,
+
+  /**
+   * @see https://prettier.io/docs/en/configuration.html
+   * @type {import("prettier").Config}
+  */
+ const config = {
+   printWidth: 80,
+   proseWrap: "always",
+   trailingComma: "es5",
+  tabWidth: 4,
+  semi: false,
   singleQuote: true,
-  tailwindConfig: "./config/tailwind/tailwind.config.js",
-  tailwindFunctions: ["cx"],
-  trailingComma: "es5",
 };
+
+module.exports = config;
