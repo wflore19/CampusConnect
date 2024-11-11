@@ -6,6 +6,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
+import { GOOGLE_ANALYTICS } from "./utils/env";
 
 import "./tailwind.css";
 
@@ -23,6 +24,7 @@ export const links: LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+
   return (
     <html lang="en">
       <head>
@@ -35,6 +37,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
+
+        {/* Google Analytics */}
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', ${GOOGLE_ANALYTICS}, {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
+        />
       </body>
     </html>
   );
