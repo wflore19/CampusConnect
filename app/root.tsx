@@ -4,6 +4,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 import { GOOGLE_ANALYTICS } from "./utils/env";
@@ -23,7 +24,12 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export async function loader() {
+  return { GOOGLE_ANALYTICS };
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { GOOGLE_ANALYTICS } = useLoaderData<typeof loader>();
 
   return (
     <html lang="en">
@@ -50,7 +56,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
 
-              gtag('config', ${GOOGLE_ANALYTICS}, {
+              gtag('config', '${GOOGLE_ANALYTICS}', {
                 page_path: window.location.pathname,
               });
             `,
