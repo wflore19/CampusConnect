@@ -11,10 +11,10 @@ export default function DashboardLayout() {
 
   return (
     <Dashboard>
+      <Dashboard.Header />
       <Dashboard.Sidebar>
         <div className="mb-8 flex w-full items-center justify-between">
           <Dashboard.CompanyLogo />
-          <Dashboard.CloseMenuButton />
         </div>
 
         <Dashboard.Navigation>
@@ -46,7 +46,6 @@ export default function DashboardLayout() {
       </Dashboard.Sidebar>
 
       <Dashboard.Page className="max-h-screen overflow-auto">
-        <Dashboard.MenuButton />
         <Outlet />
       </Dashboard.Page>
     </Dashboard>

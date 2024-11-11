@@ -189,3 +189,18 @@ Dashboard.Subheader = function Subheader({ children }: PropsWithChildren) {
 Dashboard.Title = function Title({ children }: PropsWithChildren) {
   return <Text variant="2xl">{children}</Text>;
 };
+
+Dashboard.Header = function Header() {
+  const { open } = useContext(DashboardContext);
+
+  return (
+    <header className={cx("sticky top-0 z-10 bg-white border-b border-gray-200 p-4 md:hidden", open && 'z-0')}>
+      <div className="flex items-center justify-between">
+        {open ? 
+        <Dashboard.CloseMenuButton /> :
+        <Dashboard.MenuButton /> 
+        }
+      </div>
+    </header>
+  );
+};
