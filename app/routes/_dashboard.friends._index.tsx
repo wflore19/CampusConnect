@@ -112,7 +112,7 @@ export default function Friends() {
   );
 
   return (
-    <div className="p-6">
+    <div className="py-6 px-2">
       <h1 className="text-3xl font-bold mb-6">Friends</h1>
       
       <div className="mb-6">

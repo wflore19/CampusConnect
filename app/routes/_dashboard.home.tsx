@@ -11,7 +11,7 @@ export const meta: MetaFunction = () => {
 
 export default function Home() {
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="py-6 px-2 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Welcome to CampusConnect</h1>
       
       <div className="bg-blue-100 p-4 rounded-lg mb-8">

@@ -249,7 +249,7 @@ export default function Events() {
   );
 
   return (
-    <div className="p-6">
+    <div className="py-6 px-2">
       <h1 className="text-3xl font-bold mb-6">Events</h1>
       
       <div className="mb-6">

@@ -262,7 +262,7 @@ export default function EventPage() {
   const { event } = useLoaderData<LoaderData>();
 
   return (
-    <div className="p-6">
+    <div className="py-6 px-2">
       <Text className="text-3xl font-bold mb-4">{event.title}</Text>
       <Divider />
       

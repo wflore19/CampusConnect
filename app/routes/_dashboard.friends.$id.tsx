@@ -116,7 +116,7 @@ export default function FriendProfilePage() {
   const { friend } = useLoaderData<LoaderData>();
 
   return (
-    <div className="p-6">
+    <div className="py-6 px-2">
       <Text className="text-3xl font-bold mb-4">{friend.name}&apos;s Profile</Text>
 
       <Divider />
