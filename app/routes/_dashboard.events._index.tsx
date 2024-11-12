@@ -1,5 +1,6 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+import { db } from "db/src";
 import { useState } from "react";
 import { Search, Calendar, MapPin, Users } from "react-feather";
 
@@ -23,228 +24,51 @@ type Event = {
   location: string;
   imageUrl: string;
   organization: string;
-  friends_going: Friend[];
+  friendsGoing: Friend[];
 };
 
-const sampleEvents: Event[] = [
-  {
-    id: "1",
-    title: "Sunday Service with Maryland Christian Fellowship",
-    date: "Sunday, November 19",
-    time: "11:00 AM",
-    location: "Memorial Garden Chapel",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "MARYLAND CHRISTIAN FELLOWSHIP",
-    friends_going: [
-      { id: "1", name: "Alex Rivera" },
-      { id: "2", name: "Mia Thompson" },
-      { id: "3", name: "Jamal Ahmed" }
-    ]
-  },
-  {
-    id: "2",
-    title: "Sign up for an Alternative Break experience!",
-    date: "Thursday, September 12",
-    time: "12:00 PM",
-    location: "Online",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "Leadership & Community Service-Learning",
-    friends_going: []
-  },
-  {
-    id: "3",
-    title: "Maryland Bhangra Practices",
-    date: "Sunday, November 19",
-    time: "12:00 PM",
-    location: "Adele Gladfelter Rehearsal Studio",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "Maryland Bhangra",
-    friends_going: [
-      { id: "4", name: "Sophia Chen" },
-      { id: "5", name: "Ethan Goldstein" }
-    ]
-  },
-  {
-    id: "4",
-    title: "Worship Service",
-    date: "Sunday, November 19",
-    time: "11:00 AM",
-    location: "Stamp Margaret Brent 2123",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "Oasis",
-    friends_going: [
-      { id: "6", name: "Zoe Nguyen" }
-    ]
-  },
-  {
-    id: "5",
-    title: "Pa'lante Latin Dance Company Performance Team Practice",
-    date: "Sunday, November 19",
-    time: "11:00 AM",
-    location: "Terpzone Activity Room A",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "Pa'lante Latin Dance Company",
-    friends_going: [
-      { id: "2", name: "Mia Thompson" },
-      { id: "3", name: "Jamal Ahmed" },
-      { id: "5", name: "Ethan Goldstein" },
-      { id: "6", name: "Zoe Nguyen" },
-      { id: "7", name: "Lucas Fernandez" }
-    ]
-  },
-  {
-    id: "6",
-    title: "Kairos Sunday Service",
-    date: "Sunday, November 19",
-    time: "11:00 AM",
-    location: "Stamp Prince George's Room",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "Kairos Christian Fellowship",
-    friends_going: []
-  },
-  {
-    id: "7",
-    title: "Chess Club Weekly Meeting",
-    date: "Monday, November 20",
-    time: "6:00 PM",
-    location: "Stamp Student Union Room 1234",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "UMD Chess Club",
-    friends_going: [
-      { id: "1", name: "Alex Rivera" },
-      { id: "7", name: "Lucas Fernandez" }
-    ]
-  },
-  {
-    id: "8",
-    title: "Intro to Python Workshop",
-    date: "Tuesday, November 21",
-    time: "4:00 PM",
-    location: "Computer Science Building Room 1115",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "Computer Science Department",
-    friends_going: [
-      { id: "2", name: "Mia Thompson" },
-      { id: "4", name: "Sophia Chen" },
-      { id: "5", name: "Ethan Goldstein" },
-      { id: "7", name: "Lucas Fernandez" }
-    ]
-  },
-  {
-    id: "9",
-    title: "Terps Basketball Game",
-    date: "Wednesday, November 22",
-    time: "7:30 PM",
-    location: "Xfinity Center",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "Maryland Athletics",
-    friends_going: [
-      { id: "1", name: "Alex Rivera" },
-      { id: "2", name: "Mia Thompson" },
-      { id: "3", name: "Jamal Ahmed" },
-      { id: "4", name: "Sophia Chen" },
-      { id: "5", name: "Ethan Goldstein" },
-      { id: "6", name: "Zoe Nguyen" },
-      { id: "7", name: "Lucas Fernandez" }
-    ]
-  },
-  {
-    id: "10",
-    title: "Environmental Club Campus Cleanup",
-    date: "Saturday, November 25",
-    time: "10:00 AM",
-    location: "McKeldin Mall",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "UMD Environmental Club",
-    friends_going: [
-      { id: "1", name: "Alex Rivera" },
-      { id: "4", name: "Sophia Chen" },
-      { id: "6", name: "Zoe Nguyen" }
-    ]
-  },
-  {
-    id: "11",
-    title: "Career Fair: STEM Industries",
-    date: "Monday, November 27",
-    time: "1:00 PM",
-    location: "Stamp Grand Ballroom",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "University Career Center",
-    friends_going: [
-      { id: "2", name: "Mia Thompson" },
-      { id: "3", name: "Jamal Ahmed" },
-      { id: "4", name: "Sophia Chen" },
-      { id: "5", name: "Ethan Goldstein" },
-      { id: "7", name: "Lucas Fernandez" }
-    ]
-  },
-  {
-    id: "12",
-    title: "Mindfulness Meditation Session",
-    date: "Tuesday, November 28",
-    time: "5:30 PM",
-    location: "Eppley Recreation Center",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "UMD Health Center",
-    friends_going: [
-      { id: "6", name: "Zoe Nguyen" }
-    ]
-  },
-  {
-    id: "13",
-    title: "International Food Festival",
-    date: "Friday, December 1",
-    time: "6:00 PM",
-    location: "Nyumburu Amphitheater",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "International Student Association",
-    friends_going: [
-      { id: "1", name: "Alex Rivera" },
-      { id: "2", name: "Mia Thompson" },
-      { id: "3", name: "Jamal Ahmed" },
-      { id: "4", name: "Sophia Chen" },
-      { id: "5", name: "Ethan Goldstein" },
-      { id: "6", name: "Zoe Nguyen" },
-      { id: "7", name: "Lucas Fernandez" }
-    ]
-  },
-  {
-    id: "14",
-    title: "Hackathon: Build for Social Good",
-    date: "Saturday, December 2",
-    time: "9:00 AM",
-    location: "Iribe Center",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "Technica",
-    friends_going: [
-      { id: "2", name: "Mia Thompson" },
-      { id: "4", name: "Sophia Chen" },
-      { id: "5", name: "Ethan Goldstein" },
-      { id: "7", name: "Lucas Fernandez" }
-    ]
-  },
-  {
-    id: "15",
-    title: "A Cappella Showcase",
-    date: "Sunday, December 3",
-    time: "7:00 PM",
-    location: "Clarice Smith Performing Arts Center",
-    imageUrl: "https://random.imagecdn.app/400/400",
-    organization: "UMD A Cappella Council",
-    friends_going: [
-      { id: "1", name: "Alex Rivera" },
-      { id: "3", name: "Jamal Ahmed" },
-      { id: "4", name: "Sophia Chen" },
-      { id: "6", name: "Zoe Nguyen" },
-      { id: "7", name: "Lucas Fernandez" }
-    ]
-  }
-];
+export const loader: LoaderFunction = async () => {
+  const events = await db
+    .selectFrom('events')
+    .leftJoin('eventAttendees', 'events.id', 'eventAttendees.eventId')
+    .select([
+      'events.id',
+      'events.title',
+      'events.date',
+      'events.time',
+      'events.location',
+      'events.imageUrl',
+      'events.organization',
+    ])
+    .select(db.fn.count('eventAttendees.userId').as('attendeesCount'))
+    .groupBy('events.id')
+    .execute();
+
+  // Fetch friends going for each event
+  const eventsWithFriends = await Promise.all(
+    events.map(async (event) => {
+      const friendsGoing = await db
+        .selectFrom('users')
+        .innerJoin('eventAttendees', 'users.id', 'eventAttendees.userId')
+        .select(['users.id', 'users.name'])
+        .where('eventAttendees.eventId', '=', event.id)
+        .execute();
+
+      return {
+        ...event,
+        friendsGoing
+      };
+    })
+  );
+
+  return { events: eventsWithFriends };
+};
 
 export default function Events() {
+  const { events } = useLoaderData<typeof loader>();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredEvents = sampleEvents.filter(event =>
+  const filteredEvents = events.filter((event: Event) =>
     event.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -266,7 +90,7 @@ export default function Events() {
       </div>
 
       <div className="space-y-4">
-      {filteredEvents.map(event => (
+      {filteredEvents.map((event: Event) => (
   <div key={event.id} className="flex items-start space-x-4 border-b pb-4">
     <div className="w-1/4 min-w-[100px] max-w-[400px]">
       <img 
@@ -288,11 +112,11 @@ export default function Events() {
         <span>{event.location}</span>
       </div>
       <div className="text-sm text-gray-600 mt-1">{event.organization}</div>
-      {event.friends_going.length > 0 && (
+      {event.friendsGoing.length > 0 && (
         <div className="text-sm text-gray-600 mt-1 flex items-center">
           <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
           <Users size={14} className="mr-1" />
-          <span>{event.friends_going.length} friend{event.friends_going.length > 1 ? 's' : ''} going</span>
+          <span>{event.friendsGoing.length} friend{event.friendsGoing.length > 1 ? 's' : ''} going</span>
         </div>
       )}
     </div>

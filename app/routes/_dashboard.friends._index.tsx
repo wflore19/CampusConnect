@@ -1,5 +1,6 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+import { db } from "db/src";
 import { useState } from "react";
 import { Search, MapPin, Users, Book } from "react-feather";
 
@@ -30,83 +31,39 @@ type Friend = {
   imageUrl: string;
 };
 
-const sampleFriends: Friend[] = [
-  {
-    id: "1",
-    name: "Alex Rivera",
-    major: "Environmental Science",
-    year: "Junior",
-    location: "West Campus",
-    interests: ["Sustainability", "Hiking", "Photography"],
-    friends: 52,
-    imageUrl: "https://ui-avatars.com/api/?name=Alex+Rivera"
-  },
-  {
-    id: "2",
-    name: "Mia Thompson",
-    major: "Computer Engineering",
-    year: "Sophomore",
-    location: "North Campus",
-    interests: ["Robotics", "AI", "Rock Climbing"],
-    friends: 38,
-    imageUrl: "https://ui-avatars.com/api/?name=Mia+Thompson"
-  },
-  {
-    id: "3",
-    name: "Jamal Ahmed",
-    major: "Business Analytics",
-    year: "Senior",
-    location: "Off-campus",
-    interests: ["Data Science", "Basketball", "Cooking"],
-    friends: 65,
-    imageUrl: "https://ui-avatars.com/api/?name=Jamal+Ahmed"
-  },
-  {
-    id: "4",
-    name: "Sophia Chen",
-    major: "Biomedical Engineering",
-    year: "Freshman",
-    location: "East Campus",
-    interests: ["Medical Research", "Violin", "Volunteering"],
-    friends: 23,
-    imageUrl: "https://ui-avatars.com/api/?name=Sophia+Chen"
-  },
-  {
-    id: "5",
-    name: "Ethan Goldstein",
-    major: "Political Science",
-    year: "Junior",
-    location: "South Campus",
-    interests: ["Debate", "Model UN", "Writing"],
-    friends: 47,
-    imageUrl: "https://ui-avatars.com/api/?name=Ethan+Goldstein"
-  },
-  {
-    id: "6",
-    name: "Zoe Nguyen",
-    major: "Graphic Design",
-    year: "Senior",
-    location: "Art District",
-    interests: ["Digital Art", "Photography", "Yoga"],
-    friends: 58,
-    imageUrl: "https://ui-avatars.com/api/?name=Zoe+Nguyen"
-  },
-  {
-    id: "7",
-    name: "Lucas Fernandez",
-    major: "Mechanical Engineering",
-    year: "Sophomore",
-    location: "Engineering Complex",
-    interests: ["3D Printing", "Cycling", "Renewable Energy"],
-    friends: 31,
-    imageUrl: "https://ui-avatars.com/api/?name=Lucas+Fernandez"
-  }
-];
+export const loader: LoaderFunction = async () => {
+  const friends = await db
+    .selectFrom('users')
+    .leftJoin('friendships', 'users.id', 'friendships.user_id')
+    .select([
+      'users.id',
+      'users.name',
+      'users.email',
+      'users.image_url as imageUrl',
+      'users.major',
+      'users.year',
+      'users.location',
+      'users.interests',
+    ])
+    .select(() => [
+      db.fn.count('friendships.friend_id').as('friendCount')
+    ])
+    .groupBy('users.id')
+    .execute();
+
+  const parsedFriends = friends.map(friend => ({
+    ...friend,
+    friends: Number(friend.friendCount)
+  }));
+
+  return { friends: parsedFriends };
+};
 
 export default function Friends() {
+  const { friends } = useLoaderData<typeof loader>();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredFriends = sampleFriends.filter(friend =>
+  const filteredFriends = friends.filter((friend: Friend) =>
     friend.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     friend.major.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -129,7 +86,7 @@ export default function Friends() {
       </div>
 
       <div className="space-y-4">
-        {filteredFriends.map(friend => (
+        {filteredFriends.map((friend: Friend) => (
           <div key={friend.id} className="flex items-start space-x-4 border-b pb-4">
             <img src={friend.imageUrl} alt={friend.name} className="w-16 h-16 rounded-full object-cover" />
             <div className="flex-grow">

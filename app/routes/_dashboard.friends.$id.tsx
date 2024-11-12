@@ -2,7 +2,8 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Text } from '~/components/text';
 import { Divider } from '~/components/divider';
-import { MapPin, Users } from "react-feather";
+import { MapPin } from "react-feather";
+import { db } from "db/src";
 
 type Friend = {
   id: string;
@@ -15,86 +16,31 @@ type Friend = {
   imageUrl: string;
 };
 
-const sampleFriends: Friend[] = [
-  {
-    id: "1",
-    name: "Alex Rivera",
-    major: "Environmental Science",
-    year: "Junior",
-    location: "West Campus",
-    interests: ["Sustainability", "Hiking", "Photography"],
-    friends: 52,
-    imageUrl: "https://ui-avatars.com/api/?name=Alex+Rivera"
-  },
-  {
-    id: "2",
-    name: "Mia Thompson",
-    major: "Computer Engineering",
-    year: "Sophomore",
-    location: "North Campus",
-    interests: ["Robotics", "AI", "Rock Climbing"],
-    friends: 38,
-    imageUrl: "https://ui-avatars.com/api/?name=Mia+Thompson"
-  },
-  {
-    id: "3",
-    name: "Jamal Ahmed",
-    major: "Business Analytics",
-    year: "Senior",
-    location: "Off-campus",
-    interests: ["Data Science", "Basketball", "Cooking"],
-    friends: 65,
-    imageUrl: "https://ui-avatars.com/api/?name=Jamal+Ahmed"
-  },
-  {
-    id: "4",
-    name: "Sophia Chen",
-    major: "Biomedical Engineering",
-    year: "Freshman",
-    location: "East Campus",
-    interests: ["Medical Research", "Violin", "Volunteering"],
-    friends: 23,
-    imageUrl: "https://ui-avatars.com/api/?name=Sophia+Chen"
-  },
-  {
-    id: "5",
-    name: "Ethan Goldstein",
-    major: "Political Science",
-    year: "Junior",
-    location: "South Campus",
-    interests: ["Debate", "Model UN", "Writing"],
-    friends: 47,
-    imageUrl: "https://ui-avatars.com/api/?name=Ethan+Goldstein"
-  },
-  {
-    id: "6",
-    name: "Zoe Nguyen",
-    major: "Graphic Design",
-    year: "Senior",
-    location: "Art District",
-    interests: ["Digital Art", "Photography", "Yoga"],
-    friends: 58,
-    imageUrl: "https://ui-avatars.com/api/?name=Zoe+Nguyen"
-  },
-  {
-    id: "7",
-    name: "Lucas Fernandez",
-    major: "Mechanical Engineering",
-    year: "Sophomore",
-    location: "Engineering Complex",
-    interests: ["3D Printing", "Cycling", "Renewable Energy"],
-    friends: 31,
-    imageUrl: "https://ui-avatars.com/api/?name=Lucas+Fernandez"
-  }
-];
-
-
 type LoaderData = {
   friend: Friend;
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
-  const friend = sampleFriends.find(f => f.id === params.id);
+  const friendId = params.id;
+
+  if (!friendId) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  const friend = await db
+    .selectFrom('users')
+    .select([
+      'id',
+      'name',
+      'email',
+      'imageUrl',
+      'major',
+      'year',
+      'location',
+      'interests'
+    ])
+    .where('id', '=', friendId)
+    .executeTakeFirst();
 
   if (!friend) {
     throw new Response("Friend not found", { status: 404 });
@@ -142,11 +88,6 @@ export default function FriendProfilePage() {
         <div>
           <Text className="font-semibold">Interests</Text>
           <Text>{friend.interests.join(", ")}</Text>
-        </div>
-        
-        <div className="flex items-center">
-          <Users size={16} className="mr-2" />
-          <Text>{friend.friends} friends</Text>
         </div>
       </div>
     </div>
