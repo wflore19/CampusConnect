@@ -171,7 +171,7 @@ Dashboard.Sidebar = function Sidebar({ children }: PropsWithChildren) {
         'fixed left-0 h-screen w-[270px] flex-col items-start gap-4 overflow-auto border-r border-r-gray-200 bg-blue-900 text-white',
         'md:flex',
         open
-          ? 'z-10 flex w-[calc(100%-4rem)] animate-[slide-from-left_300ms] bg-white md:hidden'
+          ? 'z-10 flex w-[calc(100%-4rem)] animate-[slide-from-left_300ms] md:hidden'
           : 'hidden'
       )}
     >
