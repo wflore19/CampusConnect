@@ -56,23 +56,21 @@ Dashboard.CloseMenuButton = function CloseMenuButton() {
 
 Dashboard.CompanyLogo = function CompanyLogo() {
   return (
-    <Link to="/" className="flex items-center gap-1">
+    <Link to="/" className="flex items-center gap-1 p-6">
       <img 
         alt="Company Logo" 
         src="/images/logo.png" 
         className="h-8 w-auto"
       />
-      <h1 className="text-xl font-bold text-gray-900">CampusConnect</h1>
     </Link>
   );
 };
 
 const itemClassName = cx(
-  'box-border flex w-full items-center gap-3 rounded-lg p-4',
-  'bg-white transition-all duration-200',
-  'hover:bg-blue-50',
-  'aria-[current="page"]:bg-blue-100 aria-[current="page"]:border-l-4 aria-[current="page"]:border-blue-600',
-  'aria-[current="page"]:hover:bg-blue-200'
+  'box-border flex w-full items-center gap-3 p-4',
+  'transition-all duration-200',
+  'hover:bg-blue-100 hover:text-black',
+  'aria-[current="page"]:bg-blue-600 aria-[current="page"]:border-l-4 aria-[current="page"]:hover:text-white',
 );
 
 Dashboard.LogoutForm = function LogoutForm() {
@@ -170,7 +168,7 @@ Dashboard.Sidebar = function Sidebar({ children }: PropsWithChildren) {
   return (
     <aside
       className={cx(
-        'fixed left-0 h-screen w-[270px] flex-col items-start gap-4 overflow-auto border-r border-r-gray-200 p-6',
+        'fixed left-0 h-screen w-[270px] flex-col items-start gap-4 overflow-auto border-r border-r-gray-200 bg-blue-900 text-white',
         'md:flex',
         open
           ? 'z-10 flex w-[calc(100%-4rem)] animate-[slide-from-left_300ms] bg-white md:hidden'

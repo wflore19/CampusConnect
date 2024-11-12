@@ -10,7 +10,7 @@ export function Divider({ my }: DividerProps) {
   return (
     <hr
       className={cx(
-        'm-0 w-full border border-gray-100',
+        'm-0 w-full border border-white border-opacity-35',
 
         match(my)
           .with('2', () => 'my-2')

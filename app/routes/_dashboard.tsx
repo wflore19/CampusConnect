@@ -20,9 +20,6 @@ export default function DashboardLayout() {
         <Dashboard.Navigation>
           <Dashboard.NavigationList>
               <>
-                <div className="my-2">
-                  <Divider />
-                </div>
                 <Dashboard.NavigationLink
                   icon={<Layers />}
                   label={`Home`}
