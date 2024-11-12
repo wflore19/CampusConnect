@@ -11,6 +11,7 @@ import { GOOGLE_ANALYTICS } from "./utils/env";
 
 import "./tailwind.css";
 import { useEffect } from "react";
+import { GoogleAnalytics } from "./components/google-analytics";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -43,25 +44,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         {children}
         <Scripts />
-
-        {/* Google Analytics */}
-        <script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS}`}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-
-              gtag('config', '${GOOGLE_ANALYTICS}', {
-                page_path: window.location.pathname,
-              });
-            `,
-          }}
-        />
+        <GoogleAnalytics GoogleAnalyticsId={GOOGLE_ANALYTICS} />
       </body>
     </html>
   );
