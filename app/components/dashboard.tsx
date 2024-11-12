@@ -45,7 +45,7 @@ Dashboard.CloseMenuButton = function CloseMenuButton() {
   return (
     <div className="md:hidden">
       <IconButton
-        backgroundColorOnHover="gray-100"
+        className='text-white'
         icon={<X />}
         onClick={onClick}
         shape="circle"
@@ -91,8 +91,7 @@ Dashboard.MenuButton = function MenuButton() {
 
   return (
     <IconButton
-      backgroundColorOnHover="gray-100"
-      className="flex h-fit w-fit md:hidden"
+      className="flex h-fit w-fit md:hidden text-white"
       icon={<Menu />}
       onClick={onClick}
       shape="circle"
@@ -192,7 +191,7 @@ Dashboard.Header = function Header() {
   const { open } = useContext(DashboardContext);
 
   return (
-    <header className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4 md:hidden">
+    <header className="sticky top-0 z-10 bg-blue-900 border-b border-gray-100 border-opacity-25 p-4 md:hidden">
       <div className="flex items-center justify-between">
         {open ? 
         <Dashboard.CloseMenuButton /> :
