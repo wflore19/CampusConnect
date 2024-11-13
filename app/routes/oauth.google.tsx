@@ -26,7 +26,6 @@ export const loader: LoaderFunction = async ({ request }) => {
             .selectAll()
             .where('email', '=', googleUser.email)
             .executeTakeFirst();
-        console.log(existingUser, '🐞');
 
         if (existingUser) {
             const authToken = signToken(
@@ -38,7 +37,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
             const url = new URL(session.get('redirect_url') || '/home');
             url.searchParams.set('token', authToken);
-            console.log(url, '🪲');
 
             return redirect(url.toString(), {
                 headers: {
