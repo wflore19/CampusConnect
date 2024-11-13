@@ -2,10 +2,10 @@ import type { LoaderFunction } from '@remix-run/node';
 import { Link, redirect, useLoaderData } from '@remix-run/react';
 import { getGoogleAuthURL } from '../utils/auth';
 import { GoogleButton } from '~/components/google-button';
-import { ensureUserAuthenticated, user } from '~/utils/session.server';
+import { getSession, user } from '~/utils/session.server';
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const session = await ensureUserAuthenticated(request);
+    const session = await getSession(request);
     const id = user(session);
 
     if (id) {
