@@ -4,6 +4,7 @@ import { commitSession, getSession } from '~/utils/session.server';
 import { getGoogleUser, signToken } from '~/utils/auth';
 import { db } from 'db/src';
 import { uploadImageFromCDN } from '~/utils/s3-config.server';
+import { APP_URL } from '~/utils/env';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);
@@ -36,10 +37,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
             session.set('user_id', existingUser.id);
 
-            const url = new URL(session.get('redirect_url') || '/home');
-            url.searchParams.set('token', authToken);
+            const redirectUrl = new URL(`${APP_URL}/home`);
+            redirectUrl.searchParams.set('token', authToken);
 
-            return redirect(url.toString(), {
+            return redirect(redirectUrl.toString(), {
                 headers: {
                     'Set-Cookie': await commitSession(session),
                 },
@@ -84,15 +85,16 @@ export const loader: LoaderFunction = async ({ request }) => {
 
             session.set('user_id', newUser.id);
 
-            const redirectUrl = session.get('redirect_url') || '/home';
+            const redirectUrl = new URL(`${APP_URL}/home`);
 
-            return redirect(redirectUrl, {
+            return redirect(redirectUrl.toString(), {
                 headers: {
                     'Set-Cookie': await commitSession(session),
                 },
             });
         }
     } catch (e) {
+        console.error(e);
         session.flash('error', (e as Error).message);
         return redirect('/login', {
             headers: {
