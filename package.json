@@ -17,6 +17,8 @@
     "types": "kysely-codegen --dialect=postgres --camel-case --out-file=./db/src/dist/db.d.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.689.0",
+    "@aws-sdk/lib-storage": "^3.689.0",
     "@remix-run/node": "^2.14.0",
     "@remix-run/react": "^2.14.0",
     "@remix-run/serve": "^2.14.0",
@@ -26,6 +28,7 @@
     "jsonwebtoken": "^9.0.2",
     "kysely": "^0.27.4",
     "pg": "^8.13.1",
+    "prettier-plugin-tailwindcss": "^0.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",

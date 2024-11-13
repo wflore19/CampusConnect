@@ -1,50 +1,55 @@
 import { Dashboard } from '../components/dashboard';
-import { Divider } from '../components/divider'
+import { Divider } from '../components/divider';
 import { Outlet } from '@remix-run/react';
-import {
-  Calendar,
-  Layers,
-  User,
-} from 'react-feather';
+import { Calendar, Layers, User } from 'react-feather';
 
 export default function DashboardLayout() {
+    return (
+        <Dashboard>
+            <Dashboard.Header />
+            <Dashboard.Sidebar>
+                <div className="mb-8 flex w-full items-center justify-between">
+                    <Dashboard.CompanyLogo />
+                </div>
 
-  return (
-    <Dashboard>
-      <Dashboard.Header />
-      <Dashboard.Sidebar>
-        <div className="mb-8 flex w-full items-center justify-between">
-          <Dashboard.CompanyLogo />
-        </div>
+                <Dashboard.Navigation>
+                    <Dashboard.NavigationList>
+                        <>
+                            <Dashboard.NavigationLink
+                                icon={<Layers />}
+                                label={`Home`}
+                                pathname={'/home'}
+                            />
+                            <Dashboard.NavigationLink
+                                icon={<Calendar />}
+                                label="Events"
+                                pathname={'/events'}
+                            />
+                            <Dashboard.NavigationLink
+                                icon={<User />}
+                                label="Friends"
+                                pathname={'/friends'}
+                            />
 
-        <Dashboard.Navigation>
-          <Dashboard.NavigationList>
-              <>
-                <Dashboard.NavigationLink
-                  icon={<Layers />}
-                  label={`Home`}
-                  pathname={'/home'}
-                />
-                <Dashboard.NavigationLink
-                  icon={<Calendar />}
-                  label="Events"
-                  pathname={'/events'}
-                />
-                <Dashboard.NavigationLink
-                  icon={<User />}
-                  label="Friends"
-                  pathname={'/friends'}
-                />
-              </>
-          </Dashboard.NavigationList>
-        </Dashboard.Navigation>
+                            <div className="mb-2 mt-10">
+                                <Divider />
+                            </div>
 
-        <Dashboard.LogoutForm />
-      </Dashboard.Sidebar>
+                            <Dashboard.NavigationLink
+                                icon={<User />}
+                                label="Profile"
+                                pathname={'/profile'}
+                            />
+                        </>
+                    </Dashboard.NavigationList>
+                </Dashboard.Navigation>
 
-      <Dashboard.Page className="overflow-auto">
-        <Outlet />
-      </Dashboard.Page>
-    </Dashboard>
-  );
+                <Dashboard.LogoutForm />
+            </Dashboard.Sidebar>
+
+            <Dashboard.Page className="overflow-auto">
+                <Outlet />
+            </Dashboard.Page>
+        </Dashboard>
+    );
 }
