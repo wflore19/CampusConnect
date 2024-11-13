@@ -34,19 +34,19 @@ type Friend = {
 export const loader: LoaderFunction = async () => {
   const friends = await db
     .selectFrom('users')
-    .leftJoin('friendships', 'users.id', 'friendships.user_id')
+    .leftJoin('friendships', 'users.id', 'friendships.userId')
     .select([
       'users.id',
       'users.name',
       'users.email',
-      'users.image_url as imageUrl',
+      'users.imageUrl',
       'users.major',
       'users.year',
       'users.location',
       'users.interests',
     ])
     .select(() => [
-      db.fn.count('friendships.friend_id').as('friendCount')
+      db.fn.count('friendships.friendId').as('friendCount')
     ])
     .groupBy('users.id')
     .execute();
