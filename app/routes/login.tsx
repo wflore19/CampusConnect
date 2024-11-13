@@ -4,12 +4,19 @@ import { getGoogleAuthURL } from '../utils/auth';
 import { GoogleButton } from '~/components/google-button';
 import { getSession, user } from '~/utils/session.server';
 import { Header } from '~/components/header';
+import { db } from 'db/src';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const session = await getSession(request);
-    const id = user(session);
+    const id: string = user(session);
 
-    if (id) {
+    const existingUser = await db
+        .selectFrom('users')
+        .selectAll()
+        .where('id', '=', id)
+        .executeTakeFirst();
+
+    if (existingUser) {
         return redirect('/home');
     }
 
