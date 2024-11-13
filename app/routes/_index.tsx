@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { db } from 'db/src';
+import { Header } from '~/components/header';
 import { getSession, user } from '~/utils/session.server';
 
 export const meta: MetaFunction = () => {
@@ -36,47 +37,7 @@ export default function Index() {
 
     return (
         <div className="flex min-h-screen flex-col bg-white text-gray-800">
-            <header className="bg-blue-600 py-4 sm:py-6">
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-col items-center justify-between sm:flex-row">
-                        <div className="mb-4 text-center sm:mb-0 sm:text-left">
-                            <h1 className="text-3xl font-bold text-white sm:text-4xl">
-                                CampusConnect
-                            </h1>
-                            <p className="mt-1 text-lg text-white sm:mt-2 sm:text-xl">
-                                Building Community on Campus
-                            </p>
-                        </div>
-                        {name ? (
-                            <div className="flex items-center space-x-4">
-                                <img
-                                    src={
-                                        imageUrl
-                                            ? imageUrl
-                                            : 'https://ui-avatars.com/api/?name=' +
-                                              name
-                                    }
-                                    alt=""
-                                    className="h-8 w-8 rounded-full object-cover"
-                                />
-                                <Link
-                                    to="/home"
-                                    className="rounded bg-white px-4 py-2 text-sm font-bold text-blue-600 transition duration-300 hover:bg-blue-50 sm:text-base"
-                                >
-                                    Go to Dashboard
-                                </Link>
-                            </div>
-                        ) : (
-                            <Link
-                                to="/login"
-                                className="rounded bg-white px-4 py-2 text-sm font-bold text-blue-600 transition duration-300 hover:bg-blue-50 sm:text-base"
-                            >
-                                Log In
-                            </Link>
-                        )}
-                    </div>
-                </div>
-            </header>
+            <Header name={name} imageUrl={imageUrl} />
 
             <main className="container mx-auto flex-grow px-4 py-8">
                 {/* Hero Section */}
