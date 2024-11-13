@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { db } from 'db/src';
+import { Footer } from '~/components/footer';
 import { Header } from '~/components/header';
 import { getSession, user } from '~/utils/session.server';
 
@@ -101,11 +102,7 @@ export default function Index() {
                 </section>
             </main>
 
-            <footer className="mt-auto bg-gray-100 py-6">
-                <div className="container mx-auto px-4 text-center text-gray-600">
-                    <p>&copy; 2023 CampusConnect. All rights reserved.</p>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }

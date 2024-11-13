@@ -1,3 +1,4 @@
+import { Footer } from '~/components/footer';
 import { Header } from '~/components/header';
 
 export default function PrivacyPolicy() {
@@ -357,6 +358,7 @@ export default function PrivacyPolicy() {
                     </li>
                 </ol>
             </main>
+            <Footer />
         </div>
     );
 }
