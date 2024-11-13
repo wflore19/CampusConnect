@@ -3,6 +3,7 @@ import { redirect } from '@remix-run/node';
 import { commitSession, getSession } from '~/utils/session.server';
 import { getGoogleUser, signToken } from '~/utils/auth';
 import { db } from 'db/src';
+import { uploadImageFromCDN } from '~/utils/s3-config.server';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);
@@ -44,11 +45,25 @@ export const loader: LoaderFunction = async ({ request }) => {
                 },
             });
         } else if (!existingUser) {
+            const spacesImageUrl = await uploadImageFromCDN(
+                googleUser.picture,
+                `${googleUser.email}-${new Date()}.png`
+            );
+
+            if (!spacesImageUrl) {
+                throw new Error('Failed to upload image');
+            }
+
+            const cdnSpacesImageUrl = spacesImageUrl.replace(
+                'nyc3.digitaloceanspaces',
+                'nyc3.cdn.digitaloceanspaces'
+            );
+
             await db
                 .insertInto('users')
                 .values({
                     email: googleUser.email,
-                    imageUrl: googleUser.picture,
+                    imageUrl: cdnSpacesImageUrl,
                     interests: [],
                     location: '',
                     major: '',
