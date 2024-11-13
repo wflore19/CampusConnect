@@ -27,7 +27,7 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader() {
-    if (!GOOGLE_ANALYTICS) return { GOOGLE_ANALYTICS: '' };
+    if (!GOOGLE_ANALYTICS) return { GOOGLE_ANALYTICS: '_' };
 
     return { GOOGLE_ANALYTICS };
 }
