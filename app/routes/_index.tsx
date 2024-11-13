@@ -55,10 +55,10 @@ export default function Index() {
           <h2 className="text-3xl font-bold mb-4 text-green-800">Ready to Connect?</h2>
           <p className="mb-8 text-xl text-gray-700">Join CampusConnect today and start building meaningful connections on your campus.</p>
           <div className="space-x-4">
-            <Link to="/home" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
+            <Link to="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
               Log In
             </Link>
-            <Link to="/home" className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
+            <Link to="/signup" className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
               Sign Up
             </Link>
           </div>
