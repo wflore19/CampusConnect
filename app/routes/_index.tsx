@@ -1,11 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { db } from 'db/src';
-import {
-    ensureUserAuthenticated,
-    getSession,
-    user,
-} from '~/utils/session.server';
+import { ensureUserAuthenticated, user } from '~/utils/session.server';
 
 export const meta: MetaFunction = () => {
     return [
