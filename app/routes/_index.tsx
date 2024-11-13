@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { db } from 'db/src';
-import { ensureUserAuthenticated, user } from '~/utils/session.server';
+import { getSession, user } from '~/utils/session.server';
 
 export const meta: MetaFunction = () => {
     return [
@@ -15,7 +15,7 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-    const session = await ensureUserAuthenticated(request);
+    const session = await getSession(request);
     const id = await user(session);
 
     const profile = await db
@@ -25,7 +25,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .executeTakeFirst();
 
     if (!profile) {
-        throw new Error('User not found');
+        return {};
     }
 
     return { name: profile.name, imageUrl: profile.imageUrl };
