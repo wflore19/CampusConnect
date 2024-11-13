@@ -39,7 +39,7 @@ export default function Home() {
 
     return (
         <div className="mx-auto max-w-4xl px-2 py-6">
-            <h1 className="mb-6 text-3xl font-bold">
+            <div className="mb-6 text-3xl font-bold">
                 Welcome to CampusConnect, {name}{' '}
                 <span>
                     <img
@@ -48,7 +48,7 @@ export default function Home() {
                         className="h-16 w-16 rounded-full object-cover"
                     />
                 </span>
-            </h1>
+            </div>
 
             <div className="mb-8 rounded-lg bg-blue-100 p-4">
                 <p className="text-lg">
