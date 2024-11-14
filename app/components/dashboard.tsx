@@ -167,11 +167,12 @@ Dashboard.Sidebar = function Sidebar({ children }: PropsWithChildren) {
     return (
         <aside
             className={cx(
-                'fixed left-0 min-h-[calc(100%-65px)] w-[270px] flex-col items-start gap-4 overflow-auto border-r border-r-gray-200 bg-blue-900 text-white md:min-h-screen',
-                'md:flex',
+                'fixed left-0 min-h-[calc(100%-65px)] w-0 flex-col items-start gap-4 overflow-auto md:w-[270px]',
+                'border-r border-r-gray-200 bg-blue-900 text-white md:flex md:min-h-screen',
+                'transition-all ease-in-out',
                 open
-                    ? 'z-10 flex w-[calc(100%-4rem)] animate-[slide-from-left_300ms] md:hidden'
-                    : 'hidden'
+                    ? 'z-10 flex w-[calc(100%-4rem)] animate-[slide-from-left_300ms] duration-300 md:hidden'
+                    : 'w-[0px] duration-200'
             )}
         >
             {children}
