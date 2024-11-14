@@ -18,9 +18,7 @@ export function Header({ name = '', imageUrl = '' }: HeaderProps) {
                                 className="h-6 w-auto md:h-12"
                             />
                         </Link>
-                        <h1 className="text-2xl text-white sm:text-4xl md:text-3xl">
-                            CampusConnect
-                        </h1>
+                        <h1 className="text-xl text-white">CampusConnect</h1>
                     </div>
                     {name ? (
                         <div className="flex items-center space-x-4">

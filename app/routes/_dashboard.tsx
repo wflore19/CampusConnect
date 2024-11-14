@@ -8,8 +8,9 @@ export default function DashboardLayout() {
         <Dashboard>
             <Dashboard.Header />
             <Dashboard.Sidebar>
-                <div className="mb-8 flex w-full items-center justify-between">
+                <div className="mb-8 flex w-full items-center gap-1 p-6">
                     <Dashboard.CompanyLogo />
+                    <div className="text-xl text-white">CampusConnect</div>
                 </div>
 
                 <Dashboard.Navigation>
