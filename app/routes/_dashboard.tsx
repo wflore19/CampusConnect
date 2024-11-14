@@ -1,7 +1,15 @@
+import { LoaderFunction } from '@remix-run/node';
 import { Dashboard } from '../components/dashboard';
 import { Divider } from '../components/divider';
 import { Outlet } from '@remix-run/react';
 import { Calendar, Layers, User } from 'react-feather';
+import { ensureUserAuthenticated } from '~/utils/session.server';
+
+export const loader: LoaderFunction = async ({ request }) => {
+    await ensureUserAuthenticated(request);
+
+    return {};
+};
 
 export default function DashboardLayout() {
     return (
