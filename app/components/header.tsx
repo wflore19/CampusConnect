@@ -9,7 +9,7 @@ export function Header({ name = '', imageUrl = '' }: HeaderProps) {
     return (
         <header className="bg-blue-600 py-4 sm:py-6">
             <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between sm:flex-row">
+                <div className="flex flex-col items-center justify-between sm:flex-row md:flex-row">
                     <div className="mb-4 flex text-center sm:mb-0 sm:text-left">
                         <Link to="/" className="pr-2 pt-1">
                             <img
