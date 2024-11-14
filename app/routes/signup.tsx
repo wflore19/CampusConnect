@@ -34,7 +34,9 @@ export default function SignUp() {
                         </h1>
                         <div>
                             {!!googleAuthUrl && (
-                                <GoogleButton href={googleAuthUrl} />
+                                <GoogleButton href={googleAuthUrl}>
+                                    Sign up
+                                </GoogleButton>
                             )}
                         </div>
                     </div>

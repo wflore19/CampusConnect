@@ -40,7 +40,9 @@ export default function LoginPage() {
                     </h1>
                     <div>
                         {!!googleAuthUrl && (
-                            <GoogleButton href={googleAuthUrl} />
+                            <GoogleButton href={googleAuthUrl}>
+                                Log in
+                            </GoogleButton>
                         )}
                     </div>
                 </div>
