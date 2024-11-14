@@ -10,8 +10,8 @@ export function Header({ name = '', imageUrl = '' }: HeaderProps) {
         <header className="bg-blue-600 py-4 sm:py-6">
             <div className="container mx-auto px-4">
                 <div className="flex flex-row items-center justify-between">
-                    <div className="flex">
-                        <Link to="/" className="pr-2 pt-1">
+                    <div className="flex items-center">
+                        <Link to="/" className="pr-1">
                             <img
                                 alt="Company Logo"
                                 src="/images/logo.png"
