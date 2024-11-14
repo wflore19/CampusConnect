@@ -60,7 +60,18 @@ export default function Index() {
                         Find study buddies, join clubs, attend events and make
                         new friends all in one place.
                     </p>
-                    <GoogleButton href={googleAuthUrl!}>Sign Up</GoogleButton>
+                    {!name ? (
+                        <GoogleButton href={googleAuthUrl!}>
+                            Sign Up
+                        </GoogleButton>
+                    ) : (
+                        <Link
+                            to="/home"
+                            className="inline-block rounded border border-blue-500 bg-white px-4 py-2 text-blue-500 transition duration-300 ease-in-out hover:bg-blue-50 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        >
+                            Go to Dashboard
+                        </Link>
+                    )}
                 </section>
 
                 {/* Features Section */}
