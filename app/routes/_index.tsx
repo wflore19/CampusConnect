@@ -50,7 +50,7 @@ export default function Index() {
 
             <main className="container mx-auto flex-grow px-4 py-8">
                 {/* Hero Section */}
-                <section className="mb-16 flex flex-col items-center justify-center text-center">
+                <section className="mb-16 mt-8 flex flex-col items-center justify-center text-center">
                     <h2 className="mb-6 text-5xl font-bold leading-tight">
                         Say Goodbye to
                         <br />
@@ -101,18 +101,29 @@ export default function Index() {
                         connections on your campus.
                     </p>
                     <div className="space-x-4">
-                        <Link
-                            to="/login"
-                            className="rounded-lg bg-blue-600 px-6 py-3 text-lg font-bold text-white transition duration-300 hover:bg-blue-700"
-                        >
-                            Log In
-                        </Link>
-                        <Link
-                            to="/signup"
-                            className="rounded-lg bg-green-600 px-6 py-3 text-lg font-bold text-white transition duration-300 hover:bg-green-700"
-                        >
-                            Sign Up
-                        </Link>
+                        {!name ? (
+                            <>
+                                <Link
+                                    to="/login"
+                                    className="rounded-lg bg-blue-600 px-6 py-3 text-lg font-bold text-white transition duration-300 hover:bg-blue-700"
+                                >
+                                    Log In
+                                </Link>
+                                <Link
+                                    to="/signup"
+                                    className="rounded-lg bg-green-600 px-6 py-3 text-lg font-bold text-white transition duration-300 hover:bg-green-700"
+                                >
+                                    Sign Up
+                                </Link>
+                            </>
+                        ) : (
+                            <Link
+                                to="/home"
+                                className="rounded-lg bg-blue-600 px-6 py-3 text-lg font-bold text-white transition duration-300 hover:bg-blue-700"
+                            >
+                                Go to Dashboard
+                            </Link>
+                        )}
                     </div>
                 </section>
             </main>
