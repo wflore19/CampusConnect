@@ -2,7 +2,9 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { db } from 'db/src';
 import { Footer } from '~/components/footer';
+import { GoogleButton } from '~/components/google-button';
 import { Header } from '~/components/header';
+import { getGoogleAuthURL } from '~/utils/auth';
 import { getSession, user } from '~/utils/session.server';
 
 export const meta: MetaFunction = () => {
@@ -30,11 +32,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
         return {};
     }
 
-    return { name: profile.name, imageUrl: profile.imageUrl };
+    const googleAuthUrl = getGoogleAuthURL();
+
+    return { name: profile.name, imageUrl: profile.imageUrl, googleAuthUrl };
 }
 
 export default function Index() {
-    const { name, imageUrl } = useLoaderData<typeof loader>();
+    const { name, imageUrl, googleAuthUrl } = useLoaderData<typeof loader>();
+
+    if (!googleAuthUrl) {
+        console.error('Google Auth URL is missing');
+    }
 
     return (
         <div className="flex min-h-screen flex-col bg-white text-gray-800">
@@ -42,21 +50,17 @@ export default function Index() {
 
             <main className="container mx-auto flex-grow px-4 py-8">
                 {/* Hero Section */}
-                <section className="mb-16 text-center">
-                    <h2 className="mb-4 text-4xl font-bold text-gray-800">
-                        Say Goodbye to Campus Loneliness
+                <section className="mb-16 flex flex-col items-center justify-center text-center">
+                    <h2 className="mb-6 text-5xl font-bold leading-tight">
+                        Say Goodbye to
+                        <br />
+                        Loneliness.
                     </h2>
-                    <p className="mx-auto mb-8 max-w-2xl text-xl text-gray-600">
-                        Find study buddies, event companions, and friends who
-                        share your interests – all within your university
-                        community.
+                    <p className="mx-auto mb-8 max-w-2xl text-xl text-blue-900">
+                        Find study buddies, join clubs, attend events and make
+                        new friends all in one place.
                     </p>
-                    <Link
-                        to="/home"
-                        className="rounded-lg bg-blue-600 px-6 py-3 text-lg font-bold text-white transition duration-300 hover:bg-blue-700"
-                    >
-                        Join CampusConnect
-                    </Link>
+                    <GoogleButton href={googleAuthUrl!}>Sign Up</GoogleButton>
                 </section>
 
                 {/* Features Section */}
