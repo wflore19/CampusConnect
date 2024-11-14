@@ -28,11 +28,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .where('id', '=', id)
         .executeTakeFirst();
 
+    const googleAuthUrl = getGoogleAuthURL();
+
     if (!profile) {
-        return {};
+        return { googleAuthUrl };
     }
 
-    const googleAuthUrl = getGoogleAuthURL();
 
     return { name: profile.name, imageUrl: profile.imageUrl, googleAuthUrl };
 }
