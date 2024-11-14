@@ -52,7 +52,7 @@ Dashboard.CloseMenuButton = function CloseMenuButton() {
 
 Dashboard.CompanyLogo = function CompanyLogo() {
     return (
-        <Link to="/" className="flex items-center gap-1 p-6">
+        <Link to="/" className="flex items-center gap-1">
             <img
                 alt="Company Logo"
                 src="/images/logo.png"
