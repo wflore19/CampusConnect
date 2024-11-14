@@ -30,6 +30,5 @@ export const GOOGLE_ANALYTICS = process.env.GOOGLE_ANALYTICS;
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const APP_URL = process.env.APP_URL;
-console.log(APP_URL);
 export const JWT_SECRET = process.env.JWT_SECRET;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
