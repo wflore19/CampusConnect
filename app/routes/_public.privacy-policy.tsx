@@ -1,10 +1,7 @@
-import { Footer } from '~/components/footer';
-import { Header } from '~/components/header';
+
 
 export default function PrivacyPolicy() {
     return (
-        <div className="flex min-h-screen flex-col">
-            <Header />
             <main className="container mx-auto px-4 py-8">
                 <h1 className="mb-6 text-3xl font-bold">
                     Privacy Policy for CampusConnect
@@ -358,7 +355,5 @@ export default function PrivacyPolicy() {
                     </li>
                 </ol>
             </main>
-            <Footer />
-        </div>
     );
 }
