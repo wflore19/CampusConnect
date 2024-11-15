@@ -1,6 +1,5 @@
 import type { LoaderFunction } from '@remix-run/node';
-import { redirect, useLoaderData, useRouteLoaderData } from '@remix-run/react';
-import { getGoogleAuthURL } from '../utils/auth';
+import { redirect, useRouteLoaderData } from '@remix-run/react';
 import { GoogleButton } from '~/components/google-button';
 import { getSession } from '~/utils/session.server';
 
