@@ -1,57 +1,19 @@
-import { useLoaderData } from '@remix-run/react';
-import { LoaderFunction } from '@remix-run/node';
-import { ensureUserAuthenticated, user } from '~/utils/session.server';
-import { db } from 'db/src';
+import { useRouteLoaderData } from '@remix-run/react';
 import { Divider } from '~/components/divider';
 import { Text } from '~/components/text';
 import { MapPin } from 'react-feather';
 
-export const loader: LoaderFunction = async ({ request }) => {
-    const session = await ensureUserAuthenticated(request);
-    const id = user(session);
-
-    const profile = await db
-        .selectFrom('users')
-        .select([
-            'name',
-            'email',
-            'major',
-            'year',
-            'interests',
-            'location',
-            'imageUrl',
-        ])
-        .where('id', '=', id)
-        .executeTakeFirst();
-
-    if (!profile) {
-        throw new Error('User not found');
-    }
-
-    return {
-        name: profile.name,
-        email: profile.email,
-        major: profile.major,
-        year: profile.year,
-        interests: profile.interests,
-        location: profile.location,
-        imageUrl: profile.imageUrl,
-    };
-};
-
-interface LoaderData {
-    name: string;
-    email: string;
-    major: string;
-    year: string;
-    interests: string[];
-    location: string;
-    imageUrl: string;
-}
-
 export default function Profile() {
     const { name, email, major, year, interests, location, imageUrl } =
-        useLoaderData<LoaderData>();
+        useRouteLoaderData('routes/_dashboard') as {
+            name: string;
+            email: string;
+            major: string;
+            year: string;
+            interests: string[];
+            location: string;
+            imageUrl: string;
+        };
 
     return (
         <div className="px-2 py-6">

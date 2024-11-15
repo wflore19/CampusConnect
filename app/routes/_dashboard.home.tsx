@@ -1,8 +1,6 @@
-import type { LoaderFunction, MetaFunction } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
-import { db } from 'db/src';
+import type { MetaFunction } from '@remix-run/node';
+import { Link, useRouteLoaderData } from '@remix-run/react';
 import { Calendar, Users, Compass } from 'react-feather';
-import { ensureUserAuthenticated, user } from '~/utils/session.server';
 
 export const meta: MetaFunction = () => {
     return [
@@ -15,27 +13,11 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-// loader with types
-export const loader: LoaderFunction = async ({ request }) => {
-    const session = await ensureUserAuthenticated(request);
-
-    const id = user(session);
-
-    const profile = await db
-        .selectFrom('users')
-        .select(['name', 'imageUrl'])
-        .where('id', '=', id)
-        .executeTakeFirst();
-
-    if (!profile) {
-        throw new Error('User not found');
-    }
-
-    return { name: profile.name, imageUrl: profile.imageUrl };
-};
-
 export default function Home() {
-    const { name, imageUrl } = useLoaderData<typeof loader>();
+    const { name, imageUrl } = useRouteLoaderData('routes/_dashboard') as {
+        name: string;
+        imageUrl: string;
+    };
 
     return (
         <div className="mx-auto max-w-4xl px-2 py-6">

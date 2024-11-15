@@ -3,12 +3,36 @@ import { Dashboard } from '../components/dashboard';
 import { Divider } from '../components/divider';
 import { Outlet } from '@remix-run/react';
 import { Calendar, Layers, User } from 'react-feather';
-import { ensureUserAuthenticated } from '~/utils/session.server';
+import { ensureUserAuthenticated, user } from '~/utils/session.server';
+import { db } from 'db/src';
 
 export const loader: LoaderFunction = async ({ request }) => {
-    await ensureUserAuthenticated(request);
+    const session = await ensureUserAuthenticated(request);
+    const id = user(session);
 
-    return {};
+    const profile = await db
+        .selectFrom('users')
+        .select([
+            'name',
+            'email',
+            'major',
+            'year',
+            'interests',
+            'location',
+            'imageUrl',
+        ])
+        .where('id', '=', id)
+        .executeTakeFirst();
+
+    return {
+        name: profile?.name,
+        email: profile?.email,
+        major: profile?.major,
+        year: profile?.year,
+        interests: profile?.interests,
+        location: profile?.location,
+        imageUrl: profile?.imageUrl,
+    }
 };
 
 export default function DashboardLayout() {
