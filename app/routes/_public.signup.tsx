@@ -1,9 +1,9 @@
-import type { LoaderFunction } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
 import { redirect, useRouteLoaderData } from '@remix-run/react';
 import { GoogleButton } from '~/components/google-button';
 import { getSession } from '~/utils/session.server';
 
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
 
     if (!session.has('user_id')) {
@@ -11,7 +11,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 
     return redirect('/home');
-};
+}
 
 export default function SignUp() {
     const { googleAuthUrl } = useRouteLoaderData("routes/_public") as { googleAuthUrl: string };
