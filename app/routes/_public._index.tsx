@@ -1,9 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { db } from 'db/src';
-import { Footer } from '~/components/footer';
 import { GoogleButton } from '~/components/google-button';
-import { Header } from '~/components/header';
 import { getGoogleAuthURL } from '~/utils/auth';
 import { getSession, user } from '~/utils/session.server';
 
@@ -20,35 +18,28 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
+    
+    if (!session.has('user_id')) {
+        return { googleAuthUrl: getGoogleAuthURL() };
+    }
+    
     const id = await user(session);
-
     const profile = await db
         .selectFrom('users')
         .select(['name', 'imageUrl'])
         .where('id', '=', id)
         .executeTakeFirst();
 
-    const googleAuthUrl = getGoogleAuthURL();
-
-    if (!profile) {
-        return { googleAuthUrl };
-    }
-
-
-    return { name: profile.name, imageUrl: profile.imageUrl, googleAuthUrl };
+    return { 
+        name: profile?.name,
+        imageUrl: profile?.imageUrl
+    };
 }
 
 export default function Index() {
-    const { name, imageUrl, googleAuthUrl } = useLoaderData<typeof loader>();
-
-    if (!googleAuthUrl) {
-        console.error('Google Auth URL is missing');
-    }
+    const { name, googleAuthUrl } = useLoaderData<typeof loader>();
 
     return (
-        <div className="flex min-h-screen flex-col bg-white text-gray-800">
-            <Header name={name} imageUrl={imageUrl} />
-
             <main className="container mx-auto flex-grow px-4 py-8">
                 {/* Hero Section */}
                 <section className="mb-16 mt-8 flex flex-col items-center justify-center text-center">
@@ -128,9 +119,6 @@ export default function Index() {
                     </div>
                 </section>
             </main>
-
-            <Footer />
-        </div>
     );
 }
 
