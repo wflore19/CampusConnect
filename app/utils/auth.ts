@@ -190,7 +190,6 @@ export async function uploadAndProcessImage(
     );
 }
 
-// TSDocs
 /**
  * Create a new user in the database
  * @param googleUser - The Google user object
