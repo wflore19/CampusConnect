@@ -1,5 +1,6 @@
 import { Session, createCookieSessionStorage, redirect } from '@remix-run/node';
 import { SESSION_SECRET } from './env';
+import { db } from 'db/src';
 
 // JSDocs for getSession, commitSession, and destroySession
 /**
@@ -57,8 +58,21 @@ export async function ensureUserAuthenticated(
     { redirectTo = '/login' }: EnsureUserAuthenticatedOptions = {}
 ): Promise<Session> {
     const session = await getSession(request);
-
     if (!session.has('user_id')) {
+        throw redirect(redirectTo, {
+            headers: {
+                'Set-Cookie': await destroySession(session),
+            },
+        });
+    }
+
+    const userId = await user(session);
+    const isExistingUser = await db
+        .selectFrom('users')
+        .where('id', '=', userId)
+        .executeTakeFirst();
+
+    if (!isExistingUser) {
         throw redirect(redirectTo, {
             headers: {
                 'Set-Cookie': await destroySession(session),
