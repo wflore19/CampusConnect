@@ -1,67 +1,7 @@
 // OAuth 2.0
-import { z } from 'zod';
 import { google } from 'googleapis';
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, APP_URL } from '~/utils/env';
 
-const OAuthCodeState = z.object({
-    clientRedirectUrl: z.string().url(),
-
-    /**
-     * This provides context for what the application should do after the user
-     * is authenticated. In our case, this will tell us whether we want to lookup
-     * an admin record or a student record.
-     */
-    context: z.enum(['member_login', 'member_signup']),
-
-    oauthRedirectUrl: z.custom<`${string}/oauth/${string}`>((value) => {
-        const { success } = z.string().url().safeParse(value);
-
-        return success;
-    }),
-});
-
-// Types
-type OAuthCodeState = z.infer<typeof OAuthCodeState>;
-
-type AuthorizationCodeQuery = z.infer<typeof AuthorizationCodeQuery>;
-export type OAuthServiceType = 'google';
-export type OAuthLoginInput = {
-    context: NonNullable<OAuthCodeState['context']>;
-    code: string;
-    oauthRedirectUrl: OAuthCodeState['oauthRedirectUrl'];
-    type: OAuthServiceType;
-};
-export type OuthLoginOutput = {
-    authToken: string;
-    email: string;
-};
-export type OAuthTokens = {
-    accessToken: string;
-    refreshToken: string;
-};
-
-export type OAuthProfile = {
-    email: string;
-};
-
-export interface OAuthService {
-    exchangeCodeForToken(args: ExchangeCodeForTokenInput): Promise<OAuthTokens>;
-    getProfile(token: string): Promise<OAuthProfile>;
-}
-
-export type ExchangeCodeForTokenInput = {
-    code: string;
-    redirectUrl: string;
-};
-
-export const AuthorizationCodeQuery = z.object({
-    code: z.string().trim().min(1),
-    state: z
-        .string()
-        .optional()
-        .transform((value) => JSON.parse(value || '{}'))
-        .transform((value) => OAuthCodeState.parse(value)),
-});
 export type GoogleUser = {
     id: string;
     email: string;
