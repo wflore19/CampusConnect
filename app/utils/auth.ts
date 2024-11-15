@@ -165,6 +165,38 @@ export async function signupNewUser(googleUser: GoogleUser, session: Session) {
             'Set-Cookie': await commitSession(session),
         },
     });
+
+    /**
+     * Create a new user in the database
+     * @param googleUser - The Google user object
+     * @param imageUrl - The URL of the image
+     * @returns The user object if created successfully
+     */
+    async function createNewUser(
+        googleUser: GoogleUser,
+        imageUrl: string
+    ): Promise<User> {
+        await db
+            .insertInto('users')
+            .values({
+                email: googleUser.email,
+                imageUrl: imageUrl,
+                interests: [],
+                location: '',
+                major: '',
+                name: googleUser.name,
+                year: '',
+            })
+            .execute();
+
+        const newUser = await findUserByEmail(googleUser.email);
+
+        if (!newUser) {
+            throw new Error('Failed to create new user');
+        }
+
+        return newUser;
+    }
 }
 
 /**
@@ -188,36 +220,4 @@ export async function uploadAndProcessImage(
         'nyc3.digitaloceanspaces',
         'nyc3.cdn.digitaloceanspaces'
     );
-}
-
-/**
- * Create a new user in the database
- * @param googleUser - The Google user object
- * @param imageUrl - The URL of the image
- * @returns The user object if created successfully
- */
-async function createNewUser(
-    googleUser: GoogleUser,
-    imageUrl: string
-): Promise<User> {
-    await db
-        .insertInto('users')
-        .values({
-            email: googleUser.email,
-            imageUrl: imageUrl,
-            interests: [],
-            location: '',
-            major: '',
-            name: googleUser.name,
-            year: '',
-        })
-        .execute();
-
-    const newUser = await findUserByEmail(googleUser.email);
-
-    if (!newUser) {
-        throw new Error('Failed to create new user');
-    }
-
-    return newUser;
 }
