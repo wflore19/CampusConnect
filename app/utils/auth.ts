@@ -225,9 +225,7 @@ export function getGoogleAuthURL() {
  * @param code - The code from Google
  * @returns The Google user's profile information if found, otherwise undefined
  */
-export async function getGoogleUser(
-    code: string
-): Promise<GoogleUser | undefined> {
+export async function getGoogleUser(code: string): Promise<GoogleUser> {
     const { accessToken, refreshToken } = await exchangeCodeForToken(code);
     GoogleClient.setCredentials({
         access_token: accessToken,
@@ -237,6 +235,10 @@ export async function getGoogleUser(
     const { data } = await GoogleClient.request({
         url: 'https://www.googleapis.com/oauth2/v2/userinfo',
     });
+
+    if (!data) {
+        throw new Error('Failed to get Google user');
+    }
 
     // Type guard function to check if the data is a GoogleUser
     function isGoogleUser(user: unknown): user is GoogleUser {
@@ -254,7 +256,9 @@ export async function getGoogleUser(
     }
 
     if (!isGoogleUser(data)) {
-        return undefined;
+        throw new Error(
+            'Failed to get Google user profile information from Google'
+        );
     }
 
     return data;
