@@ -1,9 +1,6 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
-import { db } from 'db/src';
+import type { MetaFunction } from '@remix-run/node';
+import { Link, useRouteLoaderData } from '@remix-run/react';
 import { GoogleButton } from '~/components/google-button';
-import { getGoogleAuthURL } from '~/utils/auth';
-import { getSession, user } from '~/utils/session.server';
 
 export const meta: MetaFunction = () => {
     return [
@@ -14,30 +11,10 @@ export const meta: MetaFunction = () => {
                 'Connect with peers, find events, and combat loneliness on your university campus.',
         },
     ];
-};
-
-export async function loader({ request }: LoaderFunctionArgs) {
-    const session = await getSession(request);
-    
-    if (!session.has('user_id')) {
-        return { googleAuthUrl: getGoogleAuthURL() };
-    }
-    
-    const id = await user(session);
-    const profile = await db
-        .selectFrom('users')
-        .select(['name', 'imageUrl'])
-        .where('id', '=', id)
-        .executeTakeFirst();
-
-    return { 
-        name: profile?.name,
-        imageUrl: profile?.imageUrl
-    };
 }
 
 export default function Index() {
-    const { name, googleAuthUrl } = useLoaderData<typeof loader>();
+    const { name, googleAuthUrl } = useRouteLoaderData("routes/_public") as { name: string, googleAuthUrl: string };
 
     return (
             <main className="container mx-auto flex-grow px-4 py-8">
