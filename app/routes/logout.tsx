@@ -12,8 +12,6 @@ import {
 
 export async function loader({ request }: LoaderFunctionArgs) {
     await ensureUserAuthenticated(request);
-
-    return {};
 }
 
 export async function action({ request }: ActionFunctionArgs) {
