@@ -61,7 +61,7 @@ export async function ensureUserAuthenticated(
     if (!session.has('user_id')) {
         throw redirect(redirectTo, {
             headers: {
-                'Set-Cookie': await commitSession(session),
+                'Set-Cookie': await destroySession(session),
             },
         });
     }
