@@ -154,7 +154,7 @@ export async function loginExistingUser(user: User, session: Session) {
  * @returns A redirect response
  */
 export async function signupNewUser(googleUser: GoogleUser, session: Session) {
-    const imageUrl = await uploadAndProcessImage(googleUser);
+    const imageUrl = await uploadImageS3(googleUser);
     const newUser = await createNewUser(googleUser, imageUrl);
 
     session.set('user_id', newUser.id);
@@ -200,13 +200,11 @@ export async function signupNewUser(googleUser: GoogleUser, session: Session) {
 }
 
 /**
- * Uploads the image from the Google user to DigitalOcean Spaces
+ * Uploads an image to DigitalOcean Spaces (AWS S3)
  * @param googleUser - The Google user object
  * @returns The URL of the uploaded image
  */
-export async function uploadAndProcessImage(
-    googleUser: GoogleUser
-): Promise<string> {
+export async function uploadImageS3(googleUser: GoogleUser): Promise<string> {
     const spacesImageUrl = await uploadImageFromCDN(
         googleUser.picture,
         `${googleUser.email}-${new Date().toISOString()}.png`
