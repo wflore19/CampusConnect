@@ -31,6 +31,7 @@ writeFileSync(
     path.join(__dirname, `../migrations/${timestamp}_${name}.ts`),
     dedent`
     import { type Kysely } from 'kysely';
+    import { DB } from '../dist/db';
 
     export async function up(db: Kysely<DB>) {}
 
