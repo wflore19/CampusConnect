@@ -32,8 +32,8 @@ writeFileSync(
     dedent`
     import { type Kysely } from 'kysely';
 
-    export async function up(db: Kysely<any>) {}
+    export async function up(db: Kysely<DB>) {}
 
-    export async function down(db: Kysely<any>) {}\n
+    export async function down(db: Kysely<DB>) {}\n
   `
 );
