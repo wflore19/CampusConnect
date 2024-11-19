@@ -1,13 +1,5 @@
-import {
-    Links,
-    Meta,
-    Outlet,
-    Scripts,
-    useLoaderData,
-    useLocation,
-} from '@remix-run/react';
+import { Links, Meta, Outlet, Scripts, useLocation } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
-import { GOOGLE_ANALYTICS } from './utils/env';
 
 import './tailwind.css';
 import { useEffect } from 'react';
@@ -26,15 +18,7 @@ export const links: LinksFunction = () => [
     },
 ];
 
-export async function loader() {
-    if (!GOOGLE_ANALYTICS) return { GOOGLE_ANALYTICS: '_' };
-
-    return { GOOGLE_ANALYTICS };
-}
-
 export function Layout({ children }: { children: React.ReactNode }) {
-    const { GOOGLE_ANALYTICS } = useLoaderData<typeof loader>();
-
     return (
         <html lang="en">
             <head>
@@ -49,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <body>
                 {children}
                 <Scripts />
-                <GoogleAnalytics GoogleAnalyticsId={GOOGLE_ANALYTICS} />
+                <GoogleAnalytics />
             </body>
         </html>
     );
