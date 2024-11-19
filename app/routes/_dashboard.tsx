@@ -12,27 +12,16 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const profile = await db
         .selectFrom('users')
-        .select([
-            'name',
-            'email',
-            'major',
-            'year',
-            'interests',
-            'location',
-            'imageUrl',
-        ])
+        .select(['firstName', 'lastName', 'email', 'profilePicture'])
         .where('id', '=', id)
         .executeTakeFirst();
 
     return {
-        name: profile?.name,
+        firstName: profile?.firstName,
+        lastName: profile?.lastName,
         email: profile?.email,
-        major: profile?.major,
-        year: profile?.year,
-        interests: profile?.interests,
-        location: profile?.location,
-        imageUrl: profile?.imageUrl,
-    }
+        profilePicture: profile?.profilePicture,
+    };
 };
 
 export default function DashboardLayout() {
@@ -57,11 +46,6 @@ export default function DashboardLayout() {
                                 icon={<Calendar />}
                                 label="Events"
                                 pathname={'/events'}
-                            />
-                            <Dashboard.NavigationLink
-                                icon={<User />}
-                                label="Friends"
-                                pathname={'/friends'}
                             />
 
                             <div className="mb-2 mt-10">

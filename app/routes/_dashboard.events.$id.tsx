@@ -1,24 +1,19 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { useLoaderData, Link } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import { Text } from '~/components/text';
 import { Divider } from '~/components/divider';
-import { Calendar, MapPin, Users } from 'react-feather';
+import { Calendar, MapPin } from 'react-feather';
 import { db } from '../../db/src/shared/db';
-
-type Friend = {
-    id: string;
-    name: string;
-};
 
 type Event = {
     id: string;
-    title: string;
+    name: string;
     date: string;
-    time: string;
+    startTime: string;
+    endTime: string;
     location: string;
     imageUrl: string;
-    organization: string;
-    friends_going: Friend[];
+    organizerId: string;
 };
 
 type LoaderData = {
@@ -36,42 +31,30 @@ export async function loader({ params }: LoaderFunctionArgs) {
         .selectFrom('events')
         .select([
             'events.id',
-            'events.title',
+            'events.name',
             'events.date',
-            'events.time',
+            'events.startTime',
+            'events.endTime',
             'events.location',
             'events.imageUrl',
-            'events.organization',
+            'events.organizerId',
         ])
-        .where('events.id', '=', id)
+        .where('events.id', '=', parseInt(id))
         .executeTakeFirst();
 
     if (!event) {
         throw new Error('Event not found');
     }
 
-    // Fetch friends going in a separate query
-    const friendsGoing = await db
-        .selectFrom('users')
-        .innerJoin('eventAttendees', 'users.id', 'eventAttendees.userId')
-        .select(['users.id', 'users.name'])
-        .where('eventAttendees.eventId', '=', id)
-        .execute();
-
-    return {
-        event: {
-            ...event,
-            friends_going: friendsGoing,
-        },
-    };
+    return { event };
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [
-        { title: `${data?.event.title} - Campus Connect` },
+        { title: `${data?.event.name} - Campus Connect` },
         {
             name: 'description',
-            content: `View details for ${data?.event.title}`,
+            content: `View details for ${data?.event.name}`,
         },
     ];
 };
@@ -81,20 +64,20 @@ export default function EventPage() {
 
     return (
         <div className="px-2 py-6">
-            <Text className="mb-4 text-3xl font-bold">{event.title}</Text>
+            <Text className="mb-4 text-3xl font-bold">{event.name}</Text>
             <Divider />
 
             <div className="mt-4 space-y-4">
                 <img
                     src={event.imageUrl}
-                    alt={event.title}
+                    alt={event.name}
                     className="mb-4 h-64 w-full rounded-lg object-cover"
                 />
 
                 <div className="flex items-center">
                     <Calendar size={16} className="mr-2" />
                     <Text>
-                        {event.date} at {event.time}
+                        {event.date} at {event.startTime} - {event.endTime}
                     </Text>
                 </div>
 
@@ -105,28 +88,7 @@ export default function EventPage() {
 
                 <div>
                     <Text className="font-semibold">Organized by</Text>
-                    <Text>{event.organization}</Text>
-                </div>
-
-                <div>
-                    <div className="mb-2 flex items-center">
-                        <Users size={16} className="mr-2" />
-                        <Text className="font-semibold">
-                            Friends Going ({event.friends_going.length})
-                        </Text>
-                    </div>
-                    <ul className="list-inside list-disc space-y-1">
-                        {event.friends_going.map((friend) => (
-                            <li key={friend.id}>
-                                <Link
-                                    to={`/friends/${friend.id}`}
-                                    className="text-blue-600 hover:underline"
-                                >
-                                    {friend.name}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+                    <Text>{event.organizerId}</Text>
                 </div>
             </div>
         </div>

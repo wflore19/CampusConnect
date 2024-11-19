@@ -14,9 +14,11 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Home() {
-    const { name, imageUrl } = useRouteLoaderData('routes/_dashboard') as {
+    const { name, profilePicture } = useRouteLoaderData(
+        'routes/_dashboard'
+    ) as {
         name: string;
-        imageUrl: string;
+        profilePicture: string;
     };
 
     return (
@@ -25,7 +27,7 @@ export default function Home() {
                 Welcome to CampusConnect, {name}{' '}
                 <span>
                     <img
-                        src={imageUrl}
+                        src={profilePicture}
                         alt=""
                         className="h-16 w-16 rounded-full object-cover"
                     />

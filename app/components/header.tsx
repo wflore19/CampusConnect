@@ -1,11 +1,11 @@
 import { Link } from '@remix-run/react';
 
 interface HeaderProps {
-    name?: string | undefined | null;
+    firstName?: string | undefined | null;
     imageUrl?: string | undefined | null;
 }
 
-export function Header({ name = '', imageUrl = '' }: HeaderProps) {
+export function Header({ firstName = '', imageUrl = '' }: HeaderProps) {
     return (
         <header className="bg-blue-600 py-4 sm:py-6">
             <div className="container mx-auto px-4">
@@ -20,7 +20,7 @@ export function Header({ name = '', imageUrl = '' }: HeaderProps) {
                         </Link>
                         <h1 className="text-xl text-white">CampusConnect</h1>
                     </div>
-                    {name ? (
+                    {firstName ? (
                         <div className="flex items-center space-x-4">
                             <Link to="/home">
                                 <img
@@ -28,7 +28,7 @@ export function Header({ name = '', imageUrl = '' }: HeaderProps) {
                                         imageUrl
                                             ? imageUrl
                                             : 'https://ui-avatars.com/api/?name=' +
-                                              name
+                                              firstName
                                     }
                                     alt=""
                                     className="h-8 w-8 rounded-full object-cover"

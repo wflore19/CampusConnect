@@ -16,22 +16,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const id = await user(session);
     const profile = await db
         .selectFrom('users')
-        .select(['name', 'imageUrl'])
+        .select(['firstName', 'lastName', 'profilePicture'])
         .where('id', '=', id)
         .executeTakeFirst();
 
     return {
-        name: profile?.name,
-        imageUrl: profile?.imageUrl,
+        firstName: profile?.firstName,
+        profilePicture: profile?.profilePicture,
     };
 }
 
 export default function PublicLayout() {
-    const { name, imageUrl } = useLoaderData<typeof loader>();
+    const { firstName, profilePicture } = useLoaderData<typeof loader>();
 
     return (
         <div className="flex min-h-screen flex-col bg-white text-gray-800">
-            <Header name={name} imageUrl={imageUrl} />
+            <Header firstName={firstName} imageUrl={profilePicture} />
             <Outlet />
             <Footer />
         </div>

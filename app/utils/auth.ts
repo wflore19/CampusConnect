@@ -17,16 +17,13 @@ export type GoogleUser = {
 };
 
 interface User {
-    name: string;
+    id: number;
+    email: string | null;
     createdAt: Date | null;
-    id: string;
-    imageUrl: string | null; // Change this to allow null
-    location: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    profilePicture: string | null;
     updatedAt: Date | null;
-    email: string;
-    interests: string[] | null;
-    major: string;
-    year: string;
 }
 
 /**
@@ -154,8 +151,19 @@ export async function loginExistingUser(user: User, session: Session) {
  * @returns A redirect response
  */
 export async function signupNewUser(googleUser: GoogleUser, session: Session) {
-    const imageUrl = await uploadImageS3(googleUser);
-    const newUser = await createNewUser(googleUser, imageUrl);
+    const newUser = await createNewGoogleUser(googleUser);
+    const profilePicture = await uploadImageS3(
+        googleUser,
+        newUser.id.toString()
+    );
+
+    await db
+        .updateTable('users')
+        .set({
+            profilePicture,
+        })
+        .where('id', '=', newUser.id)
+        .execute();
 
     session.set('user_id', newUser.id);
 
@@ -172,20 +180,18 @@ export async function signupNewUser(googleUser: GoogleUser, session: Session) {
      * @param imageUrl - The URL of the image
      * @returns The user object if created successfully
      */
-    async function createNewUser(
-        googleUser: GoogleUser,
-        imageUrl: string
-    ): Promise<User> {
+    async function createNewGoogleUser(googleUser: GoogleUser): Promise<User> {
+        const parsedFirstName = googleUser.name.split(' ')[0];
+        const parsedLastName =
+            googleUser.name.split(' ')[googleUser.name.split(' ').length - 1];
+
         await db
             .insertInto('users')
             .values({
                 email: googleUser.email,
-                imageUrl: imageUrl,
-                interests: [],
-                location: '',
-                major: '',
-                name: googleUser.name,
-                year: '',
+                profilePicture: '',
+                firstName: parsedFirstName,
+                lastName: parsedLastName,
             })
             .execute();
 
@@ -204,10 +210,17 @@ export async function signupNewUser(googleUser: GoogleUser, session: Session) {
  * @param googleUser - The Google user object
  * @returns The URL of the uploaded image
  */
-export async function uploadImageS3(googleUser: GoogleUser): Promise<string> {
+export async function uploadImageS3(
+    googleUser: GoogleUser,
+    userId: string
+): Promise<string> {
+    const parsedFirstName = googleUser.name.split(' ')[0];
+    const parsedLastName =
+        googleUser.name.split(' ')[googleUser.name.split(' ').length - 1];
+
     const spacesImageUrl = await uploadImageFromCDN(
         googleUser.picture,
-        `${googleUser.email}-${new Date().toISOString()}.png`
+        `${parsedFirstName}-${parsedLastName}-${userId}.jpg`
     );
 
     if (!spacesImageUrl) {

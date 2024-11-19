@@ -88,6 +88,7 @@ export async function ensureUserAuthenticated(
  * @param session - The session object
  * @returns The user ID
  */
-export function user(session: Session): string {
-    return session.get('user_id');
+export function user(session: Session): number {
+    const sessionId = parseInt(session.get('user_id'));
+    return sessionId;
 }
