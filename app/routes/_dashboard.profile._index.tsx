@@ -2,7 +2,7 @@ import { useRouteLoaderData } from '@remix-run/react';
 import { Divider } from '~/components/divider';
 import { Text } from '~/components/text';
 
-export default function Profile() {
+export default function MyProfile() {
     const { firstName, lastName, email, profilePicture } = useRouteLoaderData(
         'routes/_dashboard'
     ) as {
