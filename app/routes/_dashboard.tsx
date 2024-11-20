@@ -2,7 +2,7 @@ import { LoaderFunction } from '@remix-run/node';
 import { Dashboard } from '../components/dashboard';
 import { Divider } from '../components/divider';
 import { Outlet } from '@remix-run/react';
-import { Calendar, Layers, User } from 'react-feather';
+import { Calendar, Layers, User, Users } from 'react-feather';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import { db } from 'db/src';
 
@@ -46,6 +46,16 @@ export default function DashboardLayout() {
                                 icon={<Calendar />}
                                 label="Events"
                                 pathname={'/events'}
+                            />
+                            <Dashboard.NavigationLink
+                                icon={<User />}
+                                label="Users"
+                                pathname={'/users'}
+                            />
+                            <Dashboard.NavigationLink
+                                icon={<Users />}
+                                label="Friends"
+                                pathname={'/friends'}
                             />
 
                             <div className="mb-2 mt-10">

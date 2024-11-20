@@ -1,8 +1,21 @@
-import { useRouteLoaderData } from '@remix-run/react';
+import { LoaderFunctionArgs } from '@remix-run/node';
+import { useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import { Divider } from '~/components/divider';
 import { Text } from '~/components/text';
+import { getFriendsList } from '~/modules/friends/friends.core';
+import { getSession, user } from '~/utils/session.server';
+
+export async function loader({ request }: LoaderFunctionArgs) {
+    const session = await getSession(request);
+    const id = user(session);
+
+    const friendsList = await getFriendsList(id);
+
+    return friendsList.length > 0 ? friendsList : [];
+}
 
 export default function MyProfile() {
+    const friendsList = useLoaderData<typeof loader>();
     const { firstName, lastName, email, profilePicture } = useRouteLoaderData(
         'routes/_dashboard'
     ) as {
@@ -30,6 +43,11 @@ export default function MyProfile() {
                 <div>
                     <Text className="font-semibold">Email</Text>
                     <Text>{email}</Text>
+                </div>
+                {/* Friends Count */}
+                <div>
+                    <Text className="font-semibold">Friends</Text>
+                    <Text>{friendsList.length}</Text>
                 </div>
             </div>
         </div>
