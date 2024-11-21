@@ -54,7 +54,7 @@ export function FriendshipStatusControl({
     }
 
     if (isFriend) {
-        return <Text weight="bold">Friends</Text>;
+        return <></>;
     }
 
     return (
