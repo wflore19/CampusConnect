@@ -1,16 +1,7 @@
 import type { MetaFunction } from '@remix-run/node';
 import { useRouteLoaderData } from '@remix-run/react';
 import { Calendar, Users, Compass } from 'react-feather';
-import {
-    Box,
-    Flex,
-    Heading,
-    Text,
-    Card,
-    Avatar,
-    Grid,
-    Link,
-} from '@radix-ui/themes';
+import { Box, Flex, Heading, Text, Card, Grid, Link } from '@radix-ui/themes';
 
 export const meta: MetaFunction = () => {
     return [
@@ -24,21 +15,19 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Home() {
-    const { name, profilePicture } = useRouteLoaderData(
-        'routes/_dashboard'
-    ) as {
-        name: string;
-        profilePicture: string;
+    const { firstName } = useRouteLoaderData('routes/_dashboard') as {
+        firstName: string;
     };
 
     return (
         <>
-            <Flex align="center" mb="6">
-                <Heading size="8" mr="4">
-                    Welcome to CampusConnect, {name}
-                </Heading>
-                <Avatar size="6" src={profilePicture} fallback={name} />
-            </Flex>
+            <Box width={'full'}>
+                <Flex align="center" mb="6" gap={{ initial: '1', md: '4' }}>
+                    <Heading size={{ initial: '6', md: '6' }}>
+                        Welcome to CampusConnect, {firstName}
+                    </Heading>
+                </Flex>
+            </Box>
 
             <Card mb="8">
                 <Text size="4">
@@ -48,7 +37,7 @@ export default function Home() {
                 </Text>
             </Card>
 
-            <Grid columns="2" gap="6" mb="8">
+            <Grid columns={{ initial: '1', sm: '2' }} gap="6" mb="8">
                 <Card>
                     <Flex align="center" mb="2">
                         <Users />
