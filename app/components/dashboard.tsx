@@ -9,6 +9,7 @@ import {
 } from '@radix-ui/themes';
 import { Layers, Calendar, User, Users, LogOut, Menu, X } from 'react-feather';
 import { FC, PropsWithChildren, useState } from 'react';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const SIDEBAR_ITEMS = [
     { icon: <Layers size={20} />, label: 'Home', path: '/home' },
@@ -25,15 +26,17 @@ const SIDEBAR_ITEMS = [
 export function Dashboard({ children }: PropsWithChildren) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+    useBodyScrollLock(isMobileMenuOpen);
+
     interface SidebarContentProps {
         showLabels?: boolean;
     }
 
     const SidebarContent: FC<SidebarContentProps> = ({ showLabels = true }) => (
         <Flex direction="column" p="4" height="100%">
-            <Flex justify={'between'}>
+            <Flex justify={'between'} align={'center'} mt={'4'}>
                 <Link to="/">
-                    <Flex align="center" gap="3" mb="4">
+                    <Flex align="center" gap="3">
                         <img
                             src="/images/logo.png"
                             alt="Campus Connect logo"
@@ -57,12 +60,13 @@ export function Dashboard({ children }: PropsWithChildren) {
                     <IconButton
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         variant="soft"
+                        size={'4'}
                     >
-                        <X size={20} />
+                        <X size={32} />
                     </IconButton>
                 </Box>
             </Flex>
-            <Separator size="4" mb="4" />
+            <Separator size="4" my="4" />
             <Flex direction="column" gap="4">
                 {SIDEBAR_ITEMS.map((item) => (
                     <NavLink
@@ -90,7 +94,7 @@ export function Dashboard({ children }: PropsWithChildren) {
                     </NavLink>
                 ))}
             </Flex>
-            <Separator size="4" mb="4" />
+            <Separator size="4" my="4" />
             <Form action="/logout" method="post">
                 <Button
                     type="submit"
@@ -166,7 +170,7 @@ export function Dashboard({ children }: PropsWithChildren) {
             {/* Mobile Menu Button */}
             <Box
                 position="fixed"
-                top="4"
+                top="5"
                 left="4"
                 display={{ initial: 'block', md: 'none' }}
                 style={{ zIndex: '2' }}
@@ -174,10 +178,28 @@ export function Dashboard({ children }: PropsWithChildren) {
                 <IconButton
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     variant="soft"
+                    size={'4'}
                 >
-                    <Menu size={20} />
+                    <Menu size={32} />
                 </IconButton>
             </Box>
+
+            {/* Overlay for closing sidebar */}
+            {isMobileMenuOpen && (
+                <Box
+                    position="fixed"
+                    top="0"
+                    left="0"
+                    right="0"
+                    bottom="0"
+                    style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        zIndex: 2,
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    display={{ initial: 'block', md: 'none' }}
+                />
+            )}
 
             {/* Mobile Sliding Drawer */}
             <Box

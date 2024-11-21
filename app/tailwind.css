@@ -26,3 +26,8 @@
         display: none;
     }
 }
+
+body.scroll-locked {
+    overflow: hidden;
+    padding-right: var(--scrollbar-width, 0px);
+}
