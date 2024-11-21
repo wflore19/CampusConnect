@@ -31,3 +31,9 @@ body.scroll-locked {
     overflow: hidden;
     padding-right: var(--scrollbar-width, 0px);
 }
+
+.logoutButton {
+    width: 100% !important;
+    background-color: var(--red-2) !important;
+    border-radius: var(--radius-6) !important;
+}

@@ -100,11 +100,7 @@ export function Dashboard({ children }: PropsWithChildren) {
                     type="submit"
                     variant="soft"
                     color="gray"
-                    style={{
-                        width: '100%',
-                        backgroundColor: 'var(--red-2',
-                        borderRadius: 'var(--radius-6)',
-                    }}
+                    className="logoutButton"
                 >
                     <Flex align="center" gap="2">
                         <LogOut size={16} />
