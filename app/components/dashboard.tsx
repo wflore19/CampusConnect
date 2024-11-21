@@ -6,6 +6,7 @@ import {
     Text,
     Separator,
     IconButton,
+    Avatar,
 } from '@radix-ui/themes';
 import { Layers, Calendar, User, Users, LogOut, Menu, X } from 'react-feather';
 import { FC, PropsWithChildren, useState } from 'react';
@@ -23,7 +24,14 @@ const SIDEBAR_ITEMS = [
     { icon: <User size={20} />, label: 'Profile', path: '/profile' },
 ];
 
-export function Dashboard({ children }: PropsWithChildren) {
+interface Props {
+    profilePicture: string;
+}
+
+export function Dashboard({
+    children,
+    profilePicture,
+}: PropsWithChildren<Props>) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useBodyScrollLock(isMobileMenuOpen);
@@ -167,17 +175,30 @@ export function Dashboard({ children }: PropsWithChildren) {
             <Box
                 position="fixed"
                 top="5"
-                left="4"
+                px={'5'}
                 display={{ initial: 'block', md: 'none' }}
+                width={'100%'}
                 style={{ zIndex: '2' }}
             >
-                <IconButton
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    variant="soft"
-                    size={'4'}
-                >
-                    <Menu size={32} />
-                </IconButton>
+                <Flex justify={'between'} align={'center'}>
+                    <IconButton
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        variant="soft"
+                        size={'4'}
+                    >
+                        <Menu size={32} />
+                    </IconButton>
+                    <Box>
+                        <Link to="/profile">
+                            <Avatar
+                                size={'4'}
+                                src={profilePicture}
+                                fallback={''}
+                                radius="full"
+                            />
+                        </Link>
+                    </Box>
+                </Flex>
             </Box>
 
             {/* Overlay for closing sidebar */}
