@@ -34,7 +34,7 @@ export default function Events() {
                                 size="7"
                                 src={event.imageUrl || undefined}
                                 fallback={event.name?.[0] || 'E'}
-                                radius="none"
+                                radius="full"
                             />
                             <Box ml="4">
                                 <Link to={`/event/${event.id}`}>

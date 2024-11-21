@@ -83,8 +83,8 @@ export default function EventPage() {
                 <Avatar
                     size="9"
                     src={event.imageUrl}
-                    fallback={event.name[0]}
-                    radius="none"
+                    fallback={event.name}
+                    radius="full"
                     mb="4"
                 />
 
@@ -112,6 +112,7 @@ export default function EventPage() {
                             {organizerUser.firstName} {organizerUser.lastName}
                         </Link>
                         <Avatar
+                            radius="full"
                             size="1"
                             src={organizerUser.profilePicture}
                             fallback={`${organizerUser.firstName}${organizerUser.lastName}`}

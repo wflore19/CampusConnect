@@ -39,6 +39,7 @@ export default function Friends() {
                     <Card key={friend.id}>
                         <Flex align="center" gap="4">
                             <Avatar
+                                radius="full"
                                 size="5"
                                 src={friend.profilePicture}
                                 fallback={`${friend.firstName[0]}${friend.lastName[0]}`}

@@ -92,6 +92,7 @@ export default function UserProfile() {
             <Card>
                 <Flex direction="column" gap="4">
                     <Avatar
+                        radius="full"
                         size="8"
                         src={profilePicture}
                         fallback={`${firstName}${lastName}`}

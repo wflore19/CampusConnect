@@ -37,6 +37,7 @@ export default function Home() {
                     <Card key={user.id}>
                         <Flex align="center" gap="4">
                             <Avatar
+                                radius="full"
                                 size="5"
                                 src={user.profilePicture}
                                 fallback={`${user.firstName[0]}${user.lastName[0]}`}
