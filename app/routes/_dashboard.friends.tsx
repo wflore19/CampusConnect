@@ -1,16 +1,8 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import { getFriendsList } from '~/modules/friends/friends.core';
 import { getSession, user } from '~/utils/session.server';
-import {
-    Box,
-    Heading,
-    Card,
-    Flex,
-    Avatar,
-    Text,
-    Button,
-} from '@radix-ui/themes';
+import { Box, Heading, Card, Flex, Avatar, Link } from '@radix-ui/themes';
 
 export const meta: MetaFunction = () => {
     return [
