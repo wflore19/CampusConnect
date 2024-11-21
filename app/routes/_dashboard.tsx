@@ -5,6 +5,7 @@ import { Outlet } from '@remix-run/react';
 import { Calendar, Layers, User, Users } from 'react-feather';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import { db } from 'db/src';
+import { Box } from '@radix-ui/themes';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const session = await ensureUserAuthenticated(request);
@@ -29,49 +30,44 @@ export default function DashboardLayout() {
         <Dashboard>
             <Dashboard.Header />
             <Dashboard.Sidebar>
-                <div className="mb-8 flex w-full items-center gap-1 p-6">
+                <Box className="mb-8 flex w-full items-center gap-1 p-6">
                     <Dashboard.CompanyLogo />
-                    <div className="text-xl text-white">CampusConnect</div>
-                </div>
+                </Box>
 
                 <Dashboard.Navigation>
                     <Dashboard.NavigationList>
-                        <>
-                            <Dashboard.NavigationLink
-                                icon={<Layers />}
-                                label={`Home`}
-                                pathname={'/home'}
-                            />
-                            <Dashboard.NavigationLink
-                                icon={<Calendar />}
-                                label="Events"
-                                pathname={'/events'}
-                            />
-                            <Dashboard.NavigationLink
-                                icon={<User />}
-                                label="Users"
-                                pathname={'/users'}
-                            />
-                            <Dashboard.NavigationLink
-                                icon={<Users />}
-                                label="Friends"
-                                pathname={'/friends'}
-                            />
+                        <Dashboard.NavigationLink
+                            icon={<Layers />}
+                            label={`Home`}
+                            pathname={'/home'}
+                        />
+                        <Dashboard.NavigationLink
+                            icon={<Calendar />}
+                            label="Events"
+                            pathname={'/events'}
+                        />
+                        <Dashboard.NavigationLink
+                            icon={<User />}
+                            label="Users"
+                            pathname={'/users'}
+                        />
+                        <Dashboard.NavigationLink
+                            icon={<Users />}
+                            label="Friends"
+                            pathname={'/friends'}
+                        />
+                        <Dashboard.NavigationLink
+                            icon={<User />}
+                            label="Profile"
+                            pathname={'/profile'}
+                        />
 
-                            <div className="mb-2 mt-10">
-                                <Divider />
-                            </div>
-
-                            <Dashboard.NavigationLink
-                                icon={<User />}
-                                label="Profile"
-                                pathname={'/profile'}
-                            />
-                        </>
+                        <div className="mb-2 mt-10">
+                            <Divider />
+                        </div>
+                        <Dashboard.LogoutForm />
                     </Dashboard.NavigationList>
                 </Dashboard.Navigation>
-
-                <Dashboard.LogoutForm />
             </Dashboard.Sidebar>
 
             <Dashboard.Page className="overflow-auto">

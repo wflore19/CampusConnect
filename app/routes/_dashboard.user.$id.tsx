@@ -1,18 +1,25 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { db } from 'db/src';
-import { Divider } from '~/components/divider';
-import { Text } from '~/components/text';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import { getPendingFriendRequest } from '~/modules/friends/friends.core';
 import { FriendshipStatusControl } from '~/modules/friends/friends.ui';
+import {
+    Avatar,
+    Box,
+    Card,
+    Flex,
+    Heading,
+    Text,
+    Separator,
+} from '@radix-ui/themes';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     const { id: userId } = params;
     if (!userId) throw new Error('User ID not provided');
     const session = await ensureUserAuthenticated(request);
     const id = user(session);
-    if (userId === id.toString()) redirect('/profile');
+    if (userId === id.toString()) return redirect('/profile');
 
     try {
         const userProfile = await db
@@ -58,29 +65,36 @@ export default function UserProfile() {
     };
 
     return (
-        <div className="px-2 py-6">
-            <Text className="mb-4 text-3xl font-bold">
-                {firstName} {lastName}&apos;s Profile
-            </Text>
+        <Box p="6">
+            <Heading size="7" mb="4">
+                {firstName} {lastName}
+            </Heading>
 
-            <Divider />
+            <Separator size="4" mb="4" />
 
-            <div className="mt-3 space-y-4">
-                <img
-                    src={profilePicture}
-                    alt={`${firstName} ${lastName}`}
-                    className="mb-4 h-32 w-32 rounded-full object-cover"
-                />
-                <FriendshipStatusControl
-                    friendRequest={friendRequest}
-                    userId={userId}
-                    id={id}
-                />
-                <div>
-                    <Text className="font-semibold">Email</Text>
-                    <Text>{email}</Text>
-                </div>
-            </div>
-        </div>
+            <Card>
+                <Flex direction="column" gap="4">
+                    <Avatar
+                        size="8"
+                        src={profilePicture}
+                        fallback={`${firstName[0]}${lastName[0]}`}
+                        mb="2"
+                    />
+                    <FriendshipStatusControl
+                        friendRequest={friendRequest}
+                        userId={userId}
+                        id={id}
+                    />
+                    <Box>
+                        <Text as="div" size="2" weight="bold" mb="1">
+                            Email
+                        </Text>
+                        <Text as="div" size="3">
+                            {email}
+                        </Text>
+                    </Box>
+                </Flex>
+            </Card>
+        </Box>
     );
 }

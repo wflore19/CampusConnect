@@ -1,9 +1,8 @@
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData, useRouteLoaderData } from '@remix-run/react';
-import { Divider } from '~/components/divider';
-import { Text } from '~/components/text';
 import { getFriendsList } from '~/modules/friends/friends.core';
 import { getSession, user } from '~/utils/session.server';
+import { Avatar, Flex, Heading, Text } from '@radix-ui/themes';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
@@ -16,7 +15,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function MyProfile() {
     const friendsList = useLoaderData<typeof loader>();
-    const { firstName, lastName, email, profilePicture } = useRouteLoaderData(
+    const { firstName, lastName, profilePicture } = useRouteLoaderData(
         'routes/_dashboard'
     ) as {
         firstName: string;
@@ -26,30 +25,26 @@ export default function MyProfile() {
     };
 
     return (
-        <div className="px-2 py-6">
-            <Text className="mb-4 text-3xl font-bold">
-                {firstName} {lastName}&apos;s Profile
-            </Text>
+        <Flex direction={'column'}>
+            <Heading as="h1" size={'9'}>
+                {firstName} {lastName}
+            </Heading>
 
-            <Divider />
+            <Flex direction={'column'} gap={'3'}>
+                <Flex gap="2">
+                    <Avatar
+                        src={profilePicture}
+                        size={'8'}
+                        radius="full"
+                        fallback="A"
+                    />
+                </Flex>
 
-            <div className="mt-3 space-y-4">
-                <img
-                    src={profilePicture}
-                    alt={firstName + ' ' + lastName}
-                    className="mb-4 h-32 w-32 rounded-full object-cover"
-                />
-
-                <div>
-                    <Text className="font-semibold">Email</Text>
-                    <Text>{email}</Text>
-                </div>
-                {/* Friends Count */}
-                <div>
+                <Flex gap={'1'}>
                     <Text className="font-semibold">Friends</Text>
                     <Text>{friendsList.length}</Text>
-                </div>
-            </div>
-        </div>
+                </Flex>
+            </Flex>
+        </Flex>
     );
 }
