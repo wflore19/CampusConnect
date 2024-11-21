@@ -1,205 +1,221 @@
+import { Link, NavLink, Form } from '@remix-run/react';
 import {
-    Link,
-    type LinkProps,
-    NavLink,
-    Form as RemixForm,
-} from '@remix-run/react';
-import React, { type PropsWithChildren, useContext, useState } from 'react';
-import { LogOut, Menu, X } from 'react-feather';
+    Box,
+    Flex,
+    Button,
+    Text,
+    Separator,
+    IconButton,
+} from '@radix-ui/themes';
+import { Layers, Calendar, User, Users, LogOut, Menu, X } from 'react-feather';
+import { FC, PropsWithChildren, useState } from 'react';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
-import { IconButton } from './icon-button';
-import { Text } from './text';
-import { cx } from '../utils/cx';
+const SIDEBAR_ITEMS = [
+    { icon: <Layers size={20} />, label: 'Home', path: '/home' },
+    {
+        icon: <Calendar size={20} />,
+        label: 'Events',
+        path: '/events',
+    },
+    { icon: <Users size={20} />, label: 'Users', path: '/users' },
+    { icon: <Users size={20} />, label: 'Friends', path: '/friends' },
+    { icon: <User size={20} />, label: 'Profile', path: '/profile' },
+];
 
-type DashboardContextValue = {
-    open: boolean;
-    setOpen(open: boolean): void;
-};
+export function Dashboard({ children }: PropsWithChildren) {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-const DashboardContext = React.createContext<DashboardContextValue>({
-    open: false,
-    setOpen: () => {},
-});
+    useBodyScrollLock(isMobileMenuOpen);
 
-export const Dashboard = ({ children }: PropsWithChildren) => {
-    const [open, setOpen] = useState<boolean>(false);
-
-    return (
-        <DashboardContext.Provider value={{ open, setOpen }}>
-            <main>{children}</main>
-        </DashboardContext.Provider>
-    );
-};
-
-Dashboard.CloseMenuButton = function CloseMenuButton() {
-    const { setOpen } = useContext(DashboardContext);
-
-    function onClick() {
-        setOpen(false);
+    interface SidebarContentProps {
+        showLabels?: boolean;
     }
 
-    return (
-        <div className="md:hidden">
-            <IconButton
-                className="text-white"
-                icon={<X />}
-                onClick={onClick}
-                shape="circle"
-            />
-        </div>
+    const SidebarContent: FC<SidebarContentProps> = ({ showLabels = true }) => (
+        <Flex direction="column" p="4" height="100%">
+            <Flex justify={'between'} align={'center'} mt={'4'}>
+                <Link to="/">
+                    <Flex align="center" gap="3">
+                        <img
+                            src="/images/logo.png"
+                            alt="Campus Connect logo"
+                            style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: 'var(--radius-2)',
+                            }}
+                        />
+                        {showLabels && (
+                            <Text size="5" weight="bold">
+                                CampusConnect
+                            </Text>
+                        )}
+                    </Flex>
+                </Link>
+                <Box
+                    display={{ initial: 'block', md: 'none' }}
+                    style={{ zIndex: '2' }}
+                >
+                    <IconButton
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        variant="soft"
+                        size={'4'}
+                    >
+                        <X size={32} />
+                    </IconButton>
+                </Box>
+            </Flex>
+            <Separator size="4" my="4" />
+            <Flex direction="column" gap="4">
+                {SIDEBAR_ITEMS.map((item) => (
+                    <NavLink
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        style={({ isActive }) => ({
+                            backgroundColor: isActive
+                                ? 'var(--red-4)'
+                                : 'transparent',
+                            color: 'var(--gray-12)',
+                            textDecoration: 'none',
+                            borderRadius: 'var(--radius-6)',
+                            padding: '8px 12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            ':hover': {
+                                backgroundColor: 'var(--red-4)',
+                            },
+                        })}
+                    >
+                        {item.icon}
+                        {showLabels && <Text>{item.label}</Text>}
+                    </NavLink>
+                ))}
+            </Flex>
+            <Separator size="4" my="4" />
+            <Form action="/logout" method="post">
+                <Button
+                    type="submit"
+                    variant="soft"
+                    color="gray"
+                    className="logoutButton"
+                >
+                    <Flex align="center" gap="2">
+                        <LogOut size={16} />
+                        {showLabels && <Text>Logout</Text>}
+                    </Flex>
+                </Button>
+            </Form>
+        </Flex>
     );
-};
 
-Dashboard.CompanyLogo = function CompanyLogo() {
     return (
-        <Link to="/" className="flex items-center gap-1">
-            <img
-                alt="Company Logo"
-                src="/images/logo.png"
-                className="h-8 w-auto"
-            />
-        </Link>
-    );
-};
-
-const itemClassName = cx(
-    'box-border flex w-full items-center gap-3 p-4',
-    'transition-all duration-200',
-    'hover:bg-blue-100 hover:text-black',
-    'aria-[current="page"]:border-l-4 aria-[current="page"]:bg-blue-600 aria-[current="page"]:hover:text-white'
-);
-
-Dashboard.LogoutForm = function LogoutForm() {
-    return (
-        <RemixForm action="/logout" className="mt-auto w-full" method="post">
-            <button
-                className={cx(itemClassName, 'hover:text-black')}
-                type="submit"
+        <Flex justify="center" style={{ width: '100%' }}>
+            <Flex
+                style={{
+                    maxWidth: '1200px',
+                    width: '100%',
+                    position: 'relative',
+                }}
             >
-                <LogOut />
-                Log Out
-            </button>
-        </RemixForm>
-    );
-};
+                {/* Desktop Sidebar (full) */}
+                <Box
+                    width="240px"
+                    height="100vh"
+                    position="absolute"
+                    left="0"
+                    top="0"
+                    style={{
+                        backgroundColor: 'var(--gray-1)',
+                        borderRight: '1px solid var(--gray-6)',
+                    }}
+                    display={{ initial: 'none', lg: 'block' }}
+                >
+                    <SidebarContent showLabels={true} />
+                </Box>
 
-Dashboard.MenuButton = function MenuButton() {
-    const { setOpen } = useContext(DashboardContext);
+                {/* Medium Devices Sidebar (icons only) */}
+                <Box
+                    width="72px"
+                    height="100vh"
+                    position="absolute"
+                    left="0"
+                    top="0"
+                    style={{
+                        backgroundColor: 'var(--gray-1)',
+                        borderRight: '1px solid var(--gray-6)',
+                    }}
+                    display={{ initial: 'none', md: 'block', lg: 'none' }}
+                >
+                    <SidebarContent showLabels={false} />
+                </Box>
 
-    function onClick() {
-        setOpen(true);
-    }
+                {/* Main Content */}
+                <Box
+                    width="100%"
+                    pl={{ initial: '20px', md: '72px', lg: '240px' }}
+                    pr={{ initial: '20px' }}
+                    mt={{ initial: '64px', md: '0' }}
+                >
+                    {children}
+                </Box>
+            </Flex>
 
-    return (
-        <IconButton
-            className="flex h-fit w-fit text-white md:hidden"
-            icon={<Menu />}
-            onClick={onClick}
-            shape="circle"
-        />
-    );
-};
-
-Dashboard.Navigation = function Navigation({ children }: PropsWithChildren) {
-    return <nav className="w-full">{children}</nav>;
-};
-
-type DashboardNavigationLinkProps = {
-    icon: JSX.Element;
-    label: string;
-    pathname: string;
-    prefetch?: LinkProps['prefetch'];
-};
-
-Dashboard.NavigationLink = function NavigationLink({
-    icon,
-    label,
-    pathname,
-    prefetch,
-}: DashboardNavigationLinkProps) {
-    const { setOpen } = useContext(DashboardContext);
-
-    function onClick() {
-        setOpen(false);
-    }
-
-    return (
-        <li>
-            <NavLink
-                className={itemClassName}
-                onClick={onClick}
-                prefetch={prefetch}
-                to={pathname}
+            {/* Mobile Menu Button */}
+            <Box
+                position="fixed"
+                top="5"
+                left="4"
+                display={{ initial: 'block', md: 'none' }}
+                style={{ zIndex: '2' }}
             >
-                {icon} {label}
-            </NavLink>
-        </li>
-    );
-};
+                <IconButton
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    variant="soft"
+                    size={'4'}
+                >
+                    <Menu size={32} />
+                </IconButton>
+            </Box>
 
-Dashboard.NavigationList = function NavigationList({
-    children,
-}: PropsWithChildren) {
-    return <ul className="flex flex-col">{children}</ul>;
-};
-
-Dashboard.Page = function Page({
-    children,
-    className,
-}: PropsWithChildren<{ className?: string }>) {
-    return (
-        <section
-            className={cx(
-                '@container box-border flex min-h-screen flex-col gap-4',
-                'p-4 pb-24',
-                'md:ml-[270px] md:p-6 md:pb-16',
-                className
+            {/* Overlay for closing sidebar */}
+            {isMobileMenuOpen && (
+                <Box
+                    position="fixed"
+                    top="0"
+                    left="0"
+                    right="0"
+                    bottom="0"
+                    style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        zIndex: 2,
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    display={{ initial: 'block', md: 'none' }}
+                />
             )}
-        >
-            {children}
-        </section>
+
+            {/* Mobile Sliding Drawer */}
+            <Box
+                position="fixed"
+                top="0"
+                left="0"
+                bottom="0"
+                width="90%"
+                style={{
+                    backgroundColor: 'var(--gray-1)',
+                    transform: isMobileMenuOpen
+                        ? 'translateX(0)'
+                        : 'translateX(-100%)',
+                    transition: 'transform 0.3s ease-in-out',
+                    zIndex: '2',
+                }}
+                display={{ initial: 'block', md: 'none' }}
+            >
+                <SidebarContent showLabels={true} />
+            </Box>
+        </Flex>
     );
-};
-
-Dashboard.Sidebar = function Sidebar({ children }: PropsWithChildren) {
-    const { open } = useContext(DashboardContext);
-
-    return (
-        <aside
-            className={cx(
-                'fixed left-0 min-h-[calc(100%-65px)] w-0 flex-col items-start gap-4 overflow-auto md:w-[270px]',
-                'border-r border-r-gray-200 bg-blue-900 text-white md:flex md:min-h-screen',
-                'transition-all ease-in-out',
-                open
-                    ? 'z-10 flex w-[calc(100%-4rem)] animate-[slide-from-left_300ms] duration-300 md:hidden'
-                    : 'w-[0px] duration-200'
-            )}
-        >
-            {children}
-        </aside>
-    );
-};
-
-Dashboard.Subheader = function Subheader({ children }: PropsWithChildren) {
-    return <div className="flex justify-between gap-4">{children}</div>;
-};
-
-Dashboard.Title = function Title({ children }: PropsWithChildren) {
-    return <Text variant="2xl">{children}</Text>;
-};
-
-Dashboard.Header = function Header() {
-    const { open } = useContext(DashboardContext);
-
-    return (
-        <header className="sticky top-0 z-10 border-b border-gray-100 border-opacity-25 bg-blue-900 p-4 md:hidden">
-            <div className="flex items-center justify-between">
-                {open ? (
-                    <Dashboard.CloseMenuButton />
-                ) : (
-                    <Dashboard.MenuButton />
-                )}
-            </div>
-        </header>
-    );
-};
+}

@@ -2,8 +2,10 @@ import { Links, Meta, Outlet, Scripts, useLocation } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
 
 import './tailwind.css';
+import '@radix-ui/themes/styles.css';
 import { useEffect } from 'react';
 import { GoogleAnalytics } from './components/google-analytics';
+import { Theme } from '@radix-ui/themes';
 
 export const links: LinksFunction = () => [
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -31,7 +33,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Links />
             </head>
             <body>
-                {children}
+                <Theme accentColor="red" panelBackground="translucent">
+                    {children}
+                    {/* <ThemePanel /> */}
+                </Theme>
                 <Scripts />
                 <GoogleAnalytics />
             </body>

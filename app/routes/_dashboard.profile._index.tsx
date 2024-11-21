@@ -1,8 +1,28 @@
-import { useRouteLoaderData } from '@remix-run/react';
-import { Divider } from '~/components/divider';
-import { Text } from '~/components/text';
+import { LoaderFunctionArgs } from '@remix-run/node';
+import { useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import { getFriendsList } from '~/modules/friends/friends.core';
+import { getSession, user } from '~/utils/session.server';
+import {
+    Avatar,
+    Box,
+    Card,
+    Flex,
+    Heading,
+    Text,
+    Separator,
+} from '@radix-ui/themes';
+
+export async function loader({ request }: LoaderFunctionArgs) {
+    const session = await getSession(request);
+    const id = user(session);
+
+    const friendsList = await getFriendsList(id);
+
+    return { friendsList: friendsList.length > 0 ? friendsList : [] };
+}
 
 export default function MyProfile() {
+    const { friendsList } = useLoaderData<typeof loader>();
     const { firstName, lastName, email, profilePicture } = useRouteLoaderData(
         'routes/_dashboard'
     ) as {
@@ -13,25 +33,47 @@ export default function MyProfile() {
     };
 
     return (
-        <div className="px-2 py-6">
-            <Text className="mb-4 text-3xl font-bold">
-                {firstName} {lastName}&apos;s Profile
-            </Text>
+        <>
+            <Heading size="7" mb="4">
+                My Profile
+            </Heading>
 
-            <Divider />
+            <Separator size="4" mb="4" />
 
-            <div className="mt-3 space-y-4">
-                <img
-                    src={profilePicture}
-                    alt={firstName + ' ' + lastName}
-                    className="mb-4 h-32 w-32 rounded-full object-cover"
-                />
-
-                <div>
-                    <Text className="font-semibold">Email</Text>
-                    <Text>{email}</Text>
-                </div>
-            </div>
-        </div>
+            <Card>
+                <Flex direction="column" gap="4">
+                    <Avatar
+                        size="8"
+                        src={profilePicture}
+                        fallback={`${firstName[0]}${lastName[0]}`}
+                        mb="2"
+                    />
+                    <Box>
+                        <Text as="div" size="2" weight="bold" mb="1">
+                            Name
+                        </Text>
+                        <Text as="div" size="3">
+                            {firstName} {lastName}
+                        </Text>
+                    </Box>
+                    <Box>
+                        <Text as="div" size="2" weight="bold" mb="1">
+                            Email
+                        </Text>
+                        <Text as="div" size="3">
+                            {email}
+                        </Text>
+                    </Box>
+                    <Box>
+                        <Text as="div" size="2" weight="bold" mb="1">
+                            Friends
+                        </Text>
+                        <Text as="div" size="3">
+                            {friendsList.length}
+                        </Text>
+                    </Box>
+                </Flex>
+            </Card>
+        </>
     );
 }

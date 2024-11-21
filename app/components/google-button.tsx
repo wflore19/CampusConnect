@@ -1,5 +1,5 @@
+import { Link, Button, Flex } from '@radix-ui/themes';
 import { PropsWithChildren } from 'react';
-import { cx } from '~/utils/cx';
 
 interface GoogleButtonProps {
     href: string;
@@ -10,18 +10,20 @@ export function GoogleButton({
     href,
 }: PropsWithChildren<GoogleButtonProps>) {
     return (
-        <a
-            className={cx(
-                'flex items-center gap-3 rounded-lg border border-solid border-gray-300 p-2 no-underline',
-                'hover:cursor-pointer hover:bg-gray-100',
-                'active:bg-gray-200'
-            )}
-            href={href}
-            rel={'noopener noreferrer'}
+        <Button
+            variant="outline"
+            color="gray"
+            asChild
+            style={{ padding: 0 }}
+            size={'4'}
         >
-            <GoogleLogo />
-            {children}
-        </a>
+            <Link href={href} rel="noopener noreferrer" color="gray">
+                <Flex align="center" gap="2">
+                    <GoogleLogo />
+                    {children}
+                </Flex>
+            </Link>
+        </Button>
     );
 }
 

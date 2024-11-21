@@ -1,6 +1,16 @@
 import type { MetaFunction } from '@remix-run/node';
-import { Link, useRouteLoaderData } from '@remix-run/react';
+import { useRouteLoaderData } from '@remix-run/react';
 import { Calendar, Users, Compass } from 'react-feather';
+import {
+    Box,
+    Flex,
+    Heading,
+    Text,
+    Card,
+    Avatar,
+    Grid,
+    Link,
+} from '@radix-ui/themes';
 
 export const meta: MetaFunction = () => {
     return [
@@ -22,63 +32,61 @@ export default function Home() {
     };
 
     return (
-        <div className="mx-auto max-w-4xl px-2 py-6">
-            <div className="mb-6 text-3xl font-bold">
-                Welcome to CampusConnect, {name}{' '}
-                <span>
-                    <img
-                        src={profilePicture}
-                        alt=""
-                        className="h-16 w-16 rounded-full object-cover"
-                    />
-                </span>
-            </div>
+        <>
+            <Flex align="center" mb="6">
+                <Heading size="8" mr="4">
+                    Welcome to CampusConnect, {name}
+                </Heading>
+                <Avatar size="6" src={profilePicture} fallback={name} />
+            </Flex>
 
-            <div className="mb-8 rounded-lg bg-blue-100 p-4">
-                <p className="text-lg">
+            <Card mb="8">
+                <Text size="4">
                     Discover new friendships, exciting events, and build your
                     campus community. Say goodbye to loneliness and hello to
                     meaningful connections!
-                </p>
-            </div>
+                </Text>
+            </Card>
 
-            <div className="grid gap-6 md:grid-cols-2">
-                <div className="rounded-lg bg-white p-6 shadow-md">
-                    <h2 className="mb-4 flex items-center text-xl font-semibold">
-                        <Users className="mr-2" /> Connect with Friends
-                    </h2>
-                    <p className="mb-4">
+            <Grid columns="2" gap="6" mb="8">
+                <Card>
+                    <Flex align="center" mb="2">
+                        <Users />
+                        <Heading size="4" ml="2">
+                            Connect with Friends
+                        </Heading>
+                    </Flex>
+                    <Text as="p" mb="2">
                         Find study buddies, event companions, and friends who
                         share your interests.
-                    </p>
-                    <Link
-                        to="/friends"
-                        className="text-blue-600 hover:underline"
-                    >
-                        Explore Friends &rarr;
+                    </Text>
+                    <Link href="/friends">
+                        <Text>Explore Friends →</Text>
                     </Link>
-                </div>
+                </Card>
 
-                <div className="rounded-lg bg-white p-6 shadow-md">
-                    <h2 className="mb-4 flex items-center text-xl font-semibold">
-                        <Calendar className="mr-2" /> Discover Events
-                    </h2>
-                    <p className="mb-4">
+                <Card>
+                    <Flex align="center" mb="2">
+                        <Calendar />
+                        <Heading size="4" ml="2">
+                            Discover Events
+                        </Heading>
+                    </Flex>
+                    <Text as="p" mb="2">
                         Join campus activities, workshops, and social gatherings
                         tailored to your interests.
-                    </p>
-                    <Link
-                        to="/events"
-                        className="text-blue-600 hover:underline"
-                    >
-                        Browse Events &rarr;
+                    </Text>
+                    <Link href="/events">
+                        <Text>Browse Events →</Text>
                     </Link>
-                </div>
-            </div>
+                </Card>
+            </Grid>
 
-            <div className="mt-8">
-                <h2 className="mb-4 text-2xl font-semibold">Get Started</h2>
-                <ul className="list-inside list-disc space-y-2">
+            <Box mb="8">
+                <Heading size="6" mb="4">
+                    Get Started
+                </Heading>
+                <ul>
                     <li>Complete your profile and add your interests</li>
                     <li>
                         Browse upcoming events and mark the ones you&apos;re
@@ -90,18 +98,21 @@ export default function Home() {
                     </li>
                     <li>Create your own events or study groups</li>
                 </ul>
-            </div>
+            </Box>
 
-            <div className="mt-8 rounded-lg bg-green-100 p-4">
-                <h2 className="mb-2 flex items-center text-xl font-semibold">
-                    <Compass className="mr-2" /> Explore Your Campus Community
-                </h2>
-                <p>
+            <Card>
+                <Flex align="center" mb="2">
+                    <Compass />
+                    <Heading size="6" ml="2">
+                        Explore Your Campus Community
+                    </Heading>
+                </Flex>
+                <Text>
                     CampusConnect is your gateway to a more engaged, inclusive,
                     and vibrant campus life. Start exploring now and make the
                     most of your university experience!
-                </p>
-            </div>
-        </div>
+                </Text>
+            </Card>
+        </>
     );
 }

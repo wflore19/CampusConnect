@@ -1,5 +1,5 @@
 import type { MetaFunction } from '@remix-run/node';
-import { Link, useRouteLoaderData } from '@remix-run/react';
+import { Link, redirect, useRouteLoaderData } from '@remix-run/react';
 import { GoogleButton } from '~/components/google-button';
 
 export const meta: MetaFunction = () => {
@@ -12,6 +12,10 @@ export const meta: MetaFunction = () => {
         },
     ];
 };
+
+export async function loader() {
+    return redirect('/login');
+}
 
 export default function Index() {
     const { name, googleAuthUrl } = useRouteLoaderData('routes/_public') as {

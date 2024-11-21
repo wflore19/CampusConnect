@@ -1,7 +1,8 @@
 import type { MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
-import { db } from 'db/src';
 import { Calendar, MapPin } from 'react-feather';
+import { Box, Heading, Card, Flex, Text, Avatar, Grid } from '@radix-ui/themes';
+import { getEvents } from '~/modules/events/events.core';
 
 export const meta: MetaFunction = () => {
     return [
@@ -11,71 +12,92 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader() {
-    const events = await db
-        .selectFrom('events')
-        .select([
-            'id',
-            'name',
-            'date',
-            'startTime',
-            'endTime',
-            'location',
-            'imageUrl',
-            'organizerId',
-        ])
-        .execute();
+    const events = await getEvents();
 
-    return { events };
+    return events;
 }
 
 export default function Events() {
-    const { events } = useLoaderData<typeof loader>();
+    const events = useLoaderData<typeof loader>();
 
     return (
-        <div className="px-2 py-6">
-            <h1 className="mb-6 text-3xl font-bold">Events</h1>
+        <>
+            <Heading size="8" mb="6">
+                Events
+            </Heading>
 
-            <div className="space-y-4">
+            <Grid gap="4">
                 {events.map((event) => (
-                    <div
-                        key={event.id}
-                        className="flex items-start space-x-4 border-b pb-4"
-                    >
-                        <div className="w-1/4 min-w-[100px] max-w-[400px]">
-                            <img
-                                src={event.imageUrl!}
-                                alt={event.name!}
-                                className="h-auto w-full rounded-lg object-cover"
+                    <Card key={event.id}>
+                        <Flex>
+                            <Avatar
+                                size="7"
+                                src={event.imageUrl || undefined}
+                                fallback={event.name?.[0] || 'E'}
+                                radius="none"
                             />
-                        </div>
-                        <div className="flex-grow">
-                            <Link
-                                to={`/events/${event.id}`}
-                                className="hover:underline"
-                            >
-                                <h3 className="text-lg font-semibold">
-                                    {event.name}
-                                </h3>
-                            </Link>
-                            <div className="flex items-center text-sm text-gray-600">
-                                <Calendar size={14} className="mr-1" />
-                                <span>
-                                    {event.date?.toDateString()} at{' '}
-                                    {event.startTime?.toDateString()} -{' '}
-                                    {event.endTime?.toDateString()}
-                                </span>
-                            </div>
-                            <div className="flex items-center text-sm text-gray-600">
-                                <MapPin size={14} className="mr-1" />
-                                <span>{event.location}</span>
-                            </div>
-                            <div className="mt-1 text-sm text-gray-600">
-                                {event.organizerId}
-                            </div>
-                        </div>
-                    </div>
+                            <Box ml="4">
+                                <Link to={`/event/${event.id}`}>
+                                    <Text size="5" weight="bold" mb="1">
+                                        {event.name}
+                                    </Text>
+                                </Link>
+                                <Flex align="center" mb="1">
+                                    <Calendar size={14} />
+                                    <Text size="2" color="gray" ml="1">
+                                        {event.date
+                                            ? formatDate(new Date(event.date))
+                                            : 'No date'}{' '}
+                                        at{' '}
+                                        {event.startTime
+                                            ? formatTime(
+                                                  new Date(event.startTime)
+                                              )
+                                            : 'No start time'}{' '}
+                                        -{' '}
+                                        {event.endTime
+                                            ? formatTime(
+                                                  new Date(event.endTime)
+                                              )
+                                            : 'No end time'}
+                                    </Text>
+                                </Flex>
+
+                                <Flex align="center" mb="1">
+                                    <MapPin size={14} />
+                                    <Text size="2" color="gray" ml="1">
+                                        {event.location}
+                                    </Text>
+                                </Flex>
+                                <Flex align="center" mb="1">
+                                    <Text size="2" color="gray">
+                                        Organizer ID: {event.organizerId}
+                                    </Text>
+                                </Flex>
+                                <Text size="3" mt="2">
+                                    {event.description}
+                                </Text>
+                            </Box>
+                        </Flex>
+                    </Card>
                 ))}
-            </div>
-        </div>
+            </Grid>
+        </>
     );
 }
+
+const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+};
+
+const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+};
