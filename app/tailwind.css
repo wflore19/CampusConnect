@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media (max-width: 768px) {
+    .desktop-sidebar {
+        display: none;
+    }
+
+    .mobile-drawer {
+        display: block;
+    }
+
+    .mobile-menu-button {
+        display: flex;
+    }
+
+    #mobile-drawer-toggle:checked ~ .mobile-drawer {
+        transform: translateX(0);
+    }
+}
+
+@media (min-width: 769px) {
+    .mobile-drawer,
+    .mobile-menu-button {
+        display: none;
+    }
+}
