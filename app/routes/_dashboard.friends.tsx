@@ -52,20 +52,12 @@ export default function Friends() {
                                 fallback={`${friend.firstName[0]}${friend.lastName[0]}`}
                             />
                             <Box>
-                                <Text
-                                    as="div"
+                                <Link
+                                    href={`/user/${friend.id}`}
                                     size="3"
                                     weight="bold"
-                                >{`${friend.firstName} ${friend.lastName}`}</Text>
-                                <Text as="div" size="2" color="gray">
-                                    {friend.email}
-                                </Text>
+                                >{`${friend.firstName} ${friend.lastName}`}</Link>
                             </Box>
-                            <Button asChild variant="soft">
-                                <Link to={`/user/${friend.id}`}>
-                                    View Profile
-                                </Link>
-                            </Button>
                         </Flex>
                     </Card>
                 ))}

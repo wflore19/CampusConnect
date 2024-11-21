@@ -1,16 +1,8 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import type { LoaderFunctionArgs } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { getUsersList } from '~/modules/users/users.core';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
-import {
-    Avatar,
-    Box,
-    Card,
-    Flex,
-    Heading,
-    Text,
-    Button,
-} from '@radix-ui/themes';
+import { Avatar, Box, Card, Flex, Heading, Link } from '@radix-ui/themes';
 
 type User = {
     id: number;
@@ -18,17 +10,6 @@ type User = {
     lastName: string;
     email: string;
     profilePicture: string;
-};
-
-export const meta: MetaFunction = () => {
-    return [
-        { title: 'CampusConnect - Your Campus Community' },
-        {
-            name: 'description',
-            content:
-                'Connect with friends, discover events, and build your campus community',
-        },
-    ];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -61,20 +42,14 @@ export default function Home() {
                                 fallback={`${user.firstName[0]}${user.lastName[0]}`}
                             />
                             <Box>
-                                <Text
-                                    as="div"
+                                <Link
+                                    href={`/user/${user.id}`}
                                     size="3"
                                     weight="bold"
-                                >{`${user.firstName} ${user.lastName}`}</Text>
-                                <Text as="div" size="2" color="gray">
-                                    {user.email}
-                                </Text>
-                            </Box>
-                            <Button asChild variant="soft">
-                                <Link to={`/user/${user.id}`}>
-                                    View Profile
+                                >
+                                    {user.firstName} {user.lastName}
                                 </Link>
-                            </Button>
+                            </Box>
                         </Flex>
                     </Card>
                 ))}
