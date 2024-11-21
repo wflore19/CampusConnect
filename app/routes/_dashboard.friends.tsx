@@ -1,16 +1,8 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import { getFriendsList } from '~/modules/friends/friends.core';
 import { getSession, user } from '~/utils/session.server';
-import {
-    Box,
-    Heading,
-    Card,
-    Flex,
-    Avatar,
-    Text,
-    Button,
-} from '@radix-ui/themes';
+import { Box, Heading, Card, Flex, Avatar, Link } from '@radix-ui/themes';
 
 export const meta: MetaFunction = () => {
     return [
@@ -47,25 +39,18 @@ export default function Friends() {
                     <Card key={friend.id}>
                         <Flex align="center" gap="4">
                             <Avatar
+                                radius="full"
                                 size="5"
                                 src={friend.profilePicture}
                                 fallback={`${friend.firstName[0]}${friend.lastName[0]}`}
                             />
                             <Box>
-                                <Text
-                                    as="div"
+                                <Link
+                                    href={`/user/${friend.id}`}
                                     size="3"
                                     weight="bold"
-                                >{`${friend.firstName} ${friend.lastName}`}</Text>
-                                <Text as="div" size="2" color="gray">
-                                    {friend.email}
-                                </Text>
+                                >{`${friend.firstName} ${friend.lastName}`}</Link>
                             </Box>
-                            <Button asChild variant="soft">
-                                <Link to={`/user/${friend.id}`}>
-                                    View Profile
-                                </Link>
-                            </Button>
                         </Flex>
                     </Card>
                 ))}

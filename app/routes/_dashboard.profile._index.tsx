@@ -6,6 +6,7 @@ import {
     Avatar,
     Box,
     Card,
+    Link,
     Flex,
     Heading,
     Text,
@@ -43,6 +44,7 @@ export default function MyProfile() {
             <Card>
                 <Flex direction="column" gap="4">
                     <Avatar
+                        radius="full"
                         size="8"
                         src={profilePicture}
                         fallback={`${firstName[0]}${lastName[0]}`}
@@ -65,12 +67,14 @@ export default function MyProfile() {
                         </Text>
                     </Box>
                     <Box>
-                        <Text as="div" size="2" weight="bold" mb="1">
-                            Friends
-                        </Text>
-                        <Text as="div" size="3">
-                            {friendsList.length}
-                        </Text>
+                        <Link href="/friends">
+                            <Text as="div" size="2" weight="bold" mb="1">
+                                Friends
+                            </Text>
+                            <Text as="div" size="3">
+                                {friendsList.length}
+                            </Text>
+                        </Link>
                     </Box>
                 </Flex>
             </Card>

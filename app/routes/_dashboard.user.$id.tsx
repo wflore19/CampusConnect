@@ -2,16 +2,19 @@ import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { db } from 'db/src';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
-import { getPendingFriendRequest } from '~/modules/friends/friends.core';
+import {
+    getFriendsList,
+    getPendingFriendRequest,
+} from '~/modules/friends/friends.core';
 import { FriendshipStatusControl } from '~/modules/friends/friends.ui';
 import {
     Avatar,
-    Box,
     Card,
     Flex,
     Heading,
-    Text,
     Separator,
+    Text,
+    Box,
 } from '@radix-ui/themes';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -33,7 +36,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             id
         );
 
-        return { ...userProfile, friendRequest, id: parseInt(userId) };
+        const friendsList = await getFriendsList(parseInt(userId));
+
+        return {
+            ...userProfile,
+            friendRequest,
+            id: parseInt(userId),
+            friendsList,
+        };
     } catch (error) {
         throw new Error((error as Error).message);
     }
@@ -44,10 +54,10 @@ export default function UserProfile() {
         id: userId,
         firstName,
         lastName,
-        email,
         profilePicture,
         friendRequest,
         id,
+        friendsList,
     } = useLoaderData<typeof loader>() as {
         userId: number;
         firstName: string;
@@ -62,6 +72,13 @@ export default function UserProfile() {
               }
             | undefined;
         id: number;
+        friendsList: {
+            id: number;
+            firstName: string;
+            lastName: string;
+            email: string;
+            profilePicture: string;
+        }[];
     };
 
     return (
@@ -75,9 +92,10 @@ export default function UserProfile() {
             <Card>
                 <Flex direction="column" gap="4">
                     <Avatar
+                        radius="full"
                         size="8"
                         src={profilePicture}
-                        fallback={`${firstName[0]}${lastName[0]}`}
+                        fallback={`${firstName}${lastName}`}
                         mb="2"
                     />
                     <FriendshipStatusControl
@@ -86,11 +104,10 @@ export default function UserProfile() {
                         id={id}
                     />
                     <Box>
-                        <Text as="div" size="2" weight="bold" mb="1">
-                            Email
-                        </Text>
-                        <Text as="div" size="3">
-                            {email}
+                        <Text>Friends</Text>
+                        {/* Number of friends // length of friendsList */}
+                        <Text as="div" size="3" color="gray">
+                            {friendsList.length}
                         </Text>
                     </Box>
                 </Flex>

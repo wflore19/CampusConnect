@@ -1,6 +1,6 @@
 // app/routes/_dashboard.tsx
 import { LoaderFunction } from '@remix-run/node';
-import { Outlet } from '@remix-run/react';
+import { Outlet, useLoaderData } from '@remix-run/react';
 import { Dashboard } from '~/components/dashboard';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import { db } from 'db/src';
@@ -25,10 +25,11 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function DashboardLayout() {
+    const { profilePicture } = useLoaderData<typeof loader>();
     return (
-        <Box style={{ maxWidth: '1300px', margin: '0 auto', width: '100%' }}>
-            <Dashboard>
-                <Container size="3">
+        <Box width={'full'} maxWidth={'1300px'} m={'0 auto'}>
+            <Dashboard profilePicture={profilePicture}>
+                <Container size="3" p={{ initial: '1', md: '6' }}>
                     <Box py="6">
                         <Outlet />
                     </Box>
