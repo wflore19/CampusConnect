@@ -22,7 +22,7 @@ export function FriendshipStatusControl({
 
     if (isPendingForUser) {
         return (
-            <Flex gap="2">
+            <Flex gap="2" direction={{ initial: 'column', sm: 'row' }}>
                 <Form
                     action={`/api/friend-request/${userId}`}
                     method="post"
