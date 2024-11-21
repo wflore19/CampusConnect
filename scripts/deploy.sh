@@ -12,6 +12,9 @@ git pull origin main
 # Install any new dependencies
 npm install
 
+# Migrate the database
+npm run migrate
+
 # Rebuild the project
 npm run build
 
