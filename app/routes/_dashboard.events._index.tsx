@@ -21,7 +21,7 @@ export default function Events() {
     const events = useLoaderData<typeof loader>();
 
     return (
-        <Box p="6">
+        <>
             <Heading size="8" mb="6">
                 Events
             </Heading>
@@ -82,7 +82,7 @@ export default function Events() {
                     </Card>
                 ))}
             </Grid>
-        </Box>
+        </>
     );
 }
 

@@ -38,7 +38,7 @@ export default function Friends() {
     }[];
 
     return (
-        <Box p="4">
+        <>
             <Heading size="6" mb="4">
                 Your Friends
             </Heading>
@@ -70,6 +70,6 @@ export default function Friends() {
                     </Card>
                 ))}
             </Flex>
-        </Box>
+        </>
     );
 }

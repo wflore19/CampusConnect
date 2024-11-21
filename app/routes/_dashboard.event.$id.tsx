@@ -2,7 +2,6 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { Calendar, MapPin } from 'react-feather';
 import {
-    Box,
     Heading,
     Text,
     Card,
@@ -74,7 +73,7 @@ export default function EventPage() {
     });
 
     return (
-        <Box p="6">
+        <>
             <Heading size="8" mb="4">
                 {event.name}
             </Heading>
@@ -120,6 +119,6 @@ export default function EventPage() {
                     </Flex>
                 </Flex>
             </Card>
-        </Box>
+        </>
     );
 }

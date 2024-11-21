@@ -47,7 +47,7 @@ export default function Home() {
     const { users } = useLoaderData<typeof loader>() as { users: User[] };
 
     return (
-        <Box p="4">
+        <>
             <Heading size="6" mb="4">
                 Users
             </Heading>
@@ -79,6 +79,6 @@ export default function Home() {
                     </Card>
                 ))}
             </Flex>
-        </Box>
+        </>
     );
 }

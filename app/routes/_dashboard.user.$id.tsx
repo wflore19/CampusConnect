@@ -65,7 +65,7 @@ export default function UserProfile() {
     };
 
     return (
-        <Box p="6">
+        <>
             <Heading size="7" mb="4">
                 {firstName} {lastName}
             </Heading>
@@ -95,6 +95,6 @@ export default function UserProfile() {
                     </Box>
                 </Flex>
             </Card>
-        </Box>
+        </>
     );
 }
