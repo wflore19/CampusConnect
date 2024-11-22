@@ -9,3 +9,11 @@ export interface FriendshipStatusControlProps {
     userId: number;
     id: number;
 }
+
+export type Friend = {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    profilePicture: string;
+};

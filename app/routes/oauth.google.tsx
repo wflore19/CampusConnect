@@ -27,6 +27,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
         return loginExistingUser(existingUser, session);
     } catch (error) {
-        throw new Error('Failed to authenticate Google user');
+        throw new Error((error as Error).message);
     }
 };
