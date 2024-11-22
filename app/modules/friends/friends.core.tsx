@@ -5,13 +5,13 @@ import { db } from 'db/src';
  */
 
 /**
- * Add a friend request
+ * Send friend request
  * @param fromId
  * @param toId
  * @returns
  */
-export async function addFriendRequest(fromId: number, toId: number) {
-    const friendRequest = await db
+export async function sendFriendRequest(fromId: number, toId: number) {
+    await db
         .insertInto('userFriend')
         .values({
             uid1: fromId,
@@ -19,8 +19,33 @@ export async function addFriendRequest(fromId: number, toId: number) {
             status: 'REQ_UID1',
         })
         .executeTakeFirst();
+}
 
-    return friendRequest;
+/** Cancel friend request
+ * @param fromId
+ * @param toId
+ *
+ * @example
+ * cancelFriendRequest(1, 2)
+ */
+export async function cancelFriendRequest(fromId: number, toId: number) {
+    const result = await db
+        .selectFrom('userFriend')
+        .select(['id'])
+        .where('uid1', '=', fromId)
+        .where('uid2', '=', toId)
+        .where('status', '=', 'REQ_UID1')
+        .unionAll(
+            db
+                .selectFrom('userFriend')
+                .select(['id'])
+                .where('uid2', '=', fromId)
+                .where('uid1', '=', toId)
+                .where('status', '=', 'REQ_UID2')
+        )
+        .executeTakeFirstOrThrow();
+
+    await db.deleteFrom('userFriend').where('id', '=', result.id).execute();
 }
 
 /**
@@ -116,4 +141,32 @@ export async function rejectFriendRequest(fromId: number, toId: number) {
         .execute();
 
     return friendRequest;
+}
+
+/** Remove a friend
+ * @param fromId
+ * @param toId
+ * @returns
+ *
+ * @example
+ * removeFriend(1, 2)
+ */
+export async function removeFriend(fromId: number, toId: number) {
+    const result = await db
+        .selectFrom('userFriend')
+        .select(['id'])
+        .where('uid1', '=', fromId)
+        .where('uid2', '=', toId)
+        .where('status', '=', 'friend')
+        .unionAll(
+            db
+                .selectFrom('userFriend')
+                .select(['id'])
+                .where('uid2', '=', fromId)
+                .where('uid1', '=', toId)
+                .where('status', '=', 'friend')
+        )
+        .executeTakeFirstOrThrow();
+
+    await db.deleteFrom('userFriend').where('id', '=', result.id).execute();
 }

@@ -20,7 +20,6 @@ const SIDEBAR_ITEMS = [
         path: '/events',
     },
     { icon: <Users size={20} />, label: 'Users', path: '/users' },
-    { icon: <Users size={20} />, label: 'Friends', path: '/friends' },
     { icon: <User size={20} />, label: 'Profile', path: '/profile' },
 ];
 
