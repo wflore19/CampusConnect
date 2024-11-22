@@ -5,13 +5,13 @@ import { db } from 'db/src';
  */
 
 /**
- * Add a friend request
+ * Send friend request
  * @param fromId
  * @param toId
  * @returns
  */
-export async function addFriendRequest(fromId: number, toId: number) {
-    const friendRequest = await db
+export async function sendFriendRequest(fromId: number, toId: number) {
+    await db
         .insertInto('userFriend')
         .values({
             uid1: fromId,
@@ -19,8 +19,6 @@ export async function addFriendRequest(fromId: number, toId: number) {
             status: 'REQ_UID1',
         })
         .executeTakeFirst();
-
-    return friendRequest;
 }
 
 /**
