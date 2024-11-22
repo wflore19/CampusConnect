@@ -1,9 +1,9 @@
 import { type ActionFunctionArgs } from '@remix-run/node';
 import {
     acceptFriendRequest,
-    addFriendRequest,
     rejectFriendRequest,
 } from '~/modules/friends/friends.core';
+import { queueFriendRequest } from '~/modules/friends/friends.queue.server';
 
 import { getSession, user } from '~/utils/session.server';
 
@@ -18,14 +18,18 @@ export async function action({ request }: ActionFunctionArgs) {
     if (!userId) throw new Error('User ID not provided');
     if (!status) throw new Error('Status not provided');
 
-    if (status === 'accepted') {
-        await acceptFriendRequest(parseInt(userId), id);
-        return {};
-    } else if (status === 'rejected') {
-        await rejectFriendRequest(parseInt(userId), id);
-        return {};
-    } else if (status === 'sending') {
-        await addFriendRequest(id, parseInt(userId));
-        return {};
+    try {
+        if (status === 'accepted') {
+            await acceptFriendRequest(parseInt(userId), id);
+            return {};
+        } else if (status === 'rejected') {
+            await rejectFriendRequest(parseInt(userId), id);
+            return {};
+        } else if (status === 'sending') {
+            await queueFriendRequest(id, parseInt(userId));
+            return { success: true };
+        }
+    } catch (error) {
+        return { error: (error as Error).message };
     }
 }

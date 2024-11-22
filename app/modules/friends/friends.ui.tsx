@@ -1,11 +1,15 @@
-import { Form } from '@remix-run/react';
+import { Form, useFetcher } from '@remix-run/react';
 import { Button, Flex, Text } from '@radix-ui/themes';
 import { FriendshipStatusControlProps } from './friends.types';
-
+type FetcherData = {
+    success: boolean;
+};
 export function FriendshipStatusControl({
     friendRequest,
     userId,
 }: FriendshipStatusControlProps) {
+    const fetcher = useFetcher<FetcherData>();
+
     const isPendingForUser =
         (friendRequest?.uid1 === userId &&
             friendRequest?.status === 'REQ_UID1') ||
@@ -49,8 +53,12 @@ export function FriendshipStatusControl({
         );
     }
 
-    if (isRequestSentByUser) {
-        return <Text weight="bold">Friend Request Sent</Text>;
+    if (fetcher.data || isRequestSentByUser) {
+        return (
+            <>
+                <Text weight="bold">Friend Request Sent</Text>
+            </>
+        );
     }
 
     if (isFriend) {
@@ -58,16 +66,16 @@ export function FriendshipStatusControl({
     }
 
     return (
-        <Form
-            action={`/api/friend-request/${userId}`}
-            method="post"
-            navigate={false}
-        >
+        <fetcher.Form action={`/api/friend-request/${userId}`} method="post">
             <input type="hidden" name="id" value={userId} />
             <input type="hidden" name="status" value="sending" />
-            <Button type="submit" color="blue">
-                Add Friend
+            <Button
+                type="submit"
+                color="blue"
+                disabled={fetcher.state !== 'idle'}
+            >
+                {fetcher.state === 'idle' ? 'Add Friend' : 'Sending...'}
             </Button>
-        </Form>
+        </fetcher.Form>
     );
 }
