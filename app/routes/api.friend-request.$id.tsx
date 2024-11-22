@@ -27,7 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
             return {};
         } else if (status === 'sending') {
             await queueFriendRequest(id, parseInt(userId));
-            return { success: true };
+            return { success: true, type: 'add' };
         }
     } catch (error) {
         return { error: (error as Error).message };
