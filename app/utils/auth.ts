@@ -12,7 +12,7 @@ export type GoogleUser = {
     verified_email: boolean;
     name: string;
     given_name: string;
-    family_name: string;
+    family_name?: string;
     picture: string;
 };
 
@@ -64,36 +64,15 @@ export async function getGoogleUser(code: string): Promise<GoogleUser> {
         refresh_token: refreshToken,
     });
 
-    const { data } = await GoogleClient.request({
-        url: 'https://www.googleapis.com/oauth2/v2/userinfo',
-    });
+    try {
+        const { data }: { data: GoogleUser } = await GoogleClient.request({
+            url: 'https://www.googleapis.com/oauth2/v2/userinfo',
+        });
 
-    if (!data) {
-        throw new Error('Failed to get Google user');
+        return data;
+    } catch (error) {
+        throw new Error((error as Error).message);
     }
-
-    // Type guard function to check if the data is a GoogleUser
-    function isGoogleUser(user: unknown): user is GoogleUser {
-        return (
-            typeof user === 'object' &&
-            user !== null &&
-            'id' in user &&
-            'email' in user &&
-            'verified_email' in user &&
-            'name' in user &&
-            'given_name' in user &&
-            'family_name' in user &&
-            'picture' in user
-        );
-    }
-
-    if (!isGoogleUser(data)) {
-        throw new Error(
-            'Failed to get Google user profile information from Google'
-        );
-    }
-
-    return data;
 }
 
 /**
