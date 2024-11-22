@@ -1,6 +1,5 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { db } from 'db/src';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import {
     getFriendsList,
@@ -15,7 +14,9 @@ import {
     Separator,
     Text,
     Box,
+    Link,
 } from '@radix-ui/themes';
+import { getUserById } from '~/modules/users/users.core';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     const { id: userId } = params;
@@ -25,11 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     if (userId === id.toString()) return redirect('/profile');
 
     try {
-        const userProfile = await db
-            .selectFrom('users')
-            .select(['id', 'email', 'firstName', 'lastName', 'profilePicture'])
-            .where('id', '=', parseInt(userId))
-            .executeTakeFirst();
+        const userProfile = await getUserById(parseInt(userId));
 
         const friendRequest = await getPendingFriendRequest(
             parseInt(userId),
@@ -104,11 +101,14 @@ export default function UserProfile() {
                         id={id}
                     />
                     <Box>
-                        <Text>Friends</Text>
-                        {/* Number of friends // length of friendsList */}
-                        <Text as="div" size="3" color="gray">
-                            {friendsList.length}
-                        </Text>
+                        <Link href={`/user/${userId}/friends`}>
+                            <Text as="div" size="2" weight="bold" mb="1">
+                                Friends
+                            </Text>
+                            <Text as="div" size="3">
+                                {friendsList.length}
+                            </Text>
+                        </Link>
                     </Box>
                 </Flex>
             </Card>
