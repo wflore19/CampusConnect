@@ -12,7 +12,6 @@ import {
     Flex,
     Heading,
     Separator,
-    Text,
     Box,
     Link,
 } from '@radix-ui/themes';
@@ -106,13 +105,8 @@ export default function UserProfile() {
                         id={id}
                     />
                     <Box>
-                        <Link href={`/user/${userId}/friends`}>
-                            <Text as="div" size="2" weight="bold" mb="1">
-                                Friends
-                            </Text>
-                            <Text as="div" size="3">
-                                {friendsList.length}
-                            </Text>
+                        <Link href="/friends">
+                            Friends ({friendsList.length})
                         </Link>
                     </Box>
                 </Flex>
