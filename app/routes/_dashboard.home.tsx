@@ -20,8 +20,7 @@ export default function Home() {
             <Card mb="8">
                 <Text size="4">
                     Discover new friendships, exciting events, and build your
-                    campus community. Say goodbye to loneliness and hello to
-                    meaningful connections!
+                    campus community.
                 </Text>
             </Card>
 
@@ -63,11 +62,19 @@ export default function Home() {
                 <Heading size="6" mb="4">
                     Get Started
                 </Heading>
-                <ul>
-                    <li>Complete your profile and add your interests</li>
+                <ul className="list-disc pl-6">
                     <li>
-                        Browse upcoming events and mark the ones you&apos;re
-                        interested in
+                        <Link href="/profile" underline="always">
+                            Complete your profile
+                        </Link>{' '}
+                        and add your interests
+                    </li>
+                    <li>
+                        Browse{' '}
+                        <Link href="/events" underline="always">
+                            upcoming events
+                        </Link>{' '}
+                        and mark the ones you&apos;re interested in
                     </li>
                     <li>
                         Connect with friends who share similar interests or are
