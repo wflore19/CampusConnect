@@ -10,10 +10,10 @@
         "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
         "start": "remix-serve ./build/server/index.js",
         "typecheck": "tsc",
-        "migrate": "tsx ./db/src/scripts/migrate.ts && npm run types",
-        "migrate:down": "tsx ./db/src/scripts/migrate.ts --down && npm run types",
+        "migrate": "tsx ./db/src/scripts/migrate.ts && yarn types",
+        "migrate:down": "tsx ./db/src/scripts/migrate.ts --down && yarn types",
         "migration:create": "tsx ./db/src/scripts/create-migration.ts",
-        "seed": "tsx ./db/src/scripts/seed.ts && npm run types",
+        "seed": "tsx ./db/src/scripts/seed.ts && yarn types",
         "type-check": "tsc --noEmit",
         "types": "kysely-codegen --dialect=postgres --camel-case --out-file=./db/src/dist/db.d.ts"
     },
