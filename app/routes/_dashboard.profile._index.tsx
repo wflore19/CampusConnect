@@ -78,7 +78,7 @@ export default function MyProfile() {
                     <EditProfileModal userDetails={userDetails} />
 
                     <Box>
-                        <Heading as="h3" size="2" weight="bold" mb="1">
+                        <Heading as="h2" size="6" weight="bold" mb="1">
                             {firstName} {lastName}
                         </Heading>
                     </Box>
