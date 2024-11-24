@@ -2,15 +2,15 @@ import { sql, type Kysely } from 'kysely';
 import { DB } from '../dist/db';
 
 export async function up(db: Kysely<DB>) {
-	await sql`
+    await sql`
 		CREATE TYPE user_details_sex AS ENUM ('male', 'female', 'other');
 	`.execute(db);
 
-	await sql`
+    await sql`
 		CREATE TYPE user_details_relationship_status AS ENUM ('single', 'taken', 'married', 'complicated');
 	`.execute(db);
 
-	await sql`
+    await sql`
 		CREATE TABLE user_details (
 			id SERIAL PRIMARY KEY,
 			user_id INTEGER REFERENCES users (id) ON DELETE CASCADE,
@@ -32,15 +32,15 @@ export async function up(db: Kysely<DB>) {
 }
 
 export async function down(db: Kysely<DB>) {
-	await sql`
+    await sql`
 		DROP TABLE user_details
 	`.execute(db);
 
-	await sql`
+    await sql`
 		DROP TYPE user_details_sex
 	`.execute(db);
 
-	await sql`
+    await sql`
 		DROP TYPE user_details_relationship_status
 	`.execute(db);
 }

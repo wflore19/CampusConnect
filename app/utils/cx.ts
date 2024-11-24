@@ -16,5 +16,5 @@ type ClassName = string | boolean | null | undefined;
  * cx('1', '2');
  */
 export function cx(...classNames: ClassName[]): string {
-  return twMerge(classNames.filter(Boolean).join(' '));
+    return twMerge(classNames.filter(Boolean).join(' '));
 }

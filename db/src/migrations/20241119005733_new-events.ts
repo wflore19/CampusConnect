@@ -7,7 +7,7 @@ export async function up(db: Kysely<DB>) {
                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                id SERIAL PRIMARY KEY,
-               name VARCHAR(255) DEFAULT '', 
+               name VARCHAR(255) DEFAULT '',
                date DATE,
                location VARCHAR(255) DEFAULT '',
                start_time TIMESTAMP WITH TIME ZONE,

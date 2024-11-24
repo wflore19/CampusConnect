@@ -22,7 +22,7 @@ setup_environment_files() {
 # Function to get permission to overwrite
 get_permission_to_overwrite() {
     ENV_FILE="${EXAMPLE_FILE%.example}"
-    
+
     if [ ! -f "$ENV_FILE" ]; then
         return 0
     fi
@@ -32,7 +32,7 @@ get_permission_to_overwrite() {
     echo -e "${YELLOW}\nIf you had any variables enabled that were not in the \".env.example\" file (ie: Google Analytics), you should jot those variables down somewhere and re-add them after this script finishes.${NC}\n"
 
     read -p "Please enter \"y\" to continue: " response
-    
+
     if [ "$response" = "y" ]; then
         return 0
     else

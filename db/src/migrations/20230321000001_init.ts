@@ -1,7 +1,7 @@
 import { type Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<unknown>) {
-  await sql`
+    await sql`
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
     CREATE TABLE users (
@@ -53,7 +53,7 @@ export async function up(db: Kysely<unknown>) {
 }
 
 export async function down(db: Kysely<unknown>) {
-  await sql`
+    await sql`
     DROP TABLE IF EXISTS event_attendees;
     DROP TABLE IF EXISTS friendships;
     DROP TABLE IF EXISTS events;
