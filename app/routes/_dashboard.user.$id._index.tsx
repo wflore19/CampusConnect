@@ -81,7 +81,7 @@ export default function UserProfile() {
     return (
         <>
             <Heading size="8" mb="6">
-                {firstName} {lastName}
+                {firstName}&apos;s Profile
             </Heading>
 
             <Separator size="4" mb="4" />
@@ -95,6 +95,11 @@ export default function UserProfile() {
                         fallback={`${firstName}${lastName}`}
                         mb="2"
                     />
+                    <Box>
+                        <Heading as="h2" size="6" weight="bold" mb="1">
+                            {firstName} {lastName}
+                        </Heading>
+                    </Box>
                     <FriendshipStatusControl
                         friendRequest={friendRequest}
                         userId={userId}
