@@ -1,18 +1,6 @@
-import type { MetaFunction } from '@remix-run/node';
 import { useRouteLoaderData } from '@remix-run/react';
 import { Calendar, Users, Compass } from 'react-feather';
 import { Box, Flex, Heading, Text, Card, Grid, Link } from '@radix-ui/themes';
-
-export const meta: MetaFunction = () => {
-    return [
-        { title: 'CampusConnect - Your Campus Community' },
-        {
-            name: 'description',
-            content:
-                'Connect with friends, discover events, and build your campus community',
-        },
-    ];
-};
 
 export default function Home() {
     const { firstName } = useRouteLoaderData('routes/_dashboard') as {

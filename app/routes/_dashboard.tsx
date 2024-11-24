@@ -1,10 +1,20 @@
-// app/routes/_dashboard.tsx
-import { LoaderFunction } from '@remix-run/node';
+import { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { Outlet, useLoaderData } from '@remix-run/react';
 import { Dashboard } from '~/components/dashboard';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import { db } from 'db/src';
 import { Box, Container } from '@radix-ui/themes';
+
+export const meta: MetaFunction = () => {
+    return [
+        { title: 'CampusConnect - Your Campus Community' },
+        {
+            name: 'description',
+            content:
+                'Connect with friends, discover events, and build your campus community',
+        },
+    ];
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
     const session = await ensureUserAuthenticated(request);

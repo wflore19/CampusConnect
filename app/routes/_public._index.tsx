@@ -1,17 +1,5 @@
-import type { MetaFunction } from '@remix-run/node';
 import { Link, redirect, useRouteLoaderData } from '@remix-run/react';
 import { GoogleButton } from '~/components/google-button';
-
-export const meta: MetaFunction = () => {
-    return [
-        { title: 'CampusConnect - Building Community on Campus' },
-        {
-            name: 'description',
-            content:
-                'Connect with peers, find events, and combat loneliness on your university campus.',
-        },
-    ];
-};
 
 export async function loader() {
     return redirect('/login');

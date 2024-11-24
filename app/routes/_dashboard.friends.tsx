@@ -1,18 +1,8 @@
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getFriendsList } from '~/modules/friends/friends.core';
 import { getSession, user } from '~/utils/session.server';
 import { Box, Heading, Card, Flex, Avatar, Link } from '@radix-ui/themes';
-
-export const meta: MetaFunction = () => {
-    return [
-        { title: 'CampusConnect - Your Friends' },
-        {
-            name: 'description',
-            content: 'Connect with your friends on CampusConnect',
-        },
-    ];
-};
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
