@@ -12,9 +12,7 @@ export async function getUsersList(id: number) {
             .where('id', '!=', id)
             .execute();
 
-        return {
-            users,
-        };
+        return users;
     } catch (error) {
         throw new Error('Failed to load users');
     }
