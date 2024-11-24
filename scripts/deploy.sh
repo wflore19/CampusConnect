@@ -10,13 +10,13 @@ set -x
 git pull origin main
 
 # Install any new dependencies
-npm install
+yarn
 
 # Migrate the database
-npm run migrate
+yarn migrate
 
 # Rebuild the project
-npm run build
+yarn build
 
 # Restart the application server using PM2
 pm2 restart CampusConnect

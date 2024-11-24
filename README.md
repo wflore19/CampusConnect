@@ -88,11 +88,11 @@ To run the application, you will need the following:
 ## Getting Started
 
 1. Clone the repository
-2. Install dependencies: `npm install`
+2. Install dependencies: `yarn`
 3. Set up environment variables (copy `.env.example` to `.env` and fill in the
    values)
-4. Run database migrations: `npm run migrate`
-5. Start the development server: `npm run dev`
+4. Run database migrations: `yarn migrate`
+5. Start the development server: `yarn dev`
 
 ## Deployment
 

@@ -13,12 +13,12 @@ git pull origin main
 2. **Install any new dependencies**
 
 ```bash
-npm install
+yarn
 ```
 3. **Rebuild the project**
 
 ```bash
-npm run build
+yarn build
 ```
 4. **Restart your application server**
 
