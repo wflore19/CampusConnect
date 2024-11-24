@@ -20,7 +20,7 @@ export function EditProfileModal({
 		<Dialog.Root>
 			<Dialog.Trigger>
 				<Box>
-					<Button size={'2'}>Edit Profile</Button>
+					<Button size={'2'} variant='soft'>Edit Profile</Button>
 				</Box>
 			</Dialog.Trigger>
 			<Dialog.Content maxWidth="450px">

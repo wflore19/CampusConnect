@@ -78,22 +78,14 @@ export default function MyProfile() {
 					<EditProfileModal userDetails={userDetails} />
 
 					<Box>
-						<Text as="div" size="2" weight="bold" mb="1">
-							Name
-						</Text>
-						<Text as="div" size="3">
+						<Heading as="h3" size="2" weight="bold" mb="1">
 							{firstName} {lastName}
-						</Text>
+						</Heading>
 					</Box>
 
 					<Box>
 						<Link href="/friends">
-							<Text as="div" size="2" weight="bold" mb="1">
-								Friends
-							</Text>
-							<Text as="div" size="3">
-								{friendsList.length}
-							</Text>
+							Friends ({friendsList.length})
 						</Link>
 					</Box>
 
