@@ -59,7 +59,7 @@ export default function MyProfile() {
 
 	return (
 		<>
-			<Heading size="7" mb="4">
+			<Heading size="8" mb="6">
 				My Profile
 			</Heading>
 
