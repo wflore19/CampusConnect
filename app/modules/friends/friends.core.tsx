@@ -77,6 +77,8 @@ export async function getPendingFriendRequest(userId: number, id: number) {
  * @returns
  */
 export async function getFriendsList(id: number) {
+    if (!id) throw new Error('User ID not provided');
+
     const friendsList = await db
         .selectFrom('userFriend')
         .fullJoin('users', 'users.id', 'userFriend.uid2')
@@ -104,6 +106,8 @@ export async function getFriendsList(id: number) {
                 .where('status', '=', 'friend')
         )
         .execute();
+
+    if (!friendsList) throw new Error('Friends not found');
 
     return friendsList;
 }
