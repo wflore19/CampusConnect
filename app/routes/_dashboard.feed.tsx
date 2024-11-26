@@ -11,16 +11,12 @@ import {
     DropdownMenu,
 } from '@radix-ui/themes';
 import { ActionFunctionArgs, LoaderFunction } from '@remix-run/node';
-import {
-    NavLink,
-    Outlet,
-    useFetcher,
-    useLoaderData,
-} from '@remix-run/react';
+import { NavLink, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
 import React from 'react';
 import { Edit3, MoreVertical, Trash2 } from 'react-feather';
 import { getFriendsList } from '~/modules/friends/friends.core';
 import { createPost, getPostsById } from '~/modules/posts/posts.core';
+import { getTimeAgo } from '~/modules/posts/posts.helpers';
 import { Post, Posts } from '~/modules/posts/posts.types';
 import { getSession, user } from '~/utils/session.server';
 
@@ -132,11 +128,13 @@ export default function Feed() {
                                             <Avatar
                                                 size="3"
                                                 src={
-                                                    post.profilePicture || undefined
+                                                    post.profilePicture ||
+                                                    undefined
                                                 }
                                                 radius="full"
                                                 fallback={
-                                                    post.firstName + post.lastName
+                                                    post.firstName +
+                                                    post.lastName
                                                 }
                                             />
                                             <Flex
@@ -145,56 +143,22 @@ export default function Feed() {
                                             >
                                                 <Link
                                                     href={`/user/${post.userId}`}
-                                                    size={{ initial: '4', md: '2' }}
+                                                    size={{
+                                                        initial: '4',
+                                                        md: '2',
+                                                    }}
                                                     weight="medium"
                                                 >
-                                                    {post.firstName} {post.lastName}
+                                                    {post.firstName}{' '}
+                                                    {post.lastName}
                                                 </Link>
                                                 <Text
-                                                    size={{ initial: '1', md: '2' }}
+                                                    size={{
+                                                        initial: '1',
+                                                        md: '2',
+                                                    }}
                                                 >
-                                                    {(() => {
-                                                        const now = new Date();
-                                                        const postDate = new Date(
-                                                            post.createdAt
-                                                        );
-                                                        const diffInSeconds =
-                                                            Math.floor(
-                                                                (now.getTime() -
-                                                                    postDate.getTime()) /
-                                                                    1000
-                                                            );
-
-                                                        if (diffInSeconds < 60) {
-                                                            return `${diffInSeconds} second${diffInSeconds !== 1 ? 's' : ''} ago`;
-                                                        } else if (
-                                                            diffInSeconds < 3600
-                                                        ) {
-                                                            // less than 1 hour
-                                                            const minutes =
-                                                                Math.floor(
-                                                                    diffInSeconds /
-                                                                        60
-                                                                );
-                                                            return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
-                                                        } else if (
-                                                            diffInSeconds < 86400
-                                                        ) {
-                                                            // less than 24 hours
-                                                            const hours =
-                                                                Math.floor(
-                                                                    diffInSeconds /
-                                                                        3600
-                                                                );
-                                                            return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-                                                        } else {
-                                                            const days = Math.floor(
-                                                                diffInSeconds /
-                                                                    86400
-                                                            );
-                                                            return `${days} day${days !== 1 ? 's' : ''} ago`;
-                                                        }
-                                                    })()}
+                                                    {getTimeAgo(post.createdAt)}
                                                 </Text>
                                             </Flex>
                                         </Flex>
@@ -208,7 +172,9 @@ export default function Feed() {
                                     as="p"
                                     size={{ initial: '3', md: '2' }}
                                     mb="2"
-                                    dangerouslySetInnerHTML={{ __html: post.content }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: post.content,
+                                    }}
                                 />
                             </Box>
 
@@ -233,15 +199,15 @@ function PostOptionsDropdown({ post }: { post: Post }) {
             <DropdownMenu.Content>
                 <DropdownMenu.Item>
                     <NavLink to={`/feed/post/${post.id}/update`}>
-                        <Flex gap={'2'} align='center'>
-                            <Edit3 size={16} color='blue' /> Edit Post
+                        <Flex gap={'2'} align="center">
+                            <Edit3 size={16} color="blue" /> Edit Post
                         </Flex>
                     </NavLink>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item asChild>
                     <NavLink to={`/feed/post/${post.id}/delete`}>
-                        <Flex gap={'2'} align='center'>
-                            <Trash2 size={16} color='red' /> Delete Post
+                        <Flex gap={'2'} align="center">
+                            <Trash2 size={16} color="red" /> Delete Post
                         </Flex>
                     </NavLink>
                 </DropdownMenu.Item>
