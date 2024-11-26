@@ -12,6 +12,18 @@ export async function loader() {
 export default function Events() {
     const events = useLoaderData<typeof loader>();
 
+    if (!events.length)
+        return (
+            <>
+                <Heading size="8" mb="6">
+                    Events
+                </Heading>
+                <Flex align="center" justify="center">
+                    <Text>Feature coming soon...</Text>
+                </Flex>
+            </>
+        );
+
     return (
         <>
             <Heading size="8" mb="6">
