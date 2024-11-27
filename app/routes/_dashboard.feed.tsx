@@ -7,11 +7,10 @@ import {
     Separator,
     TextArea,
     Button,
-    Link,
     DropdownMenu,
 } from '@radix-ui/themes';
 import { ActionFunctionArgs, LoaderFunction } from '@remix-run/node';
-import { NavLink, Outlet, useFetcher, useLoaderData } from '@remix-run/react';
+import { Outlet, useFetcher, useLoaderData, Link } from '@remix-run/react';
 import React from 'react';
 import { Edit3, MoreVertical, Trash2 } from 'react-feather';
 import { getFriendsList } from '~/modules/friends/friends.core';
@@ -142,15 +141,17 @@ export default function Feed() {
                                                 gap={{ initial: '0', md: '1' }}
                                             >
                                                 <Link
-                                                    href={`/user/${post.userId}`}
-                                                    size={{
-                                                        initial: '4',
-                                                        md: '2',
-                                                    }}
-                                                    weight="medium"
+                                                    to={`/user/${post.userId}`}
                                                 >
-                                                    {post.firstName}{' '}
-                                                    {post.lastName}
+                                                    <Text
+                                                        size={{
+                                                            initial: '4',
+                                                            md: '2',
+                                                        }}
+                                                        weight="medium"
+                                                    >
+                                                        {`${post.firstName} ${post.lastName}`}
+                                                    </Text>
                                                 </Link>
                                                 <Text
                                                     size={{
@@ -197,19 +198,19 @@ function PostOptionsDropdown({ post }: { post: Post }) {
                 <MoreVertical size={16} />
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
-                <DropdownMenu.Item>
-                    <NavLink to={`/feed/post/${post.id}/update`}>
+                <DropdownMenu.Item asChild>
+                    <Link to={`/feed/post/${post.id}/update`}>
                         <Flex gap={'2'} align="center">
                             <Edit3 size={16} color="blue" /> Edit Post
                         </Flex>
-                    </NavLink>
+                    </Link>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item asChild>
-                    <NavLink to={`/feed/post/${post.id}/delete`}>
+                    <Link to={`/feed/post/${post.id}/delete`}>
                         <Flex gap={'2'} align="center">
                             <Trash2 size={16} color="red" /> Delete Post
                         </Flex>
-                    </NavLink>
+                    </Link>
                 </DropdownMenu.Item>
             </DropdownMenu.Content>
         </DropdownMenu.Root>

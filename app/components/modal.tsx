@@ -3,10 +3,9 @@ import React, { type PropsWithChildren, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'react-feather';
 
-import { getIconButtonCn } from './icon-button';
-import { Text } from './text';
 import { useHydrated } from '~/hooks/useHydrated';
 import { cx } from '../utils/cx';
+import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 
 const ModalContext = React.createContext({
     _initialized: false,
@@ -39,7 +38,7 @@ export const Modal = ({
         <ModalContext.Provider value={{ _initialized: true, onCloseTo }}>
             <div
                 className={cx(
-                    'fixed flex h-screen w-screen justify-center',
+                    'fixed z-50 flex h-screen w-screen justify-center',
                     'bottom-0 items-center', // Mobile
                     'sm:top-0' // > Mobile
                 )}
@@ -68,7 +67,7 @@ export const Modal = ({
                 />
             </div>
         </ModalContext.Provider>,
-        document.body
+        document.querySelector('.htmlRoot')!
     );
 };
 
@@ -76,31 +75,40 @@ Modal.CloseButton = function ModalCloseButton() {
     const { onCloseTo } = useContext(ModalContext);
 
     return (
-        <Link
-            className={getIconButtonCn({
-                backgroundColor: 'gray-100',
-                backgroundColorOnHover: 'gray-200',
-            })}
-            preventScrollReset
-            to={onCloseTo}
-        >
+        <Link preventScrollReset to={onCloseTo}>
             <X />
         </Link>
     );
 };
 
 Modal.Description = function ModalDescription({ children }: PropsWithChildren) {
-    return <Text color="gray-500">{children}</Text>;
+    return (
+        <Text size="3" color="gray">
+            {children}
+        </Text>
+    );
 };
 
 Modal.Header = function ModalHeader({ children }: PropsWithChildren) {
     return (
-        <header className="flex items-start justify-between gap-2">
+        <Flex justify="between" align={'center'}>
             {children}
-        </header>
+        </Flex>
     );
 };
 
 Modal.Title = function ModalTitle({ children }: PropsWithChildren) {
-    return <Text variant="xl">{children}</Text>;
+    return <Heading size="4">{children}</Heading>;
+};
+
+Modal.Content = function ModalContent({ children }: PropsWithChildren) {
+    return <Box>{children}</Box>;
+};
+
+Modal.Actions = function ModalActions({ children }: PropsWithChildren) {
+    return (
+        <Flex mt={'4'} justify={'end'} gap={'3'}>
+            {children}
+        </Flex>
+    );
 };
