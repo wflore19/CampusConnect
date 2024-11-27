@@ -40,7 +40,7 @@ export default function EditPostModal() {
     };
 
     return (
-        <Modal onCloseTo={`/feed`} size="600">
+        <Modal onCloseTo={`/feed`}>
             <Modal.Header>
                 <Modal.Title>Edit Post</Modal.Title>
                 <Modal.CloseButton />

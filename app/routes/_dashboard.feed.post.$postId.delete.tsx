@@ -31,7 +31,7 @@ export async function action({ params }: ActionFunctionArgs) {
 
 export default function DeletePostModal() {
     return (
-        <Modal onCloseTo={`/feed`} size="600">
+        <Modal onCloseTo={`/feed`} size="400">
             <Modal.Header>
                 <Modal.Title>Confirm Delete</Modal.Title>
                 <Modal.CloseButton />
