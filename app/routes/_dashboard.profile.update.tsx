@@ -127,13 +127,11 @@ export default function ProfileUpdate() {
     return (
         <Modal onCloseTo={`/profile`} size="600">
             <Modal.Header>
-                <Modal.Title>Edit Post</Modal.Title>
+                <Modal.Title>Edit Profile</Modal.Title>
                 <Modal.CloseButton />
             </Modal.Header>
 
-            <Modal.Description>
-                Make changes to your post here.
-            </Modal.Description>
+            <Modal.Description>Make changes to your profile.</Modal.Description>
 
             <Form method="put">
                 <Modal.Content>
