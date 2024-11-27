@@ -180,6 +180,13 @@ export async function signupNewUser(googleUser: GoogleUser, session: Session) {
             throw new Error('Failed to create new user');
         }
 
+        await db
+            .insertInto('userDetails')
+            .values({
+                userId: newUser.id,
+            })
+            .execute();
+
         return newUser;
     }
 }
@@ -196,7 +203,6 @@ export async function uploadImageS3(
     const parsedFirstName = googleUser.name.split(' ')[0];
     const parsedLastName =
         googleUser.name.split(' ')[googleUser.name.split(' ').length - 1];
-
     const spacesImageUrl = await uploadImageFromCDN(
         googleUser.picture,
         `${parsedFirstName}-${parsedLastName}-${userId}.jpg`

@@ -37,14 +37,16 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function DashboardLayout() {
     const { profilePicture } = useLoaderData<typeof loader>();
     return (
-        <Box width={'full'} maxWidth={'1300px'} mx={'auto'}>
-            <Dashboard profilePicture={profilePicture}>
-                <Container size="3" p={{ initial: '1', md: '6' }}>
-                    <Box py="6">
-                        <Outlet />
-                    </Box>
-                </Container>
-            </Dashboard>
-        </Box>
+        <div className="htmlRoot">
+            <Box width={'full'} maxWidth={'1300px'} mx={'auto'}>
+                <Dashboard profilePicture={profilePicture}>
+                    <Container size="3" p={{ initial: '1', md: '6' }}>
+                        <Box py="6">
+                            <Outlet />
+                        </Box>
+                    </Container>
+                </Dashboard>
+            </Box>
+        </div>
     );
 }

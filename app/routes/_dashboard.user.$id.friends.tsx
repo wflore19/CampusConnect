@@ -5,6 +5,7 @@ import { Box, Heading, Card, Flex, Avatar, Link } from '@radix-ui/themes';
 import { getUserById } from '~/modules/users/users.core';
 import { Friend } from '~/modules/friends/friends.types';
 import { UserProfile } from '~/modules/users/users.types';
+import { Modal } from '~/components/modal';
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { id: userId } = params;
@@ -15,21 +16,24 @@ export async function loader({ params }: LoaderFunctionArgs) {
         const userProfile = await getUserById(Number(userId));
 
         return friendsList.length > 0
-            ? { friendsList, userProfile }
-            : { friendsList: [], userProfile };
+            ? { friendsList, userProfile, userId: Number(userId) }
+            : { friendsList: [], userProfile, userId: Number(userId) };
     } catch (error) {
         throw new Error((error as Error).message);
     }
 }
 
 export default function UserFriends() {
-    const { friendsList, userProfile } = useLoaderData<typeof loader>() as {
+    const { friendsList, userProfile, userId } = useLoaderData<
+        typeof loader
+    >() as {
         friendsList: Friend[];
         userProfile: UserProfile;
+        userId: number;
     };
 
     return (
-        <>
+        <Modal onCloseTo={`/user/${userId}`} size="600">
             <Heading size="8" mb="6">
                 {userProfile.firstName}&apos;s Friends
             </Heading>
@@ -54,6 +58,6 @@ export default function UserFriends() {
                     </Card>
                 ))}
             </Flex>
-        </>
+        </Modal>
     );
 }

@@ -7,17 +7,27 @@ import { Box, Heading, Card, Flex, Avatar, Link } from '@radix-ui/themes';
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
     const id = user(session);
-    return getFriendsList(id);
+
+    try {
+        const friendsList = await getFriendsList(id);
+
+    return { friendsList };
+    } catch (error) {
+        throw new Error((error as Error).message);
+    }
+
 }
 
 export default function Friends() {
-    const friendsList = useLoaderData<typeof loader>() as {
-        id: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        profilePicture: string;
-    }[];
+    const { friendsList } = useLoaderData<typeof loader>() as {
+        friendsList: {
+            id: number;
+            firstName: string;
+            lastName: string;
+            email: string;
+            profilePicture: string;
+        }[];
+    };
 
     return (
         <>

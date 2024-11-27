@@ -8,12 +8,13 @@ import {
     IconButton,
     Avatar,
 } from '@radix-ui/themes';
-import { Layers, Calendar, User, Users, LogOut, Menu, X } from 'react-feather';
+import { Layers, Calendar, User, Users, LogOut, Menu, X, Home } from 'react-feather';
 import { FC, PropsWithChildren, useState } from 'react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const SIDEBAR_ITEMS = [
-    { icon: <Layers size={20} />, label: 'Home', path: '/home' },
+    { icon: <Home size={20} />, label: 'Home', path: '/home' },
+    { icon: <Layers size={20} />, label: 'News Feed', path: '/feed' },
     {
         icon: <Calendar size={20} />,
         label: 'Events',
