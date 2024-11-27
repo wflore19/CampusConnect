@@ -150,7 +150,7 @@ export default function ProfileUpdate() {
                         </Box>
                         <Flex
                             direction={{ initial: 'row', md: 'column' }}
-                            gap="9"
+                            gap={{ initial: '9', md: '4' }}
                         >
                             <Box>
                                 <Text size="2" mb="1" weight="bold">
@@ -182,29 +182,31 @@ export default function ProfileUpdate() {
                                 <Text size="2" mb="1" weight="bold">
                                     Relationship Status
                                 </Text>
-                                <Select.Root
-                                    defaultValue={
-                                        userDetails.relationshipStatus ||
-                                        undefined
-                                    }
-                                    name="relationshipStatus"
-                                >
-                                    <Select.Trigger placeholder="Select" />
-                                    <Select.Content>
-                                        <Select.Item value="single">
-                                            Single
-                                        </Select.Item>
-                                        <Select.Item value="taken">
-                                            Taken
-                                        </Select.Item>
-                                        <Select.Item value="married">
-                                            Married
-                                        </Select.Item>
-                                        <Select.Item value="complicated">
-                                            Complicated
-                                        </Select.Item>
-                                    </Select.Content>
-                                </Select.Root>
+                                <Box width={'100%'}>
+                                    <Select.Root
+                                        defaultValue={
+                                            userDetails.relationshipStatus ||
+                                            undefined
+                                        }
+                                        name="relationshipStatus"
+                                    >
+                                        <Select.Trigger placeholder="Select" />
+                                        <Select.Content>
+                                            <Select.Item value="single">
+                                                Single
+                                            </Select.Item>
+                                            <Select.Item value="taken">
+                                                Taken
+                                            </Select.Item>
+                                            <Select.Item value="married">
+                                                Married
+                                            </Select.Item>
+                                            <Select.Item value="complicated">
+                                                Complicated
+                                            </Select.Item>
+                                        </Select.Content>
+                                    </Select.Root>
+                                </Box>
                             </Box>
                         </Flex>
                         <Box>
