@@ -17,7 +17,7 @@ import { db } from 'db/src';
 import { UserDetailsRelationshipStatus, UserDetailsSex } from 'db/src/dist/db';
 import { Modal } from '~/components/modal';
 import { Button, Flex, TextField, Text, Box, Select } from '@radix-ui/themes';
-import { Edit3 } from 'react-feather';
+import { RiEdit2Line } from '@remixicon/react';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
@@ -324,7 +324,7 @@ export default function ProfileUpdate() {
                     </Link>
 
                     <Button type="submit" color="indigo" variant="soft">
-                        <Edit3 className="mr-2" size={16} /> Update Profile
+                        <RiEdit2Line size={16} /> Update Profile
                     </Button>
                 </Modal.Actions>
             </Form>
