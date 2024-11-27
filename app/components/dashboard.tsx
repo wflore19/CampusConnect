@@ -256,14 +256,18 @@ function SidebarContent({ showLabels = true }: SidebarContentProps) {
                         )}
                     </Flex>
                 </Link>
-
-                <IconButton
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    variant="soft"
-                    size={'4'}
+                <Box
+                    display={{ initial: 'block', sm: 'none' }}
+                    style={{ zIndex: '2' }}
                 >
-                    <RiCloseLine size={32} />
-                </IconButton>
+                    <IconButton
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        variant="soft"
+                        size={'4'}
+                    >
+                        <RiCloseLine size={32} />
+                    </IconButton>
+                </Box>
             </Flex>
             <Separator size="4" my="4" />
             <Flex direction="column" gap="4">
