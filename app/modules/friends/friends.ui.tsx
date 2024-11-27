@@ -1,5 +1,5 @@
 import { Form, useFetcher } from '@remix-run/react';
-import { Button, Flex } from '@radix-ui/themes';
+import { Box, Button, Flex, Link } from '@radix-ui/themes';
 import { FriendshipStatusControlProps } from './friends.types';
 type FetcherData = {
     success: boolean;
@@ -72,12 +72,11 @@ export function FriendshipStatusControl({
 
     if (isFriend) {
         return (
-            <fetcher.Form action={`/api/friend/remove/${userId}`} method="post">
-                <input type="hidden" name="id" value={userId} />
-                <Button type="submit" disabled={fetcher.state !== 'idle'}>
-                    {fetcher.state === 'idle' ? 'Remove Friend' : 'Removing...'}
-                </Button>
-            </fetcher.Form>
+            <Box>
+                <Link href={`/user/${userId}/remove`}>
+                    <Button size={'2'}>Remove Friend</Button>
+                </Link>
+            </Box>
         );
     }
 

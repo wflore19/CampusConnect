@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Outlet, useLoaderData } from '@remix-run/react';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import {
     getFriendsList,
@@ -16,6 +16,7 @@ import {
     Link,
 } from '@radix-ui/themes';
 import { getUserById } from '~/modules/users/users.core';
+import React from 'react';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     const { id: userId } = params;
@@ -78,7 +79,7 @@ export default function UserProfile() {
     };
 
     return (
-        <>
+        <React.Fragment>
             <Heading size="8" mb="6">
                 {firstName}&apos;s Profile
             </Heading>
@@ -105,12 +106,13 @@ export default function UserProfile() {
                         id={id}
                     />
                     <Box>
-                        <Link href="/friends">
+                        <Link href={`/user/${userId}/friends`}>
                             Friends ({friendsList.length})
                         </Link>
                     </Box>
                 </Flex>
             </Card>
-        </>
+            <Outlet />
+        </React.Fragment>
     );
 }
