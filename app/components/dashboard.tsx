@@ -9,7 +9,6 @@ import {
     Avatar,
     Tooltip,
 } from '@radix-ui/themes';
-import { Menu, X } from 'react-feather';
 import React, { FC, PropsWithChildren, useState } from 'react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import {
@@ -17,9 +16,11 @@ import {
     RiAppsLine,
     RiCalendarEventFill,
     RiCalendarEventLine,
+    RiCloseLine,
     RiHome4Fill,
     RiHome4Line,
     RiLogoutBoxLine,
+    RiMenuLine,
     RiTeamFill,
     RiTeamLine,
     RiUser3Fill,
@@ -172,7 +173,7 @@ export function Dashboard({
                             variant="soft"
                             size={'4'}
                         >
-                            <Menu size={32} />
+                            <RiMenuLine size={28} />
                         </IconButton>
                         <Box>
                             <Link to="/profile">
@@ -212,7 +213,7 @@ export function Dashboard({
                     bottom="0"
                     width="90%"
                     style={{
-                        backgroundColor: 'var(--gray-1)',
+                        backgroundColor: 'var(--red-1)',
                         transform: isMobileMenuOpen
                             ? 'translateX(0)'
                             : 'translateX(-100%)',
@@ -234,7 +235,10 @@ function SidebarContent({ showLabels = true }: SidebarContentProps) {
     return (
         <Flex direction="column" p="4" height="100%">
             <Flex justify={'between'} align={'center'} mt={'4'}>
-                <Link to="/">
+                <Link
+                    to="/"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
                     <Flex align="center" gap="3">
                         <img
                             src="/images/logo.png"
@@ -252,18 +256,14 @@ function SidebarContent({ showLabels = true }: SidebarContentProps) {
                         )}
                     </Flex>
                 </Link>
-                <Box
-                    display={{ initial: 'block', sm: 'none' }}
-                    style={{ zIndex: '2' }}
+
+                <IconButton
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    variant="soft"
+                    size={'4'}
                 >
-                    <IconButton
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        variant="soft"
-                        size={'4'}
-                    >
-                        <X size={32} />
-                    </IconButton>
-                </Box>
+                    <RiCloseLine size={32} />
+                </IconButton>
             </Flex>
             <Separator size="4" my="4" />
             <Flex direction="column" gap="4">
