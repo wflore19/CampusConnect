@@ -5,7 +5,7 @@ import {
     redirect,
 } from '@remix-run/node';
 import { Form, NavLink, useLoaderData } from '@remix-run/react';
-import { Trash2 } from 'react-feather';
+import { RiUserMinusFill } from '@remixicon/react';
 import { Modal } from '~/components/modal';
 import { removeFriend } from '~/modules/friends/friends.core';
 import { getSession, user } from '~/utils/session.server';
@@ -36,7 +36,7 @@ export default function DeletePostModal() {
     const { userId } = useLoaderData<typeof loader>();
 
     return (
-        <Modal onCloseTo={`/feed`} size="600">
+        <Modal onCloseTo={`/user/${userId}`} size="600">
             <Modal.Header>
                 <Modal.Title>Confirm Delete</Modal.Title>
                 <Modal.CloseButton />
@@ -59,8 +59,8 @@ export default function DeletePostModal() {
                 </NavLink>
 
                 <Form method="delete">
-                    <Button type="submit">
-                        <Trash2 size={16} /> Confirm
+                    <Button type="submit" color="red">
+                        <RiUserMinusFill size={16} /> Confirm
                     </Button>
                 </Form>
             </Modal.Actions>

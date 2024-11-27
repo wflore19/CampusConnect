@@ -1,12 +1,16 @@
 import { LoaderFunctionArgs } from '@remix-run/node';
-import { Outlet, useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import {
+    Outlet,
+    useLoaderData,
+    useRouteLoaderData,
+    Link,
+} from '@remix-run/react';
 import { getFriendsList } from '~/modules/friends/friends.core';
 import { getSession, user } from '~/utils/session.server';
 import {
     Avatar,
     Box,
     Card,
-    Link,
     Flex,
     Heading,
     Separator,
@@ -15,6 +19,7 @@ import {
 import { getUserDetails } from '~/modules/users/users.queries';
 import { UserDetails } from '~/modules/users/users.types';
 import { UserProfileInformation } from '~/modules/users/users.ui';
+import { RiEdit2Line, RiGroupLine } from '@remixicon/react';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
@@ -76,9 +81,9 @@ export default function MyProfile() {
                     />
 
                     <Box>
-                        <Link href="/profile/update">
-                            <Button size={'2'} variant="soft">
-                                Edit Profile
+                        <Link to="/profile/update">
+                            <Button size={'2'} variant="soft" color="indigo">
+                                <RiEdit2Line size={20} /> Edit Profile
                             </Button>
                         </Link>
                     </Box>
@@ -90,8 +95,11 @@ export default function MyProfile() {
                     </Box>
 
                     <Box>
-                        <Link href="/friends">
-                            Friends ({friendsList.length})
+                        <Link to={`/profile/friends`}>
+                            <Flex align="center" gap="2">
+                                <RiGroupLine size={18} /> Friends (
+                                {friendsList.length})
+                            </Flex>
                         </Link>
                     </Box>
 

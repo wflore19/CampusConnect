@@ -1,11 +1,11 @@
 import { Link, type LinkProps } from '@remix-run/react';
 import React, { type PropsWithChildren, useContext } from 'react';
 import { createPortal } from 'react-dom';
-import { X } from 'react-feather';
 
 import { useHydrated } from '~/hooks/useHydrated';
 import { cx } from '../utils/cx';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import { RiCloseFill } from '@remixicon/react';
 
 const ModalContext = React.createContext({
     _initialized: false,
@@ -76,7 +76,7 @@ Modal.CloseButton = function ModalCloseButton() {
 
     return (
         <Link preventScrollReset to={onCloseTo}>
-            <X />
+            <RiCloseFill size={32} />
         </Link>
     );
 };

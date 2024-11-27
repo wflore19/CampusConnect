@@ -1,8 +1,9 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { useLoaderData, Link } from '@remix-run/react';
 import { getUsersList } from '~/modules/users/users.core';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
-import { Avatar, Box, Card, Flex, Heading, Link } from '@radix-ui/themes';
+import { Avatar, Box, Card, Flex, Heading, Text } from '@radix-ui/themes';
+import { RiUserLine } from '@remixicon/react';
 
 type User = {
     id: number;
@@ -43,12 +44,13 @@ export default function Home() {
                                 fallback={`${user.firstName[0]}${user.lastName[0]}`}
                             />
                             <Box>
-                                <Link
-                                    href={`/user/${user.id}`}
-                                    size="3"
-                                    weight="bold"
-                                >
-                                    {user.firstName} {user.lastName}
+                                <Link to={`/user/${user.id}`}>
+                                    <Text size="3" weight="bold">
+                                        <Flex align="center" gap="2">
+                                            {`${user.firstName} ${user.lastName}`}{' '}
+                                            <RiUserLine size={18} />
+                                        </Flex>
+                                    </Text>
                                 </Link>
                             </Box>
                         </Flex>

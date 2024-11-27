@@ -1,8 +1,8 @@
 import { Box, Flex, Heading, TextArea, Button } from '@radix-ui/themes';
 import { ActionFunctionArgs, LoaderFunction } from '@remix-run/node';
 import { Outlet, useFetcher, useLoaderData, Form } from '@remix-run/react';
+import { RiEditLine } from '@remixicon/react';
 import React from 'react';
-import { Edit3 } from 'react-feather';
 import { getFriendsList } from '~/modules/friends/friends.core';
 import { createPost, getPostsById } from '~/modules/posts/posts.core';
 import { Post, Posts } from '~/modules/posts/posts.types';
@@ -67,7 +67,7 @@ export default function Feed() {
                 <Box>
                     <Box mb={'5'}>
                         <Form method="post" onSubmit={handleSubmit}>
-                            <Flex direction="column" gap="1">
+                            <Flex direction="column" gap="2">
                                 <TextArea
                                     name="content"
                                     size={'3'}
@@ -80,10 +80,11 @@ export default function Feed() {
                                 <Box>
                                     <Button
                                         type="submit"
+                                        variant="solid"
                                         size={{ initial: '3', md: '2' }}
                                         disabled={!textAreaValue}
                                     >
-                                        <Edit3 /> Post
+                                        <RiEditLine size={20} /> Post
                                     </Button>
                                 </Box>
                             </Flex>

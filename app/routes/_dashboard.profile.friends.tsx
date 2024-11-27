@@ -1,8 +1,10 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import { getFriendsList } from '~/modules/friends/friends.core';
 import { getSession, user } from '~/utils/session.server';
-import { Box, Heading, Card, Flex, Avatar, Link } from '@radix-ui/themes';
+import { Box, Heading, Card, Flex, Avatar, Text } from '@radix-ui/themes';
+import { RiUserLine } from '@remixicon/react';
+import { Modal } from '~/components/modal';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
@@ -11,11 +13,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     try {
         const friendsList = await getFriendsList(id);
 
-    return { friendsList };
+        return { friendsList, id };
     } catch (error) {
         throw new Error((error as Error).message);
     }
-
 }
 
 export default function Friends() {
@@ -30,9 +31,9 @@ export default function Friends() {
     };
 
     return (
-        <>
+        <Modal onCloseTo={`/profile`} size="600">
             <Heading size="8" mb="6">
-                Your Friends
+                My Friends
             </Heading>
             <Flex direction="column" gap="4">
                 {friendsList.map((friend) => (
@@ -45,16 +46,19 @@ export default function Friends() {
                                 fallback={`${friend.firstName[0]}${friend.lastName[0]}`}
                             />
                             <Box>
-                                <Link
-                                    href={`/user/${friend.id}`}
-                                    size="3"
-                                    weight="bold"
-                                >{`${friend.firstName} ${friend.lastName}`}</Link>
+                                <Link to={`/user/${friend.id}`}>
+                                    <Text size="3" weight="bold">
+                                        <Flex align="center" gap="2">
+                                            {`${friend.firstName} ${friend.lastName}`}{' '}
+                                            <RiUserLine size={18} />
+                                        </Flex>
+                                    </Text>
+                                </Link>
                             </Box>
                         </Flex>
                     </Card>
                 ))}
             </Flex>
-        </>
+        </Modal>
     );
 }

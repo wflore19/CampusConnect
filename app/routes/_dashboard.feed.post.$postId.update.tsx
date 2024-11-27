@@ -1,7 +1,7 @@
 import { Button, TextArea } from '@radix-ui/themes';
 import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, Link, redirect, useLoaderData } from '@remix-run/react';
-import { Edit3 } from 'react-feather';
+import { RiEdit2Line } from '@remixicon/react';
 import { Modal } from '~/components/modal';
 import { getPostById, updatePost } from '~/modules/posts/posts.core';
 import { Post } from '~/modules/posts/posts.types';
@@ -75,7 +75,7 @@ export default function EditPostModal() {
                     </Link>
 
                     <Button type="submit" color="indigo" variant="soft">
-                        <Edit3 className="mr-2" size={16} /> Update
+                        <RiEdit2Line size={20} /> Update
                     </Button>
                 </Modal.Actions>
             </Form>

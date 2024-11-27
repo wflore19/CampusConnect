@@ -1,6 +1,12 @@
 import { Form, useFetcher } from '@remix-run/react';
-import { Box, Button, Flex, Link } from '@radix-ui/themes';
+import { Box, Button, Flex, Link, Spinner } from '@radix-ui/themes';
 import { FriendshipStatusControlProps } from './friends.types';
+import React from 'react';
+import {
+    RiUserAddLine,
+    RiUserMinusLine,
+    RiUserUnfollowLine,
+} from '@remixicon/react';
 type FetcherData = {
     success: boolean;
     type: 'add' | 'remove';
@@ -36,7 +42,7 @@ export function FriendshipStatusControl({
                     <input type="hidden" name="id" value={userId} />
                     <input type="hidden" name="status" value="accepted" />
                     <Button type="submit" color="green">
-                        Accept Friend Request
+                        <RiUserAddLine size={18} /> Accept Friend Request
                     </Button>
                 </Form>
                 <Form
@@ -47,7 +53,7 @@ export function FriendshipStatusControl({
                     <input type="hidden" name="id" value={userId} />
                     <input type="hidden" name="status" value="rejected" />
                     <Button type="submit" color="red">
-                        Reject Friend Request
+                        <RiUserMinusLine size={18} /> Reject Friend Request
                     </Button>
                 </Form>
             </Flex>
@@ -61,10 +67,20 @@ export function FriendshipStatusControl({
                 method="post"
             >
                 <input type="hidden" name="id" value={userId} />
-                <Button type="submit" disabled={fetcher.state !== 'idle'}>
-                    {fetcher.state === 'idle'
-                        ? 'Cancel Friend Request'
-                        : 'Cancelling...'}
+                <Button
+                    type="submit"
+                    color="red"
+                    variant="surface"
+                    disabled={fetcher.state !== 'idle'}
+                >
+                    {fetcher.state === 'idle' ? (
+                        <React.Fragment>
+                            <RiUserUnfollowLine size={18} /> Cancel Friend
+                            Request
+                        </React.Fragment>
+                    ) : (
+                        <Spinner />
+                    )}
                 </Button>
             </fetcher.Form>
         );
@@ -74,7 +90,9 @@ export function FriendshipStatusControl({
         return (
             <Box>
                 <Link href={`/user/${userId}/remove`}>
-                    <Button size={'2'}>Remove Friend</Button>
+                    <Button color="red">
+                        <RiUserMinusLine size={18} /> Remove Friend
+                    </Button>
                 </Link>
             </Box>
         );
@@ -86,10 +104,17 @@ export function FriendshipStatusControl({
             <input type="hidden" name="status" value="sending" />
             <Button
                 type="submit"
-                color="blue"
+                color="indigo"
+                variant="surface"
                 disabled={fetcher.state !== 'idle'}
             >
-                {fetcher.state === 'idle' ? 'Add Friend' : 'Sending...'}
+                {fetcher.state === 'idle' ? (
+                    <React.Fragment>
+                        <RiUserAddLine size={18} /> Add Friend
+                    </React.Fragment>
+                ) : (
+                    <Spinner />
+                )}
             </Button>
         </fetcher.Form>
     );

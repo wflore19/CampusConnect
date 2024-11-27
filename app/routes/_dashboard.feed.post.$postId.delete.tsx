@@ -5,7 +5,7 @@ import {
     redirect,
 } from '@remix-run/node';
 import { Form, NavLink } from '@remix-run/react';
-import { Trash2 } from 'react-feather';
+import { RiDeleteBinFill } from '@remixicon/react';
 import { Modal } from '~/components/modal';
 import { deletePost } from '~/modules/posts/posts.core';
 
@@ -55,8 +55,8 @@ export default function DeletePostModal() {
                 </NavLink>
 
                 <Form method="delete">
-                    <Button type="submit">
-                        <Trash2 size={16} /> Delete
+                    <Button type="submit" color="red">
+                        <RiDeleteBinFill size={16} /> Delete
                     </Button>
                 </Form>
             </Modal.Actions>

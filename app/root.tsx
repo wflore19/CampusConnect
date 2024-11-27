@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Links />
             </head>
             <body>
-                <Theme accentColor="red" panelBackground="translucent">
+                <Theme accentColor="indigo" panelBackground="translucent">
                     {children}
                     {/* <ThemePanel /> */}
                 </Theme>

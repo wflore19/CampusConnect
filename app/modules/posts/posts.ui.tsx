@@ -6,11 +6,11 @@ import {
     Separator,
     Text,
 } from '@radix-ui/themes';
-import { Edit3, MoreVertical, Trash2 } from 'react-feather';
 import { Post, Posts } from './posts.types';
 import React from 'react';
 import { getTimeAgo } from './posts.helpers';
 import { Link } from '@remix-run/react';
+import { RiDeleteBinFill, RiEdit2Line, RiMore2Fill } from '@remixicon/react';
 
 export function NewsFeed({
     feedPosts,
@@ -96,20 +96,24 @@ export function PostOptionsDropdown({ post }: { post: Post }) {
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-                <MoreVertical size={16} />
+                <Box>
+                    <RiMore2Fill size={20} />
+                </Box>
             </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
+            <DropdownMenu.Content align="end" sideOffset={-20}>
                 <DropdownMenu.Item asChild>
                     <Link to={`/feed/post/${post.id}/update`}>
                         <Flex gap={'2'} align="center">
-                            <Edit3 size={16} color="blue" /> Edit Post
+                            <RiEdit2Line size={20} /> Edit Post
                         </Flex>
                     </Link>
                 </DropdownMenu.Item>
+                <DropdownMenu.Separator />
                 <DropdownMenu.Item asChild>
                     <Link to={`/feed/post/${post.id}/delete`}>
                         <Flex gap={'2'} align="center">
-                            <Trash2 size={16} color="red" /> Delete Post
+                            <RiDeleteBinFill size={20} color="red" /> Delete
+                            Post
                         </Flex>
                     </Link>
                 </DropdownMenu.Item>

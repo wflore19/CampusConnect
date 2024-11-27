@@ -213,7 +213,7 @@ export function Dashboard({
                     bottom="0"
                     width="90%"
                     style={{
-                        backgroundColor: 'var(--red-1)',
+                        backgroundColor: 'var(--blue-1)',
                         transform: isMobileMenuOpen
                             ? 'translateX(0)'
                             : 'translateX(-100%)',
@@ -375,6 +375,7 @@ function LogoutButton({
                 <Button
                     type="submit"
                     variant="outline"
+                    color="red"
                     style={{
                         width: '100%',
                         height: '2.5rem',

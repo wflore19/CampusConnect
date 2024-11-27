@@ -1,22 +1,15 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { Outlet, useLoaderData } from '@remix-run/react';
+import { Link, Outlet, useLoaderData } from '@remix-run/react';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import {
     getFriendsList,
     getPendingFriendRequest,
 } from '~/modules/friends/friends.core';
 import { FriendshipStatusControl } from '~/modules/friends/friends.ui';
-import {
-    Avatar,
-    Card,
-    Flex,
-    Heading,
-    Separator,
-    Box,
-    Link,
-} from '@radix-ui/themes';
+import { Avatar, Card, Flex, Heading, Separator, Box } from '@radix-ui/themes';
 import { getUserById } from '~/modules/users/users.core';
 import React from 'react';
+import { RiGroupLine } from '@remixicon/react';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     const { id: userId } = params;
@@ -106,8 +99,11 @@ export default function UserProfile() {
                         id={id}
                     />
                     <Box>
-                        <Link href={`/user/${userId}/friends`}>
-                            Friends ({friendsList.length})
+                        <Link to={`/user/${userId}/friends`}>
+                            <Flex align="center" gap="2">
+                                <RiGroupLine size={18} /> Friends (
+                                {friendsList.length})
+                            </Flex>
                         </Link>
                     </Box>
                 </Flex>

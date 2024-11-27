@@ -1,6 +1,10 @@
 import { useRouteLoaderData } from '@remix-run/react';
-import { Calendar, Users, Compass } from 'react-feather';
 import { Box, Flex, Heading, Text, Card, Grid, Link } from '@radix-ui/themes';
+import {
+    RiCalendarEventLine,
+    RiCompass3Line,
+    RiTeamLine,
+} from '@remixicon/react';
 
 export default function Home() {
     const { firstName } = useRouteLoaderData('routes/_dashboard') as {
@@ -27,7 +31,7 @@ export default function Home() {
             <Grid columns={{ initial: '1', sm: '2' }} gap="6" mb="8">
                 <Card>
                     <Flex align="center" mb="2">
-                        <Users />
+                        <RiTeamLine size={28} />
                         <Heading size="4" ml="2">
                             Connect with Friends
                         </Heading>
@@ -43,7 +47,7 @@ export default function Home() {
 
                 <Card>
                     <Flex align="center" mb="2">
-                        <Calendar />
+                        <RiCalendarEventLine size={28} />
                         <Heading size="4" ml="2">
                             Discover Events
                         </Heading>
@@ -86,8 +90,8 @@ export default function Home() {
 
             <Card>
                 <Flex align="center" mb="2">
-                    <Compass />
-                    <Heading size="6" ml="2">
+                    <RiCompass3Line size={32} />
+                    <Heading size="5" ml="2">
                         Explore Your Campus Community
                     </Heading>
                 </Flex>
