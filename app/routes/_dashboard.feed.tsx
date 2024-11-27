@@ -82,8 +82,8 @@ export default function Feed() {
     };
 
     return (
-        <>
-            <Box p="4">
+        <React.Fragment>
+            <Box>
                 <Heading size="6" mb="4">
                     Feed
                 </Heading>
@@ -187,7 +187,7 @@ export default function Feed() {
                 </Box>
             </Box>
             <Outlet />
-        </>
+        </React.Fragment>
     );
 }
 
