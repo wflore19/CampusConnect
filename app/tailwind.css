@@ -6,3 +6,25 @@ body.scroll-locked {
     overflow: hidden;
     padding-right: var(--scrollbar-width, 0px);
 }
+
+@keyframes modal-animation {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes modal-shader-animation {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 0.4;
+        backdrop-filter: blur(4px);
+    }
+}

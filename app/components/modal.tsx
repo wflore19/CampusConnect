@@ -3,7 +3,6 @@ import React, { type PropsWithChildren, useContext } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useHydrated } from '~/hooks/useHydrated';
-import { cx } from '../utils/cx';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { RiCloseFill } from '@remixicon/react';
 
@@ -36,36 +35,47 @@ export const Modal = ({
 
     return createPortal(
         <ModalContext.Provider value={{ _initialized: true, onCloseTo }}>
-            <div
-                className={cx(
-                    'fixed z-50 flex h-screen w-screen justify-center',
-                    'bottom-0 items-center', // Mobile
-                    'sm:top-0' // > Mobile
-                )}
+            <Box
+                position="fixed"
+                px={'5'}
+                style={{
+                    zIndex: 50,
+                    inset: 0,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
             >
-                <aside
-                    className={cx(
-                        'lock-scroll relative z-10 flex max-h-[calc(100vh-5rem)] w-[400px] flex-col gap-4 overflow-auto bg-white px-4 py-8',
-                        'animate-[modal-animation-mobile_250ms] rounded-lg',
-                        'sm:animate-[modal-animation_250ms] sm:rounded-lg',
-                        size === '400' && 'max-w-[400px]',
-                        size === '600' && 'max-w-[600px]'
-                    )}
-                    id="modal"
+                <Flex
+                    direction={'column'}
+                    gap={'2'}
+                    p={'7'}
+                    maxHeight={'calc(100vh - 5rem)'}
+                    overflowY={'auto'}
+                    position={'relative'}
+                    style={{
+                        zIndex: 10,
+                        backgroundColor: 'var(--color-panel-solid)',
+                        borderRadius: 'var(--radius-4)',
+                        width: size === '400' ? '400px' : '600px',
+                        animation: 'modal-animation 250ms',
+                    }}
                     role="dialog"
                 >
                     {children}
-                </aside>
+                </Flex>
 
                 <Link
-                    className={cx(
-                        'absolute inset-0 cursor-default bg-black',
-                        'animate-[modal-shader-animation_250ms_forwards]'
-                    )}
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                        animation: 'modal-shader-animation 250ms forwards',
+                    }}
                     preventScrollReset
                     to={onCloseTo}
                 />
-            </div>
+            </Box>
         </ModalContext.Provider>,
         document.querySelector('.htmlRoot')!
     );
@@ -82,11 +92,7 @@ Modal.CloseButton = function ModalCloseButton() {
 };
 
 Modal.Description = function ModalDescription({ children }: PropsWithChildren) {
-    return (
-        <Text size="3" color="gray">
-            {children}
-        </Text>
-    );
+    return <Text size="3">{children}</Text>;
 };
 
 Modal.Header = function ModalHeader({ children }: PropsWithChildren) {
@@ -107,7 +113,7 @@ Modal.Content = function ModalContent({ children }: PropsWithChildren) {
 
 Modal.Actions = function ModalActions({ children }: PropsWithChildren) {
     return (
-        <Flex mt={'4'} justify={'end'} gap={'3'}>
+        <Flex pt={'5'} justify={'end'} gap={'3'}>
             {children}
         </Flex>
     );

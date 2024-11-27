@@ -5,7 +5,7 @@ import './tailwind.css';
 import '@radix-ui/themes/styles.css';
 import { useEffect } from 'react';
 import { GoogleAnalytics } from './components/google-analytics';
-import { Theme } from '@radix-ui/themes';
+import { Theme, ThemePanel } from '@radix-ui/themes';
 
 export const links: LinksFunction = () => [
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Links />
             </head>
             <body>
-                <Theme accentColor="indigo" panelBackground="translucent">
+                <Theme accentColor="indigo" radius="medium">
                     {children}
                     {/* <ThemePanel /> */}
                 </Theme>
