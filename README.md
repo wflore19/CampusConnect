@@ -7,12 +7,16 @@ to find things to do.
 
 ## Tech Stack
 
--   Frontend: React, Radix Themes UI library
--   Backend: Remix framework
--   Database: PostgreSQL, Redis
--   Authentication: Google OAuth2
--   Cloud Services: DigitalOcean, AWS S3
--   Languages: TypeScript
+-   Typescript
+-   React
+-   Radix Themes UI Component
+-   Remix.run
+-   PostgreSQL
+-   Redis
+-   Google OAuth2
+-   DigitalOcean (Droplet, Spaces)
+-   Nginx
+-   PM2
 
 ## Project Structure
 
@@ -41,42 +45,12 @@ The application is organized into modules:
 Each module typically contains core functionality, queries, types, and UI
 components.
 
-### Utilities
+### Database Management
 
--   Authentication (`utils/auth.ts`)
--   Session Management (`utils/session.server.ts`)
+The project uses Kysely as an type-safe SQL query builder with migrations for
+schemas (tables, columns, etc.). management.
 
-### Database
+### Contributing
 
-The project uses Kysely as an SQL query builder with migrations for schema
-management. Key migrations include:
-
--   Table additions and modifications, and column additions and changes
-
-## Core Features
-
--   User Profiles
--   Friend System
-
-## Prerequisites
-
-To run the application, you will need the following:
-
-1.  Node.js 20.x
-2.  PostgreSQL 17.x
-3.  Redis 7.x
-4.  Google OAuth2 credentials (Free)
-5.  DigitalOcean or AWS S3 credentials (GitHub Student Developer Pack)
-
-## Getting Started
-
-1. Clone the repository
-2. Install dependencies: `yarn`
-3. Set up environment variables (copy `.env.example` to `.env` and fill in the
-   values)
-4. Run database migrations: `yarn migrate`
-5. Start the development server: `yarn dev`
-
-## Deployment
-
-Deployment instructions can be found in `docs/deploy.md`.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on contributing to
+this project.
