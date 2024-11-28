@@ -1,0 +1,38 @@
+{
+    "name": "@campusconnect/db",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "wflore19",
+    "license": "MIT",
+    "private": true,
+    "exports": {
+        ".": "./src/index.ts",
+        "./dist/db": "./dist/db.d.ts"
+    },
+    "scripts": {
+        "migrate": "tsx ./src/scripts/migrate.ts && yarn types",
+        "migrate:down": "tsx ./src/scripts/migrate.ts --down && yarn types",
+        "migration:create": "tsx ./src/scripts/create-migration.ts",
+        "seed": "tsx ./src/scripts/seed.ts && yarn types",
+        "type-check": "tsc --noEmit",
+        "types": "kysely-codegen --dialect=postgres --camel-case --out-file=./db/src/dist/db.d.ts",
+        "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+        "lint:fix": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint . --fix"
+    },
+    "dependencies": {
+        "kysely": "^0.27.4",
+        "pg": "^8.13.1"
+    },
+    "devDependencies": {
+        "@campusconnect/eslint-config": "*",
+        "@campusconnect/tsconfig": "*",
+        "@types/pg": "^8.11.10",
+        "@types/prompt-sync": "^4.2.3",
+        "commander": "^12.1.0",
+        "dedent": "^1.5.3",
+        "kysely-codegen": "^0.17.0",
+        "prompt-sync": "^4.2.0",
+        "tsx": "^4.19.2",
+        "vitest": "^2.1.6"
+    }
+}

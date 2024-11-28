@@ -1,4 +1,3 @@
-// app/hooks/useBodyScrollLock.ts
 import { useEffect } from 'react';
 
 export function useBodyScrollLock(isLocked: boolean) {

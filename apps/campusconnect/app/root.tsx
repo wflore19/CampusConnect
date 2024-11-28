@@ -1,11 +1,12 @@
-import { Links, Meta, Outlet, Scripts, useLocation } from '@remix-run/react';
+import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
 
 import './tailwind.css';
 import '@radix-ui/themes/styles.css';
-import { useEffect } from 'react';
 import { GoogleAnalytics } from './components/google-analytics';
-import { Theme, ThemePanel } from '@radix-ui/themes';
+import { Theme } from '@radix-ui/themes';
+import { SocketProvider } from './utils/socket';
+import { NotificationProvider } from './modules/notifications/notifications.context';
 
 export const links: LinksFunction = () => [
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -20,7 +21,7 @@ export const links: LinksFunction = () => [
     },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export default function App() {
     return (
         <html lang="en">
             <head>
@@ -33,23 +34,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Links />
             </head>
             <body>
-                <Theme accentColor="indigo" radius="medium">
-                    {children}
-                    {/* <ThemePanel /> */}
-                </Theme>
+                <SocketProvider>
+                    <NotificationProvider>
+                        <Theme accentColor="indigo" radius="medium">
+                            <Outlet />
+                            {/* <ThemePanel /> */}
+                        </Theme>
+                    </NotificationProvider>
+                </SocketProvider>
                 <Scripts />
                 <GoogleAnalytics />
             </body>
         </html>
     );
-}
-
-export default function App() {
-    const location = useLocation();
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [location.pathname]);
-
-    return <Outlet />;
 }
