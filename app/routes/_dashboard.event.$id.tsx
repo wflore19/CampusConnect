@@ -1,6 +1,5 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { Calendar, MapPin } from 'react-feather';
 import {
     Heading,
     Text,
@@ -12,6 +11,7 @@ import {
 } from '@radix-ui/themes';
 import { getEventById } from '~/modules/events/events.core';
 import { getUserById } from '~/modules/users/users.core';
+import { RiCalendar2Line, RiMapPin2Line } from '@remixicon/react';
 
 type LoaderData = {
     event: {
@@ -79,7 +79,7 @@ export default function EventPage() {
                 />
 
                 <Flex align="center" mb="3">
-                    <Calendar size={16} />
+                    <RiCalendar2Line size={16} />
                     <Text size="3" ml="2">
                         {formattedDate} at {formattedStartTime} -{' '}
                         {formattedEndTime}
@@ -87,7 +87,7 @@ export default function EventPage() {
                 </Flex>
 
                 <Flex align="center" mb="3">
-                    <MapPin size={16} />
+                    <RiMapPin2Line size={16} />
                     <Text size="3" ml="2">
                         {event.location}
                     </Text>

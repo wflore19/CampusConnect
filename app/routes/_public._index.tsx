@@ -1,3 +1,4 @@
+import { Container } from '@radix-ui/themes';
 import { Link, redirect, useRouteLoaderData } from '@remix-run/react';
 import { GoogleButton } from '~/components/google-button';
 
@@ -12,7 +13,7 @@ export default function Index() {
     };
 
     return (
-        <main className="container mx-auto flex-grow px-4 py-8">
+        <Container maxWidth="3xl" mx="auto" py="8">
             {/* Hero Section */}
             <section className="mb-16 mt-8 flex flex-col items-center justify-center text-center">
                 <h2 className="mb-6 text-5xl font-bold leading-tight">
@@ -86,7 +87,7 @@ export default function Index() {
                     )}
                 </div>
             </section>
-        </main>
+        </Container>
     );
 }
 

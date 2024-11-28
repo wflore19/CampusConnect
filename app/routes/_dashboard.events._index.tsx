@@ -1,7 +1,7 @@
 import { Link, useLoaderData } from '@remix-run/react';
-import { Calendar, MapPin } from 'react-feather';
 import { Box, Heading, Card, Flex, Text, Avatar, Grid } from '@radix-ui/themes';
 import { getEvents } from '~/modules/events/events.core';
+import { RiCalendar2Line, RiMapLine } from '@remixicon/react';
 
 export async function loader() {
     const events = await getEvents();
@@ -47,7 +47,7 @@ export default function Events() {
                                     </Text>
                                 </Link>
                                 <Flex align="center" mb="1">
-                                    <Calendar size={14} />
+                                    <RiCalendar2Line size={14} />
                                     <Text size="2" color="gray" ml="1">
                                         {event.date
                                             ? formatDate(new Date(event.date))
@@ -68,7 +68,7 @@ export default function Events() {
                                 </Flex>
 
                                 <Flex align="center" mb="1">
-                                    <MapPin size={14} />
+                                    <RiMapLine size={14} />
                                     <Text size="2" color="gray" ml="1">
                                         {event.location}
                                     </Text>
