@@ -199,6 +199,9 @@ export function Dashboard({
                         style={{
                             backgroundColor: 'rgba(0, 0, 0, 0.15)',
                             zIndex: 2,
+                            animation: isMobileMenuOpen
+                                ? 'overlay-fade-in 0.2s ease forwards'
+                                : 'overlay-fade-out 0.2s ease forwards',
                         }}
                         onClick={() => setIsMobileMenuOpen(false)}
                         display={{ initial: 'block', sm: 'none' }}
@@ -214,10 +217,9 @@ export function Dashboard({
                     width="90%"
                     style={{
                         backgroundColor: 'var(--blue-1)',
-                        transform: isMobileMenuOpen
-                            ? 'translateX(0)'
-                            : 'translateX(-100%)',
-                        transition: 'transform 0.3s ease-in-out',
+                        animation: isMobileMenuOpen
+                            ? 'dashboard-menu-animation 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards'
+                            : 'dashboard-menu-exit  0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards',
                         zIndex: '2',
                     }}
                     display={{ initial: 'block', sm: 'none' }}
