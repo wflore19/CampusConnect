@@ -8,7 +8,7 @@ import {
 } from '@radix-ui/themes';
 import { Post, Posts } from './posts.types';
 import React from 'react';
-import { getTimeAgo } from './posts.helpers';
+import { getTimeAgo } from '~/utils/time';
 import { Link } from '@remix-run/react';
 import { RiDeleteBinFill, RiEdit2Line, RiMore2Fill } from '@remixicon/react';
 
