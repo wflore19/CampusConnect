@@ -34,14 +34,10 @@ export default function App() {
                 <Links />
             </head>
             <body>
-                <SocketProvider>
-                    <NotificationProvider>
-                        <Theme accentColor="indigo" radius="medium">
-                            <Outlet />
-                            {/* <ThemePanel /> */}
-                        </Theme>
-                    </NotificationProvider>
-                </SocketProvider>
+                <Theme accentColor="indigo" radius="medium">
+                    <Outlet />
+                    {/* <ThemePanel /> */}
+                </Theme>
                 <Scripts />
                 <GoogleAnalytics />
             </body>
