@@ -23,7 +23,6 @@
         "@remix-run/serve": "^2.14.0",
         "@remixicon/react": "^4.5.0",
         "bullmq": "^5.28.1",
-        "date-fns": "^4.1.0",
         "googleapis": "^144.0.0",
         "ioredis": "^5.4.1",
         "isbot": "^4.1.0",
