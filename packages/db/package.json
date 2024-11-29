@@ -1,7 +1,6 @@
 {
     "name": "@campusconnect/db",
     "version": "1.0.0",
-    "main": "index.js",
     "author": "wflore19",
     "license": "MIT",
     "private": true,
