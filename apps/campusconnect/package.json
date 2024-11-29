@@ -1,0 +1,53 @@
+{
+    "name": "@campusconnect/campusconnect",
+    "version": "1.0.0",
+    "private": true,
+    "sideEffects": false,
+    "type": "module",
+    "scripts": {
+        "build": "remix vite:build",
+        "dev": "remix vite:dev",
+        "serve": "remix-serve ./build/server/index.js",
+        "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+        "lint:fix": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint --fix .",
+        "start": "remix-serve ./build/server/index.js",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@aws-sdk/client-s3": "^3.689.0",
+        "@aws-sdk/lib-storage": "^3.689.0",
+        "@campusconnect/db": "*",
+        "@radix-ui/themes": "^3.1.6",
+        "@remix-run/node": "^2.14.0",
+        "@remix-run/react": "^2.14.0",
+        "@remix-run/serve": "^2.14.0",
+        "@remixicon/react": "^4.5.0",
+        "bullmq": "^5.28.1",
+        "googleapis": "^144.0.0",
+        "ioredis": "^5.4.1",
+        "isbot": "^4.1.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "socket.io-client": "^4.8.1",
+        "ts-pattern": "^5.5.0",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "@campusconnect/eslint-config": "*",
+        "@campusconnect/tsconfig": "*",
+        "@remix-run/dev": "^2.14.0",
+        "@types/node": "^18.7.18",
+        "@types/react": "^18.2.20",
+        "@types/react-dom": "^18.2.7",
+        "autoprefixer": "^10.4.19",
+        "postcss": "^8.4.38",
+        "tailwind-merge": "^2.5.4",
+        "tailwindcss": "^3.4.4",
+        "vite": "^5.1.0",
+        "vite-tsconfig-paths": "^4.2.1"
+    },
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "license": "MIT"
+}

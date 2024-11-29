@@ -1,0 +1,26 @@
+{
+    "name": "@campusconnect/api",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "type": "module",
+    "scripts": {
+        "start": "tsx ./src/index.js",
+        "dev": "tsx watch ./src/index.ts"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "express": "^4.21.1",
+        "socket.io": "^4.8.1"
+    },
+    "devDependencies": {
+        "@campusconnect/eslint-config": "*",
+        "@campusconnect/tsconfig": "*",
+        "@campusconnect/db": "*",
+        "@types/express": "^5.0.0",
+        "@types/node": "^22.10.1",
+        "ts-node-dev": "^2.0.0",
+        "tsx": "^4.19.2",
+        "typescript": "^5.7.2"
+    },
+    "license": "MIT"
+}

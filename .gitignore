@@ -1,7 +1,45 @@
+# Dependencies
+
 node_modules
 
-/.cache
-/build
-.env
+# Environment Variables
 
-/db/src/dist/*.ts
+.env
+.env.test
+
+# Turborepo
+
+.turbo
+
+# React Email
+
+.react-email
+
+# Remix Run
+
+.cache
+
+# Vite
+
+vite.config.ts.timestamp*
+
+# Build
+
+build
+dist
+tsconfig.tsbuildinfo
+
+
+# Debugging
+
+yarn-debug.log*
+yarn-error.log*
+
+
+# Miscelleanous
+
+.DS_Store
+
+# Other
+
+schema.prisma

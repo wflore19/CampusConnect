@@ -1,0 +1,11 @@
+{
+    "extends": "@campusconnect/tsconfig/base.json",
+    "include": ["src", "kysely-patch.d.ts", "./dist/db.d.ts"],
+    "compilerOptions": {
+      "jsx": "react-jsx",
+      "module": "ESNext",
+      "moduleResolution": "Bundler",
+      "types": ["vitest/globals"]
+    }
+}
+
