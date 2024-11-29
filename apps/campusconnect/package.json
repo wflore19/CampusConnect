@@ -14,15 +14,16 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "@campusconnect/db": "*",
         "@aws-sdk/client-s3": "^3.689.0",
         "@aws-sdk/lib-storage": "^3.689.0",
+        "@campusconnect/db": "*",
         "@radix-ui/themes": "^3.1.6",
         "@remix-run/node": "^2.14.0",
         "@remix-run/react": "^2.14.0",
         "@remix-run/serve": "^2.14.0",
         "@remixicon/react": "^4.5.0",
         "bullmq": "^5.28.1",
+        "date-fns": "^4.1.0",
         "googleapis": "^144.0.0",
         "ioredis": "^5.4.1",
         "isbot": "^4.1.0",

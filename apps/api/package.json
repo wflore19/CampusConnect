@@ -1,12 +1,11 @@
 {
     "name": "api",
     "version": "1.0.0",
-    "main": "index.js",
-    "license": "MIT",
+    "main": "dist/index.js",
+    "type": "module",
     "scripts": {
-        "build": "tsc",
-        "start": "node dist/index.js",
-        "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
+        "start": "tsx ./src/index.js",
+        "dev": "tsx watch ./src/index.ts"
     },
     "dependencies": {
         "dotenv": "^16.4.5",
@@ -14,9 +13,14 @@
         "socket.io": "^4.8.1"
     },
     "devDependencies": {
+        "@campusconnect/eslint-config": "*",
+        "@campusconnect/tsconfig": "*",
+        "@campusconnect/db": "*",
         "@types/express": "^5.0.0",
         "@types/node": "^22.10.1",
         "ts-node-dev": "^2.0.0",
+        "tsx": "^4.19.2",
         "typescript": "^5.7.2"
-    }
+    },
+    "license": "MIT"
 }

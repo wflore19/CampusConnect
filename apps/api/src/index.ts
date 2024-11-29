@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { NotificationService } from './modules/notifications/notification.service';
+import { db } from '@campusconnect/db';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const io = new Server(server, {
     },
 });
 
-const notificationService = new NotificationService(io);
+const notificationService = new NotificationService(io, db);
 
 io.on('connection', (socket) => {
     notificationService.handleConnection(socket);
