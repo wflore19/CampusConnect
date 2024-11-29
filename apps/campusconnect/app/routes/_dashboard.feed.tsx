@@ -59,7 +59,7 @@ export default function Feed() {
     return (
         <React.Fragment>
             <Box>
-                <Heading size="6" mb="4">
+                <Heading size="8" mb="6">
                     Feed
                 </Heading>
 
