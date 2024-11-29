@@ -20,8 +20,6 @@ import { getUserDetails } from '~/modules/users/users.queries';
 import { UserDetails } from '~/modules/users/users.types';
 import { UserProfileInformation } from '~/modules/users/users.ui';
 import { RiEdit2Line, RiGroupLine } from '@remixicon/react';
-import React from 'react';
-import { useSocket } from '~/utils/socket';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
@@ -63,28 +61,6 @@ export default function MyProfile() {
         email: string;
         profilePicture: string;
     };
-
-    const { socket } = useSocket();
-
-    React.useEffect(() => {
-        if (!socket) {
-            console.log('No socket available');
-            return;
-        }
-
-        console.log('Socket connected:', socket.connected);
-
-        socket.emit('message', { message: 'Hello, world!' });
-
-        socket.on('message', (data: string) => {
-            console.log('Received message:', data);
-        });
-
-        return () => {
-            socket?.off('message');
-            socket?.off('connect');
-        };
-    }, [socket]);
 
     return (
         <>
