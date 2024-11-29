@@ -13,7 +13,7 @@ git pull origin main
 yarn
 
 # Migrate the database
-yarn migrate
+yarn db:migrate
 
 # Rebuild the project
 yarn build
