@@ -13,8 +13,8 @@ import {
 import { getSession, user } from '~/utils/session.server';
 import { getUserDetails } from '~/modules/users/users.queries';
 import { UserDetails } from '~/modules/users/users.types';
-import { db } from 'db/src';
-import { UserDetailsRelationshipStatus, UserDetailsSex } from 'db/src/dist/db';
+import { db } from '@campusconnect/db';
+import { UserDetailsRelationshipStatus, UserDetailsSex } from '@campusconnect/db/dist/db';
 import { Modal } from '~/components/modal';
 import { Button, Flex, TextField, Text, Box, Select } from '@radix-ui/themes';
 import { RiEdit2Line } from '@remixicon/react';

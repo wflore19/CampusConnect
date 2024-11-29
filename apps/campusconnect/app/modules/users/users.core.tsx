@@ -1,4 +1,4 @@
-import { db } from 'db/src';
+import { db } from '@campusconnect/db';
 
 /* Get a list of users, excluding the current user (id)
  * @param id

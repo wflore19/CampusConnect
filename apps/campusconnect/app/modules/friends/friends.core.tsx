@@ -1,4 +1,4 @@
-import { db } from 'db/src';
+import { db } from '@campusconnect/db';
 
 /* Docs
  * https://www.coderbased.com/p/user-friends-system-and-database

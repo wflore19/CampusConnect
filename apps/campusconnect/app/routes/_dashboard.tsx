@@ -2,7 +2,7 @@ import { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { Outlet, useLoaderData } from '@remix-run/react';
 import { Dashboard } from '~/components/dashboard';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
-import { db } from 'db/src';
+import { db } from '@campusconnect/db';
 import { Box, Container } from '@radix-ui/themes';
 
 export const meta: MetaFunction = () => {

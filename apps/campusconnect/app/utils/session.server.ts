@@ -1,6 +1,6 @@
 import { Session, createCookieSessionStorage, redirect } from '@remix-run/node';
 import { SESSION_SECRET } from './env';
-import { db } from 'db/src';
+import { db } from '@campusconnect/db';
 
 // JSDocs for getSession, commitSession, and destroySession
 /**

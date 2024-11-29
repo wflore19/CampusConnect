@@ -1,6 +1,6 @@
 // OAuth 2.0
 import { Session, redirect } from '@remix-run/node';
-import { db } from 'db/src';
+import { db } from '@campusconnect/db';
 import { google } from 'googleapis';
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, APP_URL } from '~/utils/env';
 import { uploadImageFromCDN } from './s3-config.server';

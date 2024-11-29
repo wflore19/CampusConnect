@@ -1,4 +1,4 @@
-import { db } from "db/src";
+import { db } from "@campusconnect/db";
 
 /**
  * Get all posts from friends
