@@ -19,11 +19,9 @@ export type GoogleUser = {
 interface User {
     id: number;
     email: string | null;
-    createdAt: Date | null;
     firstName: string | null;
     lastName: string | null;
     profilePicture: string | null;
-    updatedAt: Date | null;
 }
 
 /**
@@ -57,7 +55,7 @@ export function getGoogleAuthURL() {
  * @param code - The code from Google
  * @returns The Google user's profile information if found, otherwise undefined
  */
-export async function getGoogleUser(code: string): Promise<GoogleUser> {
+export async function getGoogleUser(code: string) {
     const { accessToken, refreshToken } = await exchangeCodeForToken(code);
     GoogleClient.setCredentials({
         access_token: accessToken,
@@ -94,12 +92,10 @@ export async function exchangeCodeForToken(code: string) {
  * @param email - The email of the user
  * @returns The user object if found, otherwise undefined
  */
-export async function findUserByEmail(
-    email: string
-): Promise<User | undefined> {
+export async function findUserByEmail(email: string) {
     const userProfile = await db
         .selectFrom('users')
-        .selectAll()
+        .select(['id', 'email', 'firstName', 'lastName', 'profilePicture'])
         .where('email', '=', email)
         .executeTakeFirst();
 
@@ -159,7 +155,7 @@ export async function signupNewUser(googleUser: GoogleUser, session: Session) {
      * @param imageUrl - The URL of the image
      * @returns The user object if created successfully
      */
-    async function createNewGoogleUser(googleUser: GoogleUser): Promise<User> {
+    async function createNewGoogleUser(googleUser: GoogleUser) {
         const parsedFirstName = googleUser.name.split(' ')[0];
         const parsedLastName =
             googleUser.name.split(' ')[googleUser.name.split(' ').length - 1];
@@ -196,10 +192,7 @@ export async function signupNewUser(googleUser: GoogleUser, session: Session) {
  * @param googleUser - The Google user object
  * @returns The URL of the uploaded image
  */
-export async function uploadImageS3(
-    googleUser: GoogleUser,
-    userId: string
-): Promise<string> {
+export async function uploadImageS3(googleUser: GoogleUser, userId: string) {
     const parsedFirstName = googleUser.name.split(' ')[0];
     const parsedLastName =
         googleUser.name.split(' ')[googleUser.name.split(' ').length - 1];
