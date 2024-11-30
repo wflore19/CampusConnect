@@ -13,7 +13,7 @@
         "packages/*"
     ],
     "scripts": {
-        "build": "turbo run build --cache-dir=.turbo",
+        "build": "turbo run build --cache-dir=.turbo --filter=./apps/*",
         "db:migrate": "yarn workspace @campusconnect/db migrate",
         "db:migrate:down": "yarn workspace @campusconnect/db migrate:down",
         "db:migration:create": "yarn workspace @campusconnect/db migration:create",
