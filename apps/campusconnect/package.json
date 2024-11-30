@@ -33,6 +33,7 @@
         "zod": "^3.23.8"
     },
     "devDependencies": {
+        "@campusconnect/db": "*",
         "@campusconnect/eslint-config": "*",
         "@campusconnect/tsconfig": "*",
         "@remix-run/dev": "^2.14.0",
