@@ -4,6 +4,8 @@ import { Dashboard } from '~/components/dashboard';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import { db } from '@campusconnect/db';
 import { Box, Container } from '@radix-ui/themes';
+import { SocketProvider } from '~/utils/socket';
+import { NotificationProvider } from '~/modules/notifications/notifications.context';
 
 export const meta: MetaFunction = () => {
     return [
@@ -27,6 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         .executeTakeFirst();
 
     return {
+        userId: id,
         firstName: profile?.firstName,
         lastName: profile?.lastName,
         email: profile?.email,
@@ -35,17 +38,21 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function DashboardLayout() {
-    const { profilePicture } = useLoaderData<typeof loader>();
+    const { profilePicture, userId } = useLoaderData<typeof loader>();
     return (
         <div className="htmlRoot">
             <Box width={'full'} maxWidth={'1300px'} mx={'auto'}>
-                <Dashboard profilePicture={profilePicture}>
-                    <Container size="3" p={{ initial: '1', md: '6' }}>
-                        <Box py="6">
-                            <Outlet />
-                        </Box>
-                    </Container>
-                </Dashboard>
+                <SocketProvider userId={userId}>
+                    <NotificationProvider userId={userId}>
+                        <Dashboard profilePicture={profilePicture}>
+                            <Container size="3" p={{ initial: '1', md: '6' }}>
+                                <Box py="6">
+                                    <Outlet />
+                                </Box>
+                            </Container>
+                        </Dashboard>
+                    </NotificationProvider>
+                </SocketProvider>
             </Box>
         </div>
     );

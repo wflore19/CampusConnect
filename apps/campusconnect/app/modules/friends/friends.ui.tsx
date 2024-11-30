@@ -7,6 +7,7 @@ import {
     RiUserMinusLine,
     RiUserUnfollowLine,
 } from '@remixicon/react';
+import { useSocket } from '~/utils/socket';
 type FetcherData = {
     success: boolean;
     type: 'add' | 'remove';
@@ -14,20 +15,18 @@ type FetcherData = {
 export function FriendshipStatusControl({
     friendRequest,
     userId,
+    id,
+    socket,
 }: FriendshipStatusControlProps) {
     const fetcher = useFetcher<FetcherData>();
 
     const isPendingForUser =
-        (friendRequest?.uid1 === userId &&
-            friendRequest?.status === 'REQ_UID1') ||
-        (friendRequest?.uid2 === userId &&
-            friendRequest?.status === 'REQ_UID2');
+        (friendRequest?.uid1 === id && friendRequest?.status === 'REQ_UID1') ||
+        (friendRequest?.uid2 === id && friendRequest?.status === 'REQ_UID2');
 
     const isRequestSentByUser =
-        (friendRequest?.uid1 === userId &&
-            friendRequest?.status === 'REQ_UID2') ||
-        (friendRequest?.uid2 === userId &&
-            friendRequest?.status === 'REQ_UID1');
+        (friendRequest?.uid1 === id && friendRequest?.status === 'REQ_UID2') ||
+        (friendRequest?.uid2 === id && friendRequest?.status === 'REQ_UID1');
 
     const isFriend = friendRequest?.status === 'friend';
 
@@ -35,22 +34,22 @@ export function FriendshipStatusControl({
         return (
             <Flex gap="2" direction={{ initial: 'column', sm: 'row' }}>
                 <Form
-                    action={`/api/friend-request/${userId}`}
+                    action={`/api/friend-request/${id}`}
                     method="post"
                     navigate={false}
                 >
-                    <input type="hidden" name="id" value={userId} />
+                    <input type="hidden" name="id" value={id} />
                     <input type="hidden" name="status" value="accepted" />
                     <Button type="submit" color="green">
                         <RiUserAddLine size={18} /> Accept Friend Request
                     </Button>
                 </Form>
                 <Form
-                    action={`/api/friend-request/${userId}`}
+                    action={`/api/friend-request/${id}`}
                     method="post"
                     navigate={false}
                 >
-                    <input type="hidden" name="id" value={userId} />
+                    <input type="hidden" name="id" value={id} />
                     <input type="hidden" name="status" value="rejected" />
                     <Button type="submit" color="red">
                         <RiUserMinusLine size={18} /> Reject Friend Request
@@ -63,10 +62,10 @@ export function FriendshipStatusControl({
     if (fetcher.data?.type === 'add' || isRequestSentByUser) {
         return (
             <fetcher.Form
-                action={`/api/friend-request/${userId}/cancel`}
+                action={`/api/friend-request/${id}/cancel`}
                 method="post"
             >
-                <input type="hidden" name="id" value={userId} />
+                <input type="hidden" name="id" value={id} />
                 <Button
                     type="submit"
                     color="red"
@@ -89,7 +88,7 @@ export function FriendshipStatusControl({
     if (isFriend) {
         return (
             <Box>
-                <Link href={`/user/${userId}/remove`}>
+                <Link href={`/user/${id}/remove`}>
                     <Button color="red">
                         <RiUserMinusLine size={18} /> Remove Friend
                     </Button>
@@ -99,14 +98,22 @@ export function FriendshipStatusControl({
     }
 
     return (
-        <fetcher.Form action={`/api/friend-request/${userId}`} method="post">
-            <input type="hidden" name="id" value={userId} />
+        <fetcher.Form action={`/api/friend-request/${id}`} method="post">
+            <input type="hidden" name="id" value={id} />
             <input type="hidden" name="status" value="sending" />
             <Button
                 type="submit"
                 color="indigo"
                 variant="surface"
                 disabled={fetcher.state !== 'idle'}
+                onClick={() => {
+                    socket.emit('friend-request', {
+                        fromUID: userId,
+                        toUID: id,
+                        type: 'friend-request',
+                        message: 'Friend Request',
+                    });
+                }}
             >
                 {fetcher.state === 'idle' ? (
                     <React.Fragment>

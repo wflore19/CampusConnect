@@ -8,6 +8,7 @@ export interface FriendshipStatusControlProps {
         | undefined;
     userId: number;
     id: number;
+    socket: any;
 }
 
 export type Friend = {

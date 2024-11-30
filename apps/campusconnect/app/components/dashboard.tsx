@@ -21,6 +21,7 @@ import {
     RiHome4Line,
     RiLogoutBoxLine,
     RiMenuLine,
+    RiNotificationLine,
     RiTeamFill,
     RiTeamLine,
     RiUser3Fill,
@@ -39,6 +40,12 @@ const SIDEBAR_ITEMS = [
         activeIcon: <RiAppsFill size={20} />,
         label: 'News Feed',
         path: '/feed',
+    },
+    {
+        icon: <RiNotificationLine size={20} />,
+        activeIcon: <RiNotificationLine size={20} />,
+        label: 'Notifications',
+        path: '/notifications',
     },
     {
         icon: <RiCalendarEventLine size={20} />,

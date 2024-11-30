@@ -5,8 +5,6 @@ import './tailwind.css';
 import '@radix-ui/themes/styles.css';
 import { GoogleAnalytics } from './components/google-analytics';
 import { Theme } from '@radix-ui/themes';
-import { SocketProvider } from './utils/socket';
-import { NotificationProvider } from './modules/notifications/notifications.context';
 
 export const links: LinksFunction = () => [
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
