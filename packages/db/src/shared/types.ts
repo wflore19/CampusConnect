@@ -1,1 +1,1 @@
-export { type DB } from '../dist/db';
+export { type DB } from '../../dist/db';
