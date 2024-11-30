@@ -1,5 +1,5 @@
 import { sql, type Kysely } from 'kysely';
-import { DB } from '../../dist/db';
+import { DB } from '../dist/db';
 
 export async function up(db: Kysely<DB>) {
     await sql`

@@ -1,4 +1,4 @@
-import { sql,type Kysely } from 'kysely';
+import { sql, type Kysely } from 'kysely';
 import { DB } from '../dist/db';
 
 export async function up(db: Kysely<DB>) {
@@ -39,5 +39,4 @@ export async function down(db: Kysely<DB>) {
         DROP TABLE post_likes;
         DROP TABLE posts;
     `.execute(db);
-
 }
