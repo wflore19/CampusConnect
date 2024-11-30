@@ -40,7 +40,7 @@ export default function Home() {
                         Find study buddies, event companions, and friends who
                         share your interests.
                     </Text>
-                    <Link href="/friends">
+                    <Link href="/profile/friends">
                         <Text>Explore Friends →</Text>
                     </Link>
                 </Card>
