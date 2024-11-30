@@ -33,7 +33,7 @@ export const ONE_MONTH_IN_SECONDS = ONE_DAY_IN_SECONDS * 30;
  *   ONE_HOUR_IN_SECONDS,
  *   () => getWeatherForecast(cityName)
  * );
- * console.log(forecast); // Weather data for New York, either from cache or fresh
+ * Returns weather data for New York, either from cache or fresh
  */
 export async function getCachedData<T>(
     key: string,
@@ -58,11 +58,6 @@ export async function getCachedData<T>(
  *
  * @example
  * const cachedData = await getCachedDataOrNull('key');
- * if (cachedData) {
- *  console.log(cachedData);
- * } else {
- * console.log('No cached data found');
- * }
  */
 export async function getCachedDataOrNull<T>(key: string): Promise<T | null> {
     const cachedData = await redis.get(key);
@@ -86,7 +81,7 @@ export async function getCachedDataOrNull<T>(key: string): Promise<T | null> {
  * await setCached
  * Data('key', { name: 'Alice' }, ONE_HOUR_IN_SECONDS);
  * const data = await redis.get('key');
- * console.log(data); // { name: 'Alice' }
+ * { name: 'Alice' }
  */
 export async function setCachedData<T>(
     key: string,
@@ -110,7 +105,7 @@ export async function setCachedData<T>(
  * @example
  * await deleteCachedData('key');
  * const data = await redis.get('key');
- * console.log(data); // null
+ * returns null
  */
 export async function deleteCachedData(key: string): Promise<number> {
     return redis.del(key);

@@ -23,13 +23,11 @@ export class NotificationService {
     // Handle socket connection
     handleConnection(socket: Socket) {
         const userId = socket.handshake.auth.userId;
-        console.log(userId);
 
         if (userId) {
             // Join user to a room for private notifications
             socket.join(`user:${userId}`);
         }
-        console.log(socket.handshake);
 
         // Handle disconnect
         socket.on('disconnect', () => {

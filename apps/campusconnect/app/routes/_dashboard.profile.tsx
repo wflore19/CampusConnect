@@ -20,11 +20,11 @@ import { getUserDetails } from '~/modules/users/users.queries';
 import { UserDetails } from '~/modules/users/users.types';
 import { UserProfileInformation } from '~/modules/users/users.ui';
 import { RiEdit2Line, RiGroupLine } from '@remixicon/react';
+import React from 'react';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
     const id = user(session);
-
     try {
         const friendsList = await getFriendsList(id);
         const userDetails = await getUserDetails(id);

@@ -6,7 +6,6 @@ export function getTimeAgo(createdAt: Date): string {
         1,
         Math.floor((now.getTime() - postDate.getTime()) / 1000)
     );
-    console.log(diffInSeconds);
 
     if (diffInSeconds < 60) {
         return `${diffInSeconds} second${diffInSeconds !== 1 ? 's' : ''} ago`;
