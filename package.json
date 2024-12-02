@@ -14,13 +14,12 @@
     ],
     "scripts": {
         "build": "turbo run build --cache-dir=.turbo --filter=./apps/*",
-        "db:migrate": "yarn workspace @campusconnect/db migrate",
-        "db:migrate:down": "yarn workspace @campusconnect/db migrate:down",
-        "db:migration:create": "yarn workspace @campusconnect/db migration:create",
-        "db:seed": "yarn workspace @campusconnect/db seed",
-        "db:types": "yarn workspace @campusconnect/db types",
         "dev": "turbo run dev --cache-dir=.turbo",
         "dev:apps": "yarn dev --filter=./apps/*",
+        "drizzle:migrate": "yarn workspace @campusconnect/db drizzle:migrate",
+        "drizzle:push": "yarn workspace @campusconnect/db drizzle:push",
+        "drizzle:pull": "yarn workspace @campusconnect/db drizzle:pull",
+        "drizzle:studio": "yarn workspace @campusconnect/db drizzle:studio",
         "lint": "turbo run lint --cache-dir=.turbo",
         "lint:fix": "turbo run lint:fix --cache-dir=.turbo",
         "type-check": "turbo run type-check --cache-dir=.turbo"
