@@ -17,7 +17,7 @@ const io = new Server(server, {
     },
 });
 
-const notificationService = new NotificationService(io, db);
+const notificationService = new NotificationService(io);
 
 io.on('connection', (socket) => {
     notificationService.handleConnection(socket);
