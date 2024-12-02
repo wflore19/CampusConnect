@@ -3,8 +3,7 @@ import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, Link, redirect, useLoaderData } from '@remix-run/react';
 import { RiEdit2Line } from '@remixicon/react';
 import { Modal } from '~/components/modal';
-import { getPostById, updatePost } from '~/modules/posts/posts.core';
-import { Post } from '~/modules/posts/posts.types';
+import { type Post, getPostById, updatePost } from '@campusconnect/db';
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const postId = params.postId;

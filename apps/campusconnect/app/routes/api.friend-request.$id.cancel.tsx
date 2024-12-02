@@ -1,5 +1,5 @@
 import { type ActionFunctionArgs } from '@remix-run/node';
-import { cancelFriendRequest } from '~/modules/friends/friends.core';
+import { cancelFriendRequest } from '@campusconnect/db';
 
 import { getSession, user } from '~/utils/session.server';
 

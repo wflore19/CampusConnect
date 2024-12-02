@@ -1,6 +1,6 @@
 import { Session, createCookieSessionStorage, redirect } from '@remix-run/node';
 import { SESSION_SECRET } from './env';
-import { db } from '@campusconnect/db';
+import { getUserById } from '@campusconnect/db';
 
 // JSDocs for getSession, commitSession, and destroySession
 /**
@@ -67,10 +67,7 @@ export async function ensureUserAuthenticated(
     }
 
     const userId = await user(session);
-    const isExistingUser = await db
-        .selectFrom('users')
-        .where('id', '=', userId)
-        .executeTakeFirst();
+    const isExistingUser = await getUserById(userId);
 
     if (!isExistingUser) {
         throw redirect(redirectTo, {

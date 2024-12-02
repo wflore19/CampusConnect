@@ -1,10 +1,7 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData, Link } from '@remix-run/react';
-import { getFriendsList } from '~/modules/friends/friends.core';
 import { Box, Heading, Card, Flex, Avatar, Text } from '@radix-ui/themes';
-import { getUserById } from '~/modules/users/users.core';
-import { Friend } from '~/modules/friends/friends.types';
-import { UserProfile } from '~/modules/users/users.types';
+import { getUserById, type User, getFriendsList } from '@campusconnect/db';
 import { Modal } from '~/components/modal';
 import { RiUserLine } from '@remixicon/react';
 
@@ -28,8 +25,8 @@ export default function UserFriends() {
     const { friendsList, userProfile, userId } = useLoaderData<
         typeof loader
     >() as {
-        friendsList: Friend[];
-        userProfile: UserProfile;
+        friendsList: User[];
+        userProfile: User;
         userId: number;
     };
 
@@ -45,8 +42,8 @@ export default function UserFriends() {
                             <Avatar
                                 radius="full"
                                 size="5"
-                                src={friend.profilePicture}
-                                fallback={`${friend.firstName[0]}${friend.lastName[0]}`}
+                                src={friend.profilePicture!}
+                                fallback={`${friend.firstName![0]}${friend.lastName![0]}`}
                             />
                             <Box>
                                 <Link to={`/user/${friend.id}`}>

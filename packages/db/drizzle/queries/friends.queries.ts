@@ -1,5 +1,5 @@
-import { db, userFriend, users } from '@campusconnect/db';
-import { and, eq } from 'drizzle-orm';
+import { db, friendRequestStatus, userFriend, users } from '@campusconnect/db';
+import { InferColumnsDataTypes, InferSelectModel, and, eq } from 'drizzle-orm';
 
 /* Docs
  * https://www.coderbased.com/p/user-friends-system-and-database
@@ -203,3 +203,5 @@ export async function removeFriend(fromId: number, toId: number) {
 
     await db.delete(userFriend).where(eq(userFriend.id, result[0].id));
 }
+
+export type UserFriend = InferSelectModel<typeof userFriend>;

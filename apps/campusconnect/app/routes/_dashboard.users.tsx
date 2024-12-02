@@ -1,17 +1,9 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData, Link } from '@remix-run/react';
-import { getUsersList } from '~/modules/users/users.core';
+import { getUsersList, type User } from '@campusconnect/db';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import { Avatar, Box, Card, Flex, Heading, Text } from '@radix-ui/themes';
 import { RiUserLine } from '@remixicon/react';
-
-type User = {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    profilePicture: string;
-};
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await ensureUserAuthenticated(request);
@@ -26,7 +18,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Home() {
-    const { users } = useLoaderData<typeof loader>() as { users: User[] };
+    const users = useLoaderData<typeof loader>();
 
     return (
         <>
@@ -40,8 +32,8 @@ export default function Home() {
                             <Avatar
                                 radius="full"
                                 size="5"
-                                src={user.profilePicture}
-                                fallback={`${user.firstName[0]}${user.lastName[0]}`}
+                                src={user.profilePicture!}
+                                fallback={`${user.firstName![0]}${user.lastName![0]}`}
                             />
                             <Box>
                                 <Link to={`/user/${user.id}`}>

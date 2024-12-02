@@ -7,7 +7,7 @@ import {
 import { Form, NavLink, useLoaderData } from '@remix-run/react';
 import { RiUserMinusFill } from '@remixicon/react';
 import { Modal } from '~/components/modal';
-import { removeFriend } from '~/modules/friends/friends.core';
+import { removeFriend } from '@campusconnect/db';
 import { getSession, user } from '~/utils/session.server';
 
 export async function loader({ params }: LoaderFunctionArgs) {

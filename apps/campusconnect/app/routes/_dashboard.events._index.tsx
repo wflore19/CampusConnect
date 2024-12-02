@@ -1,6 +1,6 @@
 import { Link, useLoaderData } from '@remix-run/react';
 import { Box, Heading, Card, Flex, Text, Avatar, Grid } from '@radix-ui/themes';
-import { getEvents } from '~/modules/events/events.core';
+import { getEvents } from '@campusconnect/db';
 import { RiCalendar2Line, RiMapLine } from '@remixicon/react';
 
 export async function loader() {

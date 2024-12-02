@@ -3,9 +3,12 @@ import { ActionFunctionArgs, LoaderFunction } from '@remix-run/node';
 import { Outlet, useFetcher, useLoaderData, Form } from '@remix-run/react';
 import { RiEditLine } from '@remixicon/react';
 import React from 'react';
-import { getFriendsList } from '~/modules/friends/friends.core';
-import { createPost, getPostsById } from '~/modules/posts/posts.core';
-import { Post, Posts } from '~/modules/posts/posts.types';
+import {
+    type Post,
+    getFriendsList,
+    createPost,
+    getPostsById,
+} from '@campusconnect/db';
 import { NewsFeed } from '~/modules/posts/posts.ui';
 import { getSession, user } from '~/utils/session.server';
 
@@ -45,7 +48,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Feed() {
     const { feedPosts, userId } = useLoaderData<typeof loader>() as {
         userId: number;
-        feedPosts: Posts;
+        feedPosts: Post[];
     };
     const fetcher = useFetcher();
     const [textAreaValue, setTextAreaValue] = React.useState('');

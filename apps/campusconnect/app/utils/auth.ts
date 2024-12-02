@@ -1,6 +1,11 @@
 // OAuth 2.0
 import { Session, redirect } from '@remix-run/node';
-import { db } from '@campusconnect/db';
+import {
+    createUser,
+    getUserByEmail,
+    updateUser,
+    updateUserDetails,
+} from '@campusconnect/db';
 import { google } from 'googleapis';
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, APP_URL } from '~/utils/env';
 import { uploadImageFromCDN } from './s3-config.server';
@@ -88,21 +93,6 @@ export async function exchangeCodeForToken(code: string) {
 }
 
 /**
- * Find a user by their email
- * @param email - The email of the user
- * @returns The user object if found, otherwise undefined
- */
-export async function findUserByEmail(email: string) {
-    const userProfile = await db
-        .selectFrom('users')
-        .select(['id', 'email', 'firstName', 'lastName', 'profilePicture'])
-        .where('email', '=', email)
-        .executeTakeFirst();
-
-    return userProfile;
-}
-
-/**
  * Logs in an existing user and redirects them to the home page
  * @param user - The user object
  * @param session - The session object
@@ -132,13 +122,7 @@ export async function signupNewUser(googleUser: GoogleUser, session: Session) {
         newUser.id.toString()
     );
 
-    await db
-        .updateTable('users')
-        .set({
-            profilePicture,
-        })
-        .where('id', '=', newUser.id)
-        .execute();
+    await updateUser(newUser.id, { profilePicture: profilePicture });
 
     session.set('user_id', newUser.id);
 
@@ -160,28 +144,19 @@ export async function signupNewUser(googleUser: GoogleUser, session: Session) {
         const parsedLastName =
             googleUser.name.split(' ')[googleUser.name.split(' ').length - 1];
 
-        await db
-            .insertInto('users')
-            .values({
-                email: googleUser.email,
-                profilePicture: '',
-                firstName: parsedFirstName,
-                lastName: parsedLastName,
-            })
-            .execute();
+        await createUser({
+            email: googleUser.email,
+            firstName: parsedFirstName,
+            lastName: parsedLastName,
+        });
 
-        const newUser = await findUserByEmail(googleUser.email);
+        const newUser = await getUserByEmail(googleUser.email);
 
         if (!newUser) {
             throw new Error('Failed to create new user');
         }
 
-        await db
-            .insertInto('userDetails')
-            .values({
-                userId: newUser.id,
-            })
-            .execute();
+        await updateUserDetails(newUser.id, {});
 
         return newUser;
     }

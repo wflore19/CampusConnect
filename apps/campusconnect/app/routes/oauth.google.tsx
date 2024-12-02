@@ -1,11 +1,7 @@
+import { getUserByEmail } from '@campusconnect/db';
 import type { LoaderFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
-import {
-    findUserByEmail,
-    getGoogleUser,
-    loginExistingUser,
-    signupNewUser,
-} from '~/utils/auth';
+import { getGoogleUser, loginExistingUser, signupNewUser } from '~/utils/auth';
 import { getSession } from '~/utils/session.server';
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -21,7 +17,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     try {
         const googleUser = await getGoogleUser(code);
 
-        const existingUser = await findUserByEmail(googleUser.email);
+        const existingUser = await getUserByEmail(googleUser.email);
 
         if (!existingUser) return signupNewUser(googleUser, session);
 

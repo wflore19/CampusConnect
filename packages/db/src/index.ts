@@ -5,3 +5,4 @@
 
 export { db } from '../drizzle/index';
 export * from '../drizzle/schema';
+export * from '../drizzle/index';

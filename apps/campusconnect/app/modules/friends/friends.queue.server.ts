@@ -1,5 +1,5 @@
 import { createQueue, createWorker } from '~/utils/bullmq';
-import { sendFriendRequest } from './friends.core';
+import { sendFriendRequest } from '@campusconnect/db';
 
 const FRIEND_REQUEST_QUEUE = 'friendRequest';
 

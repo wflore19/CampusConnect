@@ -1,8 +1,5 @@
 import { type ActionFunctionArgs } from '@remix-run/node';
-import {
-    acceptFriendRequest,
-    rejectFriendRequest,
-} from '~/modules/friends/friends.core';
+import { acceptFriendRequest, rejectFriendRequest } from '@campusconnect/db';
 import { queueFriendRequest } from '~/modules/friends/friends.queue.server';
 
 import { getSession, user } from '~/utils/session.server';

@@ -1,13 +1,13 @@
 import { LoaderFunctionArgs, redirect } from '@remix-run/node';
 import { Link, Outlet, useLoaderData } from '@remix-run/react';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
-import {
-    getFriendsList,
-    getPendingFriendRequest,
-} from '~/modules/friends/friends.core';
 import { FriendshipStatusControl } from '~/modules/friends/friends.ui';
 import { Avatar, Card, Flex, Heading, Separator, Box } from '@radix-ui/themes';
-import { getUserById } from '~/modules/users/users.core';
+import {
+    getUserById,
+    getFriendsList,
+    getPendingFriendRequest,
+} from '@campusconnect/db';
 import React from 'react';
 import { RiGroupLine } from '@remixicon/react';
 

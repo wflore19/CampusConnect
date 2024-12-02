@@ -2,7 +2,7 @@ import { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { Outlet, useLoaderData } from '@remix-run/react';
 import { Dashboard } from '~/components/dashboard';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
-import { db } from '@campusconnect/db';
+import { getUserById } from '@campusconnect/db';
 import { Box, Container } from '@radix-ui/themes';
 
 export const meta: MetaFunction = () => {
@@ -20,11 +20,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const session = await ensureUserAuthenticated(request);
     const id = user(session);
 
-    const profile = await db
-        .selectFrom('users')
-        .select(['firstName', 'lastName', 'email', 'profilePicture'])
-        .where('id', '=', id)
-        .executeTakeFirst();
+    const profile = await getUserById(id);
 
     return {
         firstName: profile?.firstName,

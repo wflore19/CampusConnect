@@ -11,10 +11,11 @@ import {
     useRouteError,
 } from '@remix-run/react';
 import { getSession, user } from '~/utils/session.server';
-import { getUserDetails } from '~/modules/users/users.queries';
-import { UserDetails } from '~/modules/users/users.types';
-import { db } from '@campusconnect/db';
-import { UserDetailsRelationshipStatus, UserDetailsSex } from '@campusconnect/db/dist/db';
+import {
+    type UserDetails,
+    updateUserDetails,
+    getUserDetails,
+} from '@campusconnect/db';
 import { Modal } from '~/components/modal';
 import { Button, Flex, TextField, Text, Box, Select } from '@radix-ui/themes';
 import { RiEdit2Line } from '@remixicon/react';
@@ -40,77 +41,51 @@ export async function action({ request }: ActionFunctionArgs) {
 
     try {
         const formData = await request.formData();
-        const aboutMe = formData.get('aboutMe');
-        const sex = formData.get('sex');
-        const age = formData.get('age');
-        const birthday = formData.get('birthday');
-        const favoriteBooks = formData.get('favoriteBooks');
-        const favoriteMovies = formData.get('favoriteMovies');
-        const favoriteMusic = formData.get('favoriteMusic');
-        const hometown = formData.get('hometown');
-        const interests = formData.get('interests');
-        const relationshipStatus = formData.get('relationshipStatus');
-        const school = formData.get('school');
-        const work = formData.get('work');
+        const aboutMe = formData.get('aboutMe')?.toString() ?? null;
+        const sex = formData.get('sex')?.toString() ?? null;
+        const validatedSex =
+            sex === 'male' || sex === 'female' || sex === 'other' ? sex : null;
 
-        const record = await db
-            .selectFrom('userDetails')
-            .where('userId', '=', id)
-            .executeTakeFirst();
+        const age = formData.get('age')?.toString()
+            ? parseInt(formData.get('age')?.toString() ?? '', 10)
+            : null;
+        const birthday = formData.get('birthday')?.toString() ?? null;
+        const favoriteBooks = formData.get('favoriteBooks')?.toString() ?? null;
+        const favoriteMovies =
+            formData.get('favoriteMovies')?.toString() ?? null;
+        const favoriteMusic = formData.get('favoriteMusic')?.toString() ?? null;
+        const hometown = formData.get('hometown')?.toString() ?? null;
+        const interests = formData.get('interests')?.toString() ?? null;
+        const relationshipStatus = formData
+            .get('relationshipStatus')
+            ?.toString();
+        const validatedRelationshipStatus =
+            relationshipStatus === 'single' ||
+            relationshipStatus === 'taken' ||
+            relationshipStatus === 'married' ||
+            relationshipStatus === 'complicated'
+                ? relationshipStatus
+                : null;
 
-        if (!record) {
-            await db
-                .insertInto('userDetails')
-                .values({
-                    userId: id,
-                    aboutMe: aboutMe ? String(aboutMe) : null,
-                    sex: sex ? (String(sex) as UserDetailsSex) : null,
-                    age: age ? Number(age) : null,
-                    birthday: birthday ? String(birthday) : null,
-                    favoriteBooks: favoriteBooks ? String(favoriteBooks) : null,
-                    favoriteMovies: favoriteMovies
-                        ? String(favoriteMovies)
-                        : null,
-                    favoriteMusic: favoriteMusic ? String(favoriteMusic) : null,
-                    hometown: hometown ? String(hometown) : null,
-                    interests: interests ? String(interests) : null,
-                    relationshipStatus: relationshipStatus
-                        ? (String(
-                              relationshipStatus
-                          ) as UserDetailsRelationshipStatus)
-                        : null,
-                    school: school ? String(school) : null,
-                    work: work ? String(work) : null,
-                })
-                .executeTakeFirst();
-        } else {
-            await db
-                .updateTable('userDetails')
-                .set({
-                    userId: id,
-                    aboutMe: aboutMe ? String(aboutMe) : null,
-                    sex: sex ? (String(sex) as UserDetailsSex) : null,
-                    age: age ? Number(age) : null,
-                    birthday: birthday ? String(birthday) : null,
-                    favoriteBooks: favoriteBooks ? String(favoriteBooks) : null,
-                    favoriteMovies: favoriteMovies
-                        ? String(favoriteMovies)
-                        : null,
-                    favoriteMusic: favoriteMusic ? String(favoriteMusic) : null,
-                    hometown: hometown ? String(hometown) : null,
-                    interests: interests ? String(interests) : null,
-                    relationshipStatus: relationshipStatus
-                        ? (String(
-                              relationshipStatus
-                          ) as UserDetailsRelationshipStatus)
-                        : null,
-                    school: school ? String(school) : null,
-                    work: work ? String(work) : null,
-                })
-                .where('userId', '=', id)
-                .executeTakeFirst();
-        }
+        const school = formData.get('school')?.toString() ?? null;
+        const work = formData.get('work')?.toString() ?? null;
 
+        await updateUserDetails(id, {
+            id: id,
+            userId: id,
+            aboutMe: aboutMe,
+            sex: validatedSex,
+            age: age,
+            birthday: birthday,
+            favoriteBooks: favoriteBooks,
+            favoriteMovies: favoriteMovies,
+            favoriteMusic: favoriteMusic,
+            hometown: hometown,
+            interests: interests,
+            relationshipStatus: validatedRelationshipStatus,
+            school: school,
+            work: work,
+        });
         return redirect(`/profile`);
     } catch (error) {
         return { error: (error as Error).message };

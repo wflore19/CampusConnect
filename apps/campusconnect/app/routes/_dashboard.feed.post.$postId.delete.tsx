@@ -7,7 +7,7 @@ import {
 import { Form, NavLink } from '@remix-run/react';
 import { RiDeleteBinFill } from '@remixicon/react';
 import { Modal } from '~/components/modal';
-import { deletePost } from '~/modules/posts/posts.core';
+import { deletePost } from '@campusconnect/db';
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const postId = params.postId;

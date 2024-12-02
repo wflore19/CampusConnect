@@ -9,8 +9,7 @@ import {
     Separator,
     Link,
 } from '@radix-ui/themes';
-import { getEventById } from '~/modules/events/events.core';
-import { getUserById } from '~/modules/users/users.core';
+import { getEventById, getUserById } from '@campusconnect/db';
 import { RiCalendar2Line, RiMapPin2Line } from '@remixicon/react';
 
 type LoaderData = {

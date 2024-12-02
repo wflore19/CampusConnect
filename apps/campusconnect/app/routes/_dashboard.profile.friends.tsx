@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
-import { getFriendsList } from '~/modules/friends/friends.core';
+import { getFriendsList } from '@campusconnect/db';
 import { getSession, user } from '~/utils/session.server';
 import { Box, Heading, Card, Flex, Avatar, Text } from '@radix-ui/themes';
 import { RiUserLine } from '@remixicon/react';
