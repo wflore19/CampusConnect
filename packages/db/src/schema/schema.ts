@@ -4,7 +4,6 @@ import {
     integer,
     timestamp,
     serial,
-    foreignKey,
     date,
     text,
     unique,

@@ -1,5 +1,5 @@
 import { db } from '@campusconnect/db';
-import { InferColumnsDataTypes, InferSelectModel, eq, ne } from 'drizzle-orm';
+import { InferSelectModel, eq, ne } from 'drizzle-orm';
 import { users, userDetails } from '@campusconnect/db/schema';
 
 /**

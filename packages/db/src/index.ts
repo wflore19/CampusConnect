@@ -1,8 +1,8 @@
-// export { type DB } from './shared/types';
-// export { db } from './shared/db';
-// export { point } from './shared/utils';
-// export { createDatabaseConnection } from './use-cases/create-database-connection';
+import 'dotenv/config';
+import { drizzle } from 'drizzle-orm/node-postgres';
 
-export { db } from '../drizzle/index';
-export * from '../drizzle/schema';
-export * from '../drizzle/index';
+export * from './queries/events.queries';
+export * from './queries/friends.queries';
+export * from './queries/posts.queries';
+export * from './queries/users.queries';
+export const db = drizzle(process.env.DATABASE_URL!);

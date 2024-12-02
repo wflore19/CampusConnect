@@ -3,7 +3,7 @@ import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
     out: './drizzle',
-    schema: './drizzle/schema.ts',
+    schema: './src/schema',
     migrations: {
         prefix: 'timestamp',
         table: '__drizzle_migrations__',

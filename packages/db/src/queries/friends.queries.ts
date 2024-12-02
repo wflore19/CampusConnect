@@ -1,5 +1,6 @@
-import { db, friendRequestStatus, userFriend, users } from '@campusconnect/db';
-import { InferColumnsDataTypes, InferSelectModel, and, eq } from 'drizzle-orm';
+import { db } from '@campusconnect/db';
+import { userFriend, users } from '@campusconnect/db/schema';
+import { InferSelectModel, and, eq } from 'drizzle-orm';
 
 /* Docs
  * https://www.coderbased.com/p/user-friends-system-and-database
