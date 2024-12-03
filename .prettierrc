@@ -4,5 +4,7 @@
     "proseWrap": "always",
     "semi": true,
     "singleQuote": true,
+    "tailwindConfig": "./tailwind.config.js",
+    "tailwindFunctions": ["cx"],
     "trailingComma": "es5"
 }
