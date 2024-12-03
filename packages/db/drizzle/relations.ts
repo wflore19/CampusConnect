@@ -2,7 +2,7 @@ import { relations } from 'drizzle-orm/relations';
 import {
     users,
     events,
-    userFriend,
+    friendships,
     userDetails,
     posts,
     postLikes,
@@ -18,10 +18,10 @@ export const eventsRelations = relations(events, ({ one }) => ({
 
 export const usersRelations = relations(users, ({ many }) => ({
     events: many(events),
-    userFriends_uid1: many(userFriend, {
+    userFriends_uid1: many(friendships, {
         relationName: 'userFriend_uid1_users_id',
     }),
-    userFriends_uid2: many(userFriend, {
+    userFriends_uid2: many(friendships, {
         relationName: 'userFriend_uid2_users_id',
     }),
     userDetails: many(userDetails),
@@ -30,14 +30,14 @@ export const usersRelations = relations(users, ({ many }) => ({
     postComments: many(postComments),
 }));
 
-export const userFriendRelations = relations(userFriend, ({ one }) => ({
+export const userFriendRelations = relations(friendships, ({ one }) => ({
     user_uid1: one(users, {
-        fields: [userFriend.uid1],
+        fields: [friendships.uid1],
         references: [users.id],
         relationName: 'userFriend_uid1_users_id',
     }),
     user_uid2: one(users, {
-        fields: [userFriend.uid2],
+        fields: [friendships.uid2],
         references: [users.id],
         relationName: 'userFriend_uid2_users_id',
     }),
