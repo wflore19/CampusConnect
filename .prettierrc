@@ -1,10 +1,8 @@
 {
-	"tabWidth": 4,
-	"printWidth": 80,
-	"proseWrap": "always",
-	"semi": true,
-	"singleQuote": true,
-	"tailwindConfig": "./tailwind.config.ts",
-	"tailwindFunctions": ["cx"],
-	"trailingComma": "es5"
+    "tabWidth": 4,
+    "printWidth": 80,
+    "proseWrap": "always",
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
 }
