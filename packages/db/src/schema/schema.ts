@@ -4,29 +4,42 @@ import {
     integer,
     timestamp,
     serial,
-    date,
+    primaryKey,
     text,
     unique,
     pgEnum,
+    check,
 } from 'drizzle-orm/pg-core';
-import { sql } from 'drizzle-orm';
+import { lt, sql } from 'drizzle-orm';
+import { enumToPgEnum } from '../utils/enum';
 
-export const friendRequestStatus = pgEnum('friend_request_status', [
-    'REQ_UID1',
-    'REQ_UID2',
-    'friend',
-]);
-
-export const userDetailsRelationshipStatus = pgEnum(
-    'user_details_relationship_status',
-    ['single', 'taken', 'married', 'complicated']
+export enum FriendRequestStatus {
+    REQ_UID1 = 'REQ_UID1',
+    REQ_UID2 = 'REQ_UID2',
+    friend = 'friend',
+}
+export const friendRequestStatus = pgEnum(
+    'friend_request_status',
+    enumToPgEnum(FriendRequestStatus)
 );
 
-export const userDetailsSex = pgEnum('user_details_sex', [
-    'male',
-    'female',
-    'other',
-]);
+export enum RelationshipStatus {
+    SINGLE = 'single',
+    TAKEN = 'taken',
+    MARRIED = 'married',
+    COMPLICATED = 'complicated',
+}
+export const userDetailsRelationshipStatus = pgEnum(
+    'user_details_relationship_status',
+    enumToPgEnum(RelationshipStatus)
+);
+
+export enum SexEnum {
+    MALE = 'male',
+    FEMALE = 'female',
+    OTHER = 'other',
+}
+export const userDetailsSex = pgEnum('sex', enumToPgEnum(SexEnum));
 
 export const kyselyMigrations = pgTable('kysely_migrations', {
     name: varchar({ length: 255 }).primaryKey().notNull(),
@@ -40,10 +53,6 @@ export const kyselyMigrationsLock = pgTable('kysely_migrations_lock', {
 
 export const users = pgTable('users', {
     createdAt: timestamp('created_at', {
-        withTimezone: true,
-        mode: 'string',
-    }).default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: timestamp('updated_at', {
         withTimezone: true,
         mode: 'string',
     }).default(sql`CURRENT_TIMESTAMP`),
@@ -66,7 +75,10 @@ export const friendships = pgTable(
             .references(() => users.id),
         status: friendRequestStatus().notNull(),
     },
-    (table) => [unique('user_friend_uid1_uid2_key').on(table.uid1, table.uid2)]
+    (table) => [
+        check('uid1_is_less_than_uid2', lt(table.uid1, table.uid2)),
+        unique('user_friend_uid1_uid2_key').on(table.uid1, table.uid2),
+    ]
 );
 
 export const userDetails = pgTable('user_details', {
@@ -111,7 +123,6 @@ export const posts = pgTable(
 export const postLikes = pgTable(
     'post_likes',
     {
-        id: serial().primaryKey().notNull(),
         postId: integer('post_id')
             .notNull()
             .references(() => posts.id),
@@ -120,6 +131,7 @@ export const postLikes = pgTable(
             .references(() => users.id),
     },
     (table) => [
+        primaryKey({ columns: [table.postId, table.userId] }),
         unique('post_likes_post_id_user_id_key').on(table.postId, table.userId),
     ]
 );
@@ -141,6 +153,10 @@ export const postComments = pgTable(
         content: text().notNull(),
     },
     (table) => [
-        unique('post_comments_id_user_id_key').on(table.id, table.userId),
+        unique('post_comments_id_user_id_key').on(
+            table.id,
+            table.postId,
+            table.userId
+        ),
     ]
 );
