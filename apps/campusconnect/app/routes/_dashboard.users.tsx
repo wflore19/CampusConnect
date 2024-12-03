@@ -1,8 +1,8 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { useLoaderData, Link } from '@remix-run/react';
-import { getUsersList, type User } from '@campusconnect/db';
+import { useLoaderData } from '@remix-run/react';
+import { getUsersList } from '@campusconnect/db';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
-import { Avatar, Box, Card, Flex, Heading, Text } from '@radix-ui/themes';
+import { Avatar, Box, Card, Link, Flex, Heading, Text } from '@radix-ui/themes';
 import { RiUserLine } from '@remixicon/react';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -36,7 +36,7 @@ export default function Home() {
                                 fallback={`${user.firstName![0]}${user.lastName![0]}`}
                             />
                             <Box>
-                                <Link to={`/user/${user.id}`}>
+                                <Link href={`/user/${user.id}`}>
                                     <Text size="3" weight="bold">
                                         <Flex align="center" gap="2">
                                             {`${user.firstName} ${user.lastName}`}{' '}
