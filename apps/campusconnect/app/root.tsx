@@ -1,7 +1,7 @@
 import { Links, Meta, Outlet, Scripts } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
 
-import './tailwind.css';
+import './styles.css';
 import '@radix-ui/themes/styles.css';
 import { GoogleAnalytics } from './components/google-analytics';
 import { Theme } from '@radix-ui/themes';

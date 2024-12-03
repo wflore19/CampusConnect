@@ -14,8 +14,6 @@ import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import {
     RiAppsFill,
     RiAppsLine,
-    RiCalendarEventFill,
-    RiCalendarEventLine,
     RiCloseLine,
     RiHome4Fill,
     RiHome4Line,
@@ -39,12 +37,6 @@ const SIDEBAR_ITEMS = [
         activeIcon: <RiAppsFill size={20} />,
         label: 'News Feed',
         path: '/feed',
-    },
-    {
-        icon: <RiCalendarEventLine size={20} />,
-        activeIcon: <RiCalendarEventFill size={20} />,
-        label: 'Events',
-        path: '/events',
     },
     {
         icon: <RiTeamLine size={20} />,
