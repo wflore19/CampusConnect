@@ -54,31 +54,8 @@ export const users = pgTable('users', {
     profilePicture: varchar('profile_picture', { length: 255 }),
 });
 
-export const events = pgTable('events', {
-    createdAt: timestamp('created_at', {
-        withTimezone: true,
-        mode: 'string',
-    }).default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: timestamp('updated_at', {
-        withTimezone: true,
-        mode: 'string',
-    }).default(sql`CURRENT_TIMESTAMP`),
-    id: serial().primaryKey().notNull(),
-    name: varchar({ length: 255 }).default(''),
-    date: date(),
-    location: varchar({ length: 255 }).default(''),
-    startTime: timestamp('start_time', {
-        withTimezone: true,
-        mode: 'string',
-    }),
-    endTime: timestamp('end_time', { withTimezone: true, mode: 'string' }),
-    imageUrl: varchar('image_url', { length: 255 }),
-    organizerId: integer('organizer_id').references(() => users.id),
-    description: text().default(''),
-});
-
-export const userFriend = pgTable(
-    'user_friend',
+export const friendships = pgTable(
+    'friendships',
     {
         id: serial().primaryKey().notNull(),
         uid1: integer()
