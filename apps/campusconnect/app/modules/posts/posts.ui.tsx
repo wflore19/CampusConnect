@@ -3,13 +3,13 @@ import {
     Avatar,
     DropdownMenu,
     Flex,
+    Link,
     Separator,
     Text,
 } from '@radix-ui/themes';
 import { Post, User } from '@campusconnect/db';
 import React from 'react';
 import { getTimeAgo } from '~/utils/time';
-import { Link } from '@remix-run/react';
 import { RiDeleteBinFill, RiEdit2Line, RiMore2Fill } from '@remixicon/react';
 
 type FeedPost = Partial<Post> & Partial<User>;
@@ -42,7 +42,7 @@ export function NewsFeed({ feedPosts, userId }: NewsFeedProps) {
                                         direction="column"
                                         gap={{ initial: '0', md: '1' }}
                                     >
-                                        <Link to={`/user/${post.userId}`}>
+                                        <Link href={`/user/${post.userId}`}>
                                             <Text
                                                 size={{
                                                     initial: '4',
@@ -104,7 +104,7 @@ export function PostOptionsDropdown({ post }: PostOptionsDropdownProps) {
             </DropdownMenu.Trigger>
             <DropdownMenu.Content align="end" sideOffset={-20}>
                 <DropdownMenu.Item asChild>
-                    <Link to={`/feed/post/${post.id}/update`}>
+                    <Link href={`/feed/post/${post.id}/update`}>
                         <Flex gap={'2'} align="center">
                             <RiEdit2Line size={20} /> Edit Post
                         </Flex>
@@ -112,7 +112,7 @@ export function PostOptionsDropdown({ post }: PostOptionsDropdownProps) {
                 </DropdownMenu.Item>
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item asChild>
-                    <Link to={`/feed/post/${post.id}/delete`}>
+                    <Link href={`/feed/post/${post.id}/delete`}>
                         <Flex gap={'2'} align="center">
                             <RiDeleteBinFill size={20} color="red" /> Delete
                             Post

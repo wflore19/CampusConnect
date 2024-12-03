@@ -1,16 +1,24 @@
 import { Form, useFetcher } from '@remix-run/react';
 import { Box, Button, Flex, Link, Spinner } from '@radix-ui/themes';
-import { FriendshipStatusControlProps } from './friends.types';
 import React from 'react';
 import {
     RiUserAddLine,
     RiUserMinusLine,
     RiUserUnfollowLine,
 } from '@remixicon/react';
+import { UserFriend } from '@campusconnect/db';
+
 type FetcherData = {
     success: boolean;
     type: 'add' | 'remove';
 };
+
+export interface FriendshipStatusControlProps {
+    friendRequest: UserFriend;
+    userId: number;
+    id: number;
+}
+
 export function FriendshipStatusControl({
     friendRequest,
     userId,
