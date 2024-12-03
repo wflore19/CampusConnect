@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserDetails } from './users.types';
+import { UserDetails } from '@campusconnect/db';
 import { Flex, Text } from '@radix-ui/themes';
 
 export function UserProfileInformation({

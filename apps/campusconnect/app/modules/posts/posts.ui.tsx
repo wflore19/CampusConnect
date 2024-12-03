@@ -6,25 +6,20 @@ import {
     Separator,
     Text,
 } from '@radix-ui/themes';
-import { Post, Posts } from './posts.types';
+import { Post, User } from '@campusconnect/db';
 import React from 'react';
 import { getTimeAgo } from '~/utils/time';
 import { Link } from '@remix-run/react';
 import { RiDeleteBinFill, RiEdit2Line, RiMore2Fill } from '@remixicon/react';
 
-export function NewsFeed({
-    feedPosts,
-    userId,
-}: {
-    feedPosts: Posts;
+type FeedPost = Partial<Post> & Partial<User>;
+type NewsFeedProps = {
+    feedPosts: FeedPost[];
     userId: number;
-}) {
-    if (!feedPosts.length)
-        return (
-            <React.Fragment>
-                <Text>No posts yet</Text>
-            </React.Fragment>
-        );
+};
+
+export function NewsFeed({ feedPosts, userId }: NewsFeedProps) {
+    if (!feedPosts.length) return <Text>No posts yet</Text>;
 
     return (
         <React.Fragment>
@@ -39,7 +34,8 @@ export function NewsFeed({
                                         src={post.profilePicture || undefined}
                                         radius="full"
                                         fallback={
-                                            post.firstName[0] + post.lastName[0]
+                                            post.firstName![0] +
+                                            post.lastName![0]
                                         }
                                     />
                                     <Flex
@@ -63,7 +59,9 @@ export function NewsFeed({
                                                 md: '2',
                                             }}
                                         >
-                                            {getTimeAgo(post.createdAt)}
+                                            {getTimeAgo(
+                                                new Date(post.createdAt!)
+                                            )}
                                         </Text>
                                     </Flex>
                                 </Flex>
@@ -78,7 +76,7 @@ export function NewsFeed({
                             size={{ initial: '3', md: '2' }}
                             mb="2"
                             dangerouslySetInnerHTML={{
-                                __html: post.content,
+                                __html: post.content!,
                             }}
                         />
                     </Box>
@@ -92,7 +90,11 @@ export function NewsFeed({
     );
 }
 
-export function PostOptionsDropdown({ post }: { post: Post }) {
+type PostOptionsDropdownProps = {
+    post: Partial<Post>;
+};
+
+export function PostOptionsDropdown({ post }: PostOptionsDropdownProps) {
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger>
