@@ -1,13 +1,8 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
+import { STORAGE_ACCESS_KEY, STORAGE_SECRET, STORAGE_ENDPOINT } from './env';
 
-const { STORAGE_ACCESS_KEY, STORAGE_SECRET, STORAGE_ENDPOINT } = process.env;
-
-if (!STORAGE_ENDPOINT || !STORAGE_ACCESS_KEY || !STORAGE_SECRET) {
-    throw new Error('Storage configuration is missing required values');
-}
-
-export const s3Client = new S3Client({
+const s3Client = new S3Client({
     endpoint: STORAGE_ENDPOINT,
     region: 'nyc1',
     credentials: {
