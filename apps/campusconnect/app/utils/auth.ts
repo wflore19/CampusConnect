@@ -1,17 +1,20 @@
 // OAuth 2.0
 import { Session, redirect } from '@remix-run/node';
 import {
+    User,
     createUser,
     getUserByEmail,
+    getUserById,
+    insertUserDetails,
     updateUser,
     updateUserDetails,
 } from '@campusconnect/db';
 import { google } from 'googleapis';
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, APP_URL } from '~/utils/env';
-import { uploadImageFromCDN } from './s3-config.server';
+import { uploadImageToSpaces } from './s3-config.server';
 import { commitSession } from './session.server';
 
-export type GoogleUser = {
+export type GoogleUserType = {
     id: string;
     email: string;
     verified_email: boolean;
@@ -20,14 +23,6 @@ export type GoogleUser = {
     family_name?: string;
     picture: string;
 };
-
-interface User {
-    id: number;
-    email: string | null;
-    firstName: string | null;
-    lastName: string | null;
-    profilePicture: string | null;
-}
 
 /**
  * Google OAuth2 client
@@ -42,7 +37,7 @@ const GoogleClient = new google.auth.OAuth2({
  * Get the Google authentication URL for the user to login
  * @returns The Google authentication URL
  */
-export function getGoogleAuthURL() {
+export function getGoogleAuthURL(): string {
     const scopes = [
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email',
@@ -57,20 +52,25 @@ export function getGoogleAuthURL() {
 
 /**
  * Get the Google user profile information from the code provided by Google
- * @param code - The code from Google
- * @returns The Google user's profile information if found, otherwise undefined
+ * @param accessToken - The user's access token
+ * @param refreshToken - The user's refresh token
+ * @returns {<Promise<GoogleUserType>>} The Google user's profile information
  */
-export async function getGoogleUser(code: string) {
-    const { accessToken, refreshToken } = await exchangeCodeForToken(code);
+export async function getGoogleProfileInformation(
+    accessToken: string,
+    refreshToken: string
+) {
     GoogleClient.setCredentials({
         access_token: accessToken,
         refresh_token: refreshToken,
     });
 
     try {
-        const { data }: { data: GoogleUser } = await GoogleClient.request({
+        const response = await GoogleClient.request({
             url: 'https://www.googleapis.com/oauth2/v2/userinfo',
         });
+
+        const data = response.data as GoogleUserType;
 
         return data;
     } catch (error) {
@@ -80,7 +80,7 @@ export async function getGoogleUser(code: string) {
 
 /**
  * Exchange the code from Google for the user's tokens after consent screen is shown
- * @param code - The code from Google
+ * @param code - The code sent from Google Consent Screen
  * @returns The user's tokens
  */
 export async function exchangeCodeForToken(code: string) {
@@ -94,12 +94,14 @@ export async function exchangeCodeForToken(code: string) {
 
 /**
  * Logs in an existing user and redirects them to the home page
- * @param user - The user object
+ * @param id - The user ID
  * @param session - The session object
  * @returns A redirect response
  */
-export async function loginExistingUser(user: User, session: Session) {
-    session.set('user_id', user.id);
+export async function loginUser(id: number, session: Session) {
+    session.set('user_id', id);
+
+    const user = await getUserById(id);
 
     const redirectUrl = new URL(`${APP_URL}/home`);
     return redirect(redirectUrl.toString(), {
@@ -115,73 +117,42 @@ export async function loginExistingUser(user: User, session: Session) {
  * @param session - The session object
  * @returns A redirect response
  */
-export async function signupNewUser(googleUser: GoogleUser, session: Session) {
-    const newUser = await createNewGoogleUser(googleUser);
-    const profilePicture = await uploadImageS3(
-        googleUser,
-        newUser.id.toString()
+export async function signupNewUser(
+    googleUser: GoogleUserType,
+    session: Session
+) {
+    const parsedFirstName = googleUser.name.split(' ')[0];
+    const parsedLastName =
+        googleUser.name.split(' ')[googleUser.name.split(' ').length - 1];
+
+    const user = await createUser(
+        googleUser.email,
+        parsedFirstName,
+        parsedLastName
     );
 
-    await updateUser(newUser.id, { profilePicture: profilePicture });
+    await insertUserDetails(user[0].insertedId);
 
-    session.set('user_id', newUser.id);
+    const profilePictureUrl = await uploadImageToSpaces(
+        googleUser.picture,
+        `${parsedFirstName}-${parsedLastName}-${user[0].insertedId.toString()}.jpg`
+    );
 
+    const profilePictureCDNurl = profilePictureUrl.replace(
+        'nyc3.digitaloceanspaces',
+        'nyc3.cdn.digitaloceanspaces'
+    );
+
+    await updateUser(user[0].insertedId.toString(), {
+        profilePicture: profilePictureCDNurl,
+        backupProfilePicture: profilePictureUrl,
+    });
+
+    session.set('user_id', user[0].insertedId.toString());
     const redirectUrl = new URL(`${APP_URL}/home`);
     return redirect(redirectUrl.toString(), {
         headers: {
             'Set-Cookie': await commitSession(session),
         },
     });
-
-    /**
-     * Create a new user in the database
-     * @param googleUser - The Google user object
-     * @param imageUrl - The URL of the image
-     * @returns The user object if created successfully
-     */
-    async function createNewGoogleUser(googleUser: GoogleUser) {
-        const parsedFirstName = googleUser.name.split(' ')[0];
-        const parsedLastName =
-            googleUser.name.split(' ')[googleUser.name.split(' ').length - 1];
-
-        await createUser({
-            email: googleUser.email,
-            firstName: parsedFirstName,
-            lastName: parsedLastName,
-        });
-
-        const newUser = await getUserByEmail(googleUser.email);
-
-        if (!newUser) {
-            throw new Error('Failed to create new user');
-        }
-
-        await updateUserDetails(newUser.id, {});
-
-        return newUser;
-    }
-}
-
-/**
- * Uploads an image to DigitalOcean Spaces (AWS S3)
- * @param googleUser - The Google user object
- * @returns The URL of the uploaded image
- */
-export async function uploadImageS3(googleUser: GoogleUser, userId: string) {
-    const parsedFirstName = googleUser.name.split(' ')[0];
-    const parsedLastName =
-        googleUser.name.split(' ')[googleUser.name.split(' ').length - 1];
-    const spacesImageUrl = await uploadImageFromCDN(
-        googleUser.picture,
-        `${parsedFirstName}-${parsedLastName}-${userId}.jpg`
-    );
-
-    if (!spacesImageUrl) {
-        throw new Error('Failed to upload image');
-    }
-
-    return spacesImageUrl.replace(
-        'nyc3.digitaloceanspaces',
-        'nyc3.cdn.digitaloceanspaces'
-    );
 }
