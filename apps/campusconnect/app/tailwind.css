@@ -29,24 +29,6 @@ body.scroll-locked {
     }
 }
 
-@keyframes dashboard-menu-animation {
-    from {
-        transform: translateX(-100%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
-
-@keyframes dashboard-menu-exit {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(-100%);
-    }
-}
-
 @keyframes overlay-fade-in {
     from {
         opacity: 0;

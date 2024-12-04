@@ -16,7 +16,6 @@
     "dependencies": {
         "@aws-sdk/client-s3": "^3.689.0",
         "@aws-sdk/lib-storage": "^3.689.0",
-        "@campusconnect/db": "*",
         "@radix-ui/themes": "^3.1.6",
         "@remix-run/node": "^2.14.0",
         "@remix-run/react": "^2.14.0",
@@ -29,7 +28,6 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "socket.io-client": "^4.8.1",
-        "tailwindcss": "^3.4.15",
         "ts-pattern": "^5.5.0",
         "zod": "^3.23.8"
     },
@@ -43,6 +41,7 @@
         "@types/react-dom": "^18.2.7",
         "autoprefixer": "^10.4.19",
         "postcss": "^8.4.38",
+        "tailwindcss": "^3.4.15",
         "vite": "^5.1.0",
         "vite-tsconfig-paths": "^4.2.1"
     },
