@@ -209,9 +209,11 @@ export function Dashboard({
                     width="90%"
                     style={{
                         backgroundColor: 'var(--blue-1)',
-                        animation: isMobileMenuOpen
-                            ? 'dashboard-menu-animation 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards'
-                            : 'dashboard-menu-exit  0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+                        transform: isMobileMenuOpen
+                            ? 'translateX(0)'
+                            : 'translateX(-100%)',
+                        transition:
+                            'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
                         zIndex: '2',
                     }}
                     display={{ initial: 'block', sm: 'none' }}
