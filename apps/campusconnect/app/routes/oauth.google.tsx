@@ -32,7 +32,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
         return loginUser(Number(user.id), session);
     } catch (error) {
-        console.log(error);
         throw redirect('/login');
     }
 };

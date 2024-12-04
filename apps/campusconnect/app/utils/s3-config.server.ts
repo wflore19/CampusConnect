@@ -13,18 +13,14 @@ const s3Client = new S3Client({
 
 /**
  * Uploads an image from Google CDN to DigitalOcean Spaces
- * @param {string} cdnUrl - The URL of the image to upload
- * @param {string} filename - The name of the file to save the image as
+ * @param {string} cdnUrl - The URL of the image to buffer and upload
+ * @param {string} filename - The file name to save the image as
  * @returns {string} The URL of the uploaded file
  */
-export async function uploadImageFromCDN(cdnUrl: string, filename: string) {
+export async function uploadImageToSpaces(cdnUrl: string, filename: string) {
     const response = await fetch(cdnUrl);
-    if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`);
-    }
 
     const buffer = await response.arrayBuffer();
-
     const upload = new Upload({
         client: s3Client,
         params: {
@@ -36,11 +32,7 @@ export async function uploadImageFromCDN(cdnUrl: string, filename: string) {
         },
     });
 
-    try {
-        const result = await upload.done();
-        return result.Location; // Returns the URL of the uploaded file
-    } catch (error) {
-        console.error('Error uploading file:', error);
-        throw error;
-    }
+    const result = await upload.done();
+    if (!result.Location) throw new Error('Failed to upload image');
+    return result.Location; // Returns the URL of the uploaded file
 }
