@@ -10,18 +10,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
     if (!postId) throw new Error('Post ID not provided');
 
     try {
-        const post = await getPostById(Number(postId));
+        const post: FeedPost = await getPostById(Number(postId));
 
-        return { post };
+        return post;
     } catch (error) {
         throw new Error((error as Error).message);
     }
 }
 
 export default function EditPostModal() {
-    const { post } = useLoaderData<typeof loader>() as {
-        post: FeedPost;
-    };
+    const post = useLoaderData<typeof loader>();
 
     return (
         <Modal onCloseTo={`/feed`}>

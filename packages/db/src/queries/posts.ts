@@ -49,7 +49,7 @@ export async function getPostById(id: number) {
         .leftJoin(users, eq(users.id, posts.userId))
         .where(eq(posts.id, id));
 
-    return postsData;
+    return postsData[0];
 }
 
 /**
