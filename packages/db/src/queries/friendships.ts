@@ -144,7 +144,9 @@ export async function getFriendsIDs(uid1: number) {
         );
 
     // Union all
-    const result = await unionAll(firstHalf, secondHalf);
+    const result = (await unionAll(firstHalf, secondHalf)).map(
+        (item) => item.id
+    );
 
     return result;
 }

@@ -13,8 +13,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
         const friendsList: User[] = [];
         const friendsIds = await getFriendsIDs(Number(userId));
 
-        for (const item of friendsIds) {
-            const friend = await getUserById(item.id);
+        for (const id of friendsIds) {
+            const friend = await getUserById(id);
             if (!friend) continue;
 
             friendsList.push(friend);

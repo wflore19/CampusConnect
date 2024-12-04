@@ -44,7 +44,7 @@ export function NewsFeed({ feedPosts, userId }: NewsFeedProps) {
                                         <Link href={`/user/${post.userId}`}>
                                             <Text
                                                 size={{
-                                                    initial: '4',
+                                                    initial: '3',
                                                     md: '2',
                                                 }}
                                                 weight="medium"

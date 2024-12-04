@@ -21,8 +21,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     const friendsIds = await getFriendsIDs(id); // [1, 2, 3, 4, 5]
     const feedPosts: FeedPost[] = [];
 
-    for (const item of friendsIds) {
-        const friendsPosts = await getPostsByUserId(item.id);
+    for (const id of friendsIds) {
+        const friendsPosts = await getPostsByUserId(id);
 
         if (!friendsPosts.length) continue;
 
