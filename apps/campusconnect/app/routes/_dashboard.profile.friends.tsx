@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { getFriendsList } from '@campusconnect/db';
+import { User, getFriendsIDs, getUserById } from '@campusconnect/db';
 import { getSession, user } from '~/utils/session.server';
 import { Link, Box, Heading, Card, Flex, Avatar, Text } from '@radix-ui/themes';
 import { RiUserLine } from '@remixicon/react';
@@ -8,27 +8,27 @@ import { Modal } from '~/components/modal';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
-    const id = user(session);
+    const userId = user(session);
 
     try {
-        const friendsList = await getFriendsList(id);
+        const friendsList: User[] = [];
+        const friendsIds = await getFriendsIDs(userId);
 
-        return { friendsList, id };
+        for (const item of friendsIds) {
+            const friend = await getUserById(item.id);
+            if (!friend) continue;
+
+            friendsList.push(friend);
+        }
+
+        return { friendsList, userId };
     } catch (error) {
         throw new Error((error as Error).message);
     }
 }
 
 export default function Friends() {
-    const { friendsList } = useLoaderData<typeof loader>() as {
-        friendsList: {
-            id: number;
-            firstName: string;
-            lastName: string;
-            email: string;
-            profilePicture: string;
-        }[];
-    };
+    const { friendsList } = useLoaderData<typeof loader>();
 
     return (
         <Modal onCloseTo={`/profile`} size="600">
@@ -42,8 +42,8 @@ export default function Friends() {
                             <Avatar
                                 radius="full"
                                 size="5"
-                                src={friend.profilePicture}
-                                fallback={`${friend.firstName[0]}${friend.lastName[0]}`}
+                                src={friend.profilePicture!}
+                                fallback={`${friend.firstName![0]}${friend.lastName![0]}`}
                             />
                             <Box>
                                 <Link href={`/user/${friend.id}`}>

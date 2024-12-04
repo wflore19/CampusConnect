@@ -11,32 +11,17 @@ import { removeFriend } from '@campusconnect/db';
 import { getSession, user } from '~/utils/session.server';
 
 export async function loader({ params }: LoaderFunctionArgs) {
-    const userId = params.id;
-    if (!userId) throw new Error('user ID not provided');
+    const id = params.id;
+    if (!id) throw new Error('user ID not provided');
 
-    return { userId };
-}
-
-export async function action({ request, params }: ActionFunctionArgs) {
-    const session = await getSession(request);
-    const id = user(session);
-    const userId = params.id;
-
-    if (!userId) throw new Error('User ID not provided');
-
-    try {
-        await removeFriend(id, Number(userId));
-        return redirect(`/user/${userId}`);
-    } catch (error) {
-        return { error: (error as Error).message };
-    }
+    return id;
 }
 
 export default function DeletePostModal() {
-    const { userId } = useLoaderData<typeof loader>();
+    const id = useLoaderData<typeof loader>();
 
     return (
-        <Modal onCloseTo={`/user/${userId}`} size="600">
+        <Modal onCloseTo={`/user/${id}`} size="600">
             <Modal.Header>
                 <Modal.Title>Confirm Delete</Modal.Title>
                 <Modal.CloseButton />
@@ -47,7 +32,7 @@ export default function DeletePostModal() {
             </Modal.Description>
 
             <Modal.Actions>
-                <NavLink to={`/user/${userId}`}>
+                <NavLink to={`/user/${id}`}>
                     <Button
                         type="button"
                         color="gray"
@@ -66,4 +51,19 @@ export default function DeletePostModal() {
             </Modal.Actions>
         </Modal>
     );
+}
+
+export async function action({ request, params }: ActionFunctionArgs) {
+    const session = await getSession(request);
+    const userId = user(session);
+    const id = params.id;
+
+    if (!userId) throw new Error('User ID not provided');
+
+    try {
+        await removeFriend(Number(id), userId);
+        return redirect(`/user/${id}`);
+    } catch (error) {
+        return { error: (error as Error).message };
+    }
 }

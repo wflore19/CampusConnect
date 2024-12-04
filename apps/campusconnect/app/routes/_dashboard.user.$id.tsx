@@ -5,33 +5,40 @@ import { FriendshipStatusControl } from '~/modules/friends/friends.ui';
 import { Avatar, Card, Flex, Heading, Separator, Box } from '@radix-ui/themes';
 import {
     getUserById,
-    getFriendsList,
-    getPendingFriendRequest,
+    getFriendshipStatus,
+    getFriendsIDs,
+    User,
 } from '@campusconnect/db';
 import React from 'react';
 import { RiGroupLine } from '@remixicon/react';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-    const { id: userId } = params;
-    if (!userId) throw new Error('User ID not provided');
+    const id = params.id;
     const session = await ensureUserAuthenticated(request);
-    const id = user(session);
-    if (userId === id.toString()) return redirect('/profile');
+    const userId = user(session);
+    if (userId === Number(id)) return redirect('/profile');
 
     try {
-        const userProfile = await getUserById(parseInt(userId));
+        const friendship =
+            (await getFriendshipStatus(userId, Number(id))) || undefined;
 
-        const friendRequest = await getPendingFriendRequest(
-            parseInt(userId),
-            id
-        );
+        const friendsList: User[] = [];
+        const friendsIds = await getFriendsIDs(Number(id));
+        if (friendsIds.length > 0) {
+            for (const item of friendsIds) {
+                const friend = await getUserById(item.id);
+                if (!friend) continue;
 
-        const friendsList = await getFriendsList(parseInt(userId));
+                friendsList.push(friend);
+            }
+        }
+
+        const userProfile = await getUserById(Number(id));
 
         return {
-            ...userProfile,
-            friendRequest,
-            id: parseInt(userId),
+            userId,
+            userProfile,
+            friendship,
             friendsList,
         };
     } catch (error) {
@@ -40,41 +47,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function UserProfile() {
-    const {
-        id: userId,
-        firstName,
-        lastName,
-        profilePicture,
-        friendRequest,
-        id,
-        friendsList,
-    } = useLoaderData<typeof loader>() as {
-        userId: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        profilePicture: string;
-        friendRequest:
-            | {
-                  uid1: number;
-                  uid2: number;
-                  status: string;
-              }
-            | undefined;
-        id: number;
-        friendsList: {
-            id: number;
-            firstName: string;
-            lastName: string;
-            email: string;
-            profilePicture: string;
-        }[];
-    };
+    const { userId, userProfile, friendship, friendsList } =
+        useLoaderData<typeof loader>();
 
     return (
         <React.Fragment>
             <Heading size="8" mb="6">
-                {firstName}&apos;s Profile
+                {userProfile.firstName}&apos;s Profile
             </Heading>
 
             <Separator size="4" mb="4" />
@@ -84,22 +63,22 @@ export default function UserProfile() {
                     <Avatar
                         radius="full"
                         size="8"
-                        src={profilePicture}
-                        fallback={`${firstName}${lastName}`}
+                        src={userProfile.profilePicture!}
+                        fallback={`${userProfile.firstName}${userProfile.lastName}`}
                         mb="2"
                     />
                     <Box>
                         <Heading as="h2" size="6" weight="bold" mb="1">
-                            {firstName} {lastName}
+                            {userProfile.firstName} {userProfile.lastName}
                         </Heading>
                     </Box>
                     <FriendshipStatusControl
-                        friendRequest={friendRequest}
-                        userId={userId}
-                        id={id}
+                        friendship={friendship}
+                        userId={Number(userId)}
+                        id={userProfile.id}
                     />
                     <Box>
-                        <Link to={`/user/${userId}/friends`}>
+                        <Link to={`/user/${userProfile.id}/friends`}>
                             <Flex align="center" gap="2">
                                 <RiGroupLine size={18} /> Friends (
                                 {friendsList.length})

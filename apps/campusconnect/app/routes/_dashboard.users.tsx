@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { getUsersList } from '@campusconnect/db';
+import { getManyUsers } from '@campusconnect/db';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
 import { Avatar, Box, Card, Link, Flex, Heading, Text } from '@radix-ui/themes';
 import { RiUserLine } from '@remixicon/react';
@@ -10,7 +10,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const id = user(session);
 
     try {
-        const users = await getUsersList(id);
+        const users = await getManyUsers(id);
         return users;
     } catch (error) {
         throw new Error((error as Error).message);

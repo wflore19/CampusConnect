@@ -6,7 +6,8 @@ import {
     RiUserMinusLine,
     RiUserUnfollowLine,
 } from '@remixicon/react';
-import { UserFriend } from '@campusconnect/db';
+import { Friendship } from '@campusconnect/db';
+import { FriendshipStatus } from '@campusconnect/db/schema';
 
 type FetcherData = {
     success: boolean;
@@ -14,67 +15,90 @@ type FetcherData = {
 };
 
 export interface FriendshipStatusControlProps {
-    friendRequest: UserFriend;
+    friendship?: Friendship;
     userId: number;
     id: number;
 }
 
 export function FriendshipStatusControl({
-    friendRequest,
+    friendship,
     userId,
+    id,
 }: FriendshipStatusControlProps) {
     const fetcher = useFetcher<FetcherData>();
 
+    if (!friendship) {
+        return (
+            <fetcher.Form
+                action={`/api/friend-request/${id}/add`}
+                method="post"
+            >
+                <input type="hidden" name="id" value={id} />
+                <input type="hidden" name="status" value="sending" />
+                <Button
+                    type="submit"
+                    color="indigo"
+                    variant="surface"
+                    disabled={fetcher.state !== 'idle'}
+                >
+                    {fetcher.state === 'idle' ? (
+                        <React.Fragment>
+                            <RiUserAddLine size={18} /> Add Friend
+                        </React.Fragment>
+                    ) : (
+                        <Spinner />
+                    )}
+                </Button>
+            </fetcher.Form>
+        );
+    }
+
+    const isFriend = friendship!.status === FriendshipStatus.FRIEND;
+    if (isFriend) {
+        return (
+            <Box>
+                <Link href={`/user/${id}/remove`}>
+                    <Button color="red">
+                        <RiUserMinusLine size={18} /> Remove Friend
+                    </Button>
+                </Link>
+            </Box>
+        );
+    }
+
     const isPendingForUser =
-        (friendRequest?.uid1 === userId &&
-            friendRequest?.status === 'REQ_UID1') ||
-        (friendRequest?.uid2 === userId &&
-            friendRequest?.status === 'REQ_UID2');
-
-    const isRequestSentByUser =
-        (friendRequest?.uid1 === userId &&
-            friendRequest?.status === 'REQ_UID2') ||
-        (friendRequest?.uid2 === userId &&
-            friendRequest?.status === 'REQ_UID1');
-
-    const isFriend = friendRequest?.status === 'friend';
+        (userId < id && friendship!.status === FriendshipStatus.REQ_UID2) ||
+        (userId > id && friendship!.status === FriendshipStatus.REQ_UID1);
 
     if (isPendingForUser) {
         return (
             <Flex gap="2" direction={{ initial: 'column', sm: 'row' }}>
-                <Form
-                    action={`/api/friend-request/${userId}`}
+                <fetcher.Form
+                    action={`/api/friend-request/${id}/accept`}
                     method="post"
-                    navigate={false}
                 >
-                    <input type="hidden" name="id" value={userId} />
-                    <input type="hidden" name="status" value="accepted" />
                     <Button type="submit" color="green">
                         <RiUserAddLine size={18} /> Accept Friend Request
                     </Button>
-                </Form>
-                <Form
-                    action={`/api/friend-request/${userId}`}
+                </fetcher.Form>
+                <fetcher.Form
+                    action={`/api/friend-request/${id}/reject`}
                     method="post"
-                    navigate={false}
                 >
-                    <input type="hidden" name="id" value={userId} />
-                    <input type="hidden" name="status" value="rejected" />
                     <Button type="submit" color="red">
                         <RiUserMinusLine size={18} /> Reject Friend Request
                     </Button>
-                </Form>
+                </fetcher.Form>
             </Flex>
         );
     }
 
-    if (fetcher.data?.type === 'add' || isRequestSentByUser) {
+    if (fetcher.data?.type === 'add' || !isPendingForUser) {
         return (
             <fetcher.Form
-                action={`/api/friend-request/${userId}/cancel`}
+                action={`/api/friend-request/${id}/cancel`}
                 method="post"
             >
-                <input type="hidden" name="id" value={userId} />
                 <Button
                     type="submit"
                     color="red"
@@ -93,37 +117,4 @@ export function FriendshipStatusControl({
             </fetcher.Form>
         );
     }
-
-    if (isFriend) {
-        return (
-            <Box>
-                <Link href={`/user/${userId}/remove`}>
-                    <Button color="red">
-                        <RiUserMinusLine size={18} /> Remove Friend
-                    </Button>
-                </Link>
-            </Box>
-        );
-    }
-
-    return (
-        <fetcher.Form action={`/api/friend-request/${userId}`} method="post">
-            <input type="hidden" name="id" value={userId} />
-            <input type="hidden" name="status" value="sending" />
-            <Button
-                type="submit"
-                color="indigo"
-                variant="surface"
-                disabled={fetcher.state !== 'idle'}
-            >
-                {fetcher.state === 'idle' ? (
-                    <React.Fragment>
-                        <RiUserAddLine size={18} /> Add Friend
-                    </React.Fragment>
-                ) : (
-                    <Spinner />
-                )}
-            </Button>
-        </fetcher.Form>
-    );
 }

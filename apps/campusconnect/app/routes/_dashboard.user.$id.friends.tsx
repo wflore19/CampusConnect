@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { Box, Heading, Card, Flex, Avatar, Text, Link } from '@radix-ui/themes';
-import { getUserById, type User, getFriendsList } from '@campusconnect/db';
+import { getUserById, type User, getFriendsIDs } from '@campusconnect/db';
 import { Modal } from '~/components/modal';
 import { RiUserLine } from '@remixicon/react';
 
@@ -10,25 +10,25 @@ export async function loader({ params }: LoaderFunctionArgs) {
     if (!userId) throw new Error('User ID not provided');
 
     try {
-        const friendsList = await getFriendsList(Number(userId));
+        const friendsList: User[] = [];
+        const friendsIds = await getFriendsIDs(Number(userId));
+
+        for (const item of friendsIds) {
+            const friend = await getUserById(item.id);
+            if (!friend) continue;
+
+            friendsList.push(friend);
+        }
         const userProfile = await getUserById(Number(userId));
 
-        return friendsList.length > 0
-            ? { friendsList, userProfile, userId: Number(userId) }
-            : { friendsList: [], userProfile, userId: Number(userId) };
+        return { friendsList, userProfile, userId };
     } catch (error) {
         throw new Error((error as Error).message);
     }
 }
 
 export default function UserFriends() {
-    const { friendsList, userProfile, userId } = useLoaderData<
-        typeof loader
-    >() as {
-        friendsList: User[];
-        userProfile: User;
-        userId: number;
-    };
+    const { friendsList, userProfile, userId } = useLoaderData<typeof loader>();
 
     return (
         <Modal onCloseTo={`/user/${userId}`} size="600">

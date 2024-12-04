@@ -6,7 +6,9 @@ import {
     Link,
 } from '@remix-run/react';
 import {
-    getFriendsList,
+    type User,
+    getFriendsIDs,
+    getUserById,
     getUserDetails,
     type UserDetails,
 } from '@campusconnect/db';
@@ -25,43 +27,34 @@ import { RiEdit2Line, RiGroupLine } from '@remixicon/react';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
-    const id = user(session);
+    const userId = user(session);
     try {
-        const friendsList = await getFriendsList(id);
-        const userDetails = await getUserDetails(id);
+        const friendsList: User[] = [];
+        const friendsIds = await getFriendsIDs(userId);
+
+        for (const item of friendsIds) {
+            const friend = await getUserById(item.id);
+            if (!friend) continue;
+
+            friendsList.push(friend);
+        }
+
+        const userDetails: UserDetails = await getUserDetails(userId);
 
         return {
-            friendsList: friendsList.length > 0 ? friendsList : [],
-            userDetails: userDetails ? userDetails : {},
+            friendsList,
+            userDetails,
         };
     } catch (error) {
-        console.error(error);
+        throw new Error((error as Error).message);
     }
 }
 
-type LoaderData = {
-    friendsList: Array<{
-        id: number | null;
-        email: string | null;
-        firstName: string | null;
-        lastName: string | null;
-        profilePicture: string | null;
-    }>;
-    userDetails: Partial<UserDetails>;
-};
-
 export default function MyProfile() {
-    const { friendsList, userDetails } = useLoaderData<
-        typeof loader
-    >() as LoaderData;
+    const { friendsList, userDetails } = useLoaderData<typeof loader>();
     const { firstName, lastName, email, profilePicture } = useRouteLoaderData(
         'routes/_dashboard'
-    ) as {
-        firstName: string;
-        lastName: string;
-        email: string;
-        profilePicture: string;
-    };
+    ) as User;
 
     return (
         <>
@@ -76,7 +69,7 @@ export default function MyProfile() {
                     <Avatar
                         radius="full"
                         size="8"
-                        src={profilePicture}
+                        src={profilePicture!}
                         fallback={`${firstName}${lastName}`}
                         mb="2"
                     />
@@ -106,7 +99,7 @@ export default function MyProfile() {
 
                     <UserProfileInformation
                         userDetails={userDetails}
-                        email={email}
+                        email={email!}
                     />
                 </Flex>
             </Card>
