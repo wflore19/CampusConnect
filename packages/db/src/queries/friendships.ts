@@ -1,9 +1,5 @@
 import { db } from '@campusconnect/db';
-import {
-    friendships,
-    users,
-    FriendRequestStatus,
-} from '@campusconnect/db/schema';
+import { friendships, users, FriendshipStatus } from '@campusconnect/db/schema';
 import { InferSelectModel, and, eq } from 'drizzle-orm';
 import { unionAll } from 'drizzle-orm/pg-core';
 
@@ -16,6 +12,8 @@ import { unionAll } from 'drizzle-orm/pg-core';
 // uid1 < uid2 && uid2 == actor
 // uid1 > uid2 && uid1 == actor
 // uid1 > uid2 && uid2 == actor
+
+export type Friendship = InferSelectModel<typeof friendships>;
 
 /**
  * Inserts a friend request into the friendships table
@@ -32,25 +30,25 @@ export async function insertFriendRequest(
         await db.insert(friendships).values({
             uid1,
             uid2,
-            status: FriendRequestStatus.REQ_UID1,
+            status: FriendshipStatus.REQ_UID1,
         });
     } else if (uid1 < uid2 && actor == uid2) {
         await db.insert(friendships).values({
             uid1,
             uid2,
-            status: FriendRequestStatus.REQ_UID2,
+            status: FriendshipStatus.REQ_UID2,
         });
     } else if (uid1 > uid2 && actor == uid1) {
         await db.insert(friendships).values({
             uid1: uid2,
             uid2: uid1,
-            status: FriendRequestStatus.REQ_UID2,
+            status: FriendshipStatus.REQ_UID2,
         });
     } else {
         await db.insert(friendships).values({
             uid1: uid2,
             uid2: uid1,
-            status: FriendRequestStatus.REQ_UID1,
+            status: FriendshipStatus.REQ_UID1,
         });
     }
 }
@@ -61,7 +59,7 @@ export async function insertFriendRequest(
  * @param uid2 - user id 2
  * @param actor - the user who is canceling the friend request
  */
-export async function deleteFriendRequest(
+export async function rejectFriendRequest(
     uid1: number,
     uid2: number,
     actor: number
@@ -74,7 +72,7 @@ export async function deleteFriendRequest(
                 and(
                     eq(friendships.uid1, uid1),
                     eq(friendships.uid2, uid2),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID1)
+                    eq(friendships.status, FriendshipStatus.REQ_UID1)
                 )
             );
     } else if (uid1 < uid2 && actor == uid2) {
@@ -85,7 +83,7 @@ export async function deleteFriendRequest(
                 and(
                     eq(friendships.uid1, uid1),
                     eq(friendships.uid2, uid2),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID2)
+                    eq(friendships.status, FriendshipStatus.REQ_UID2)
                 )
             );
     } else if (uid1 > uid2 && actor == uid1) {
@@ -96,7 +94,7 @@ export async function deleteFriendRequest(
                 and(
                     eq(friendships.uid1, uid2),
                     eq(friendships.uid2, uid1),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID2)
+                    eq(friendships.status, FriendshipStatus.REQ_UID2)
                 )
             );
     } else {
@@ -107,7 +105,7 @@ export async function deleteFriendRequest(
                 and(
                     eq(friendships.uid1, uid2),
                     eq(friendships.uid2, uid1),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID1)
+                    eq(friendships.status, FriendshipStatus.REQ_UID1)
                 )
             );
     }
@@ -125,7 +123,12 @@ export async function getFriendsIDs(uid1: number) {
             id: friendships.uid2,
         })
         .from(friendships)
-        .where(eq(friendships.uid1, uid1));
+        .where(
+            and(
+                eq(friendships.uid1, uid1),
+                eq(friendships.status, FriendshipStatus.FRIEND)
+            )
+        );
 
     // uid1 === friendships.uid2
     const secondHalf = db
@@ -133,7 +136,12 @@ export async function getFriendsIDs(uid1: number) {
             id: friendships.uid1,
         })
         .from(friendships)
-        .where(eq(friendships.uid2, uid1));
+        .where(
+            and(
+                eq(friendships.uid2, uid1),
+                eq(friendships.status, FriendshipStatus.FRIEND)
+            )
+        );
 
     // Union all
     const result = await unionAll(firstHalf, secondHalf);
@@ -145,63 +153,21 @@ export async function getFriendsIDs(uid1: number) {
  * Get pending friend requests
  * @param uid1 - user id 1
  * @param uid2 - user id 2
- * @param actor - the user who is sending the friend request
- * @returns uid1, uid2, status
+ * @returns status
  */
-export async function getPendingFriendRequest(
-    uid1: number,
-    uid2: number,
-    actor: number
-) {
+export async function getFriendshipStatus(uid1: number, uid2: number) {
     let result;
     // uid1 < uid2 && uid1 == actor
-    if (uid1 < uid2 && actor == uid1) {
+    if (uid1 < uid2) {
         result = await db
             .select()
             .from(friendships)
-            .where(
-                and(
-                    eq(friendships.uid1, uid1),
-                    eq(friendships.uid2, uid2),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID2)
-                )
-            );
-    } else if (uid1 < uid2 && actor == uid2) {
-        // uid1 < uid2 && uid2 == actor
-        result = await db
-            .select()
-            .from(friendships)
-            .where(
-                and(
-                    eq(friendships.uid1, uid1),
-                    eq(friendships.uid2, uid2),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID1)
-                )
-            );
-    } else if (uid1 > uid2 && actor == uid1) {
-        // uid1 > uid2 && uid1 == actor
-        result = await db
-            .select()
-            .from(friendships)
-            .where(
-                and(
-                    eq(friendships.uid1, uid2),
-                    eq(friendships.uid2, uid1),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID2)
-                )
-            );
+            .where(and(eq(friendships.uid1, uid1), eq(friendships.uid2, uid2)));
     } else {
-        // uid1 > uid2 && uid2 == actor
         result = await db
             .select()
             .from(friendships)
-            .where(
-                and(
-                    eq(friendships.uid1, uid2),
-                    eq(friendships.uid2, uid1),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID1)
-                )
-            );
+            .where(and(eq(friendships.uid1, uid2), eq(friendships.uid2, uid1)));
     }
 
     if (!result) throw new Error('Friend request not found');
@@ -226,13 +192,13 @@ export async function acceptFriendRequest(
         await db
             .update(friendships)
             .set({
-                status: FriendRequestStatus.friend,
+                status: FriendshipStatus.FRIEND,
             })
             .where(
                 and(
                     eq(friendships.uid1, uid1),
                     eq(friendships.uid2, uid2),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID2)
+                    eq(friendships.status, FriendshipStatus.REQ_UID2)
                 )
             );
     } else if (uid1 < uid2 && actor === uid2) {
@@ -240,13 +206,13 @@ export async function acceptFriendRequest(
         await db
             .update(friendships)
             .set({
-                status: FriendRequestStatus.friend,
+                status: FriendshipStatus.FRIEND,
             })
             .where(
                 and(
                     eq(friendships.uid1, uid1),
                     eq(friendships.uid2, uid2),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID1)
+                    eq(friendships.status, FriendshipStatus.REQ_UID1)
                 )
             );
     } else if (uid1 > uid2 && actor === uid1) {
@@ -254,13 +220,13 @@ export async function acceptFriendRequest(
         await db
             .update(friendships)
             .set({
-                status: FriendRequestStatus.friend,
+                status: FriendshipStatus.FRIEND,
             })
             .where(
                 and(
                     eq(friendships.uid1, uid2),
                     eq(friendships.uid2, uid1),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID2)
+                    eq(friendships.status, FriendshipStatus.REQ_UID2)
                 )
             );
     } else {
@@ -268,13 +234,13 @@ export async function acceptFriendRequest(
         await db
             .update(friendships)
             .set({
-                status: FriendRequestStatus.friend,
+                status: FriendshipStatus.FRIEND,
             })
             .where(
                 and(
                     eq(friendships.uid1, uid2),
                     eq(friendships.uid2, uid1),
-                    eq(friendships.status, FriendRequestStatus.REQ_UID1)
+                    eq(friendships.status, FriendshipStatus.REQ_UID1)
                 )
             );
     }
@@ -282,8 +248,8 @@ export async function acceptFriendRequest(
 
 /**
  * Remove/deletes a friend from the friendships table
- * @param fromId
- * @param toId
+ * @param uid1
+ * @param uid2
  */
 export async function removeFriend(uid1: number, uid2: number) {
     if (uid1 < uid2) {
@@ -293,7 +259,7 @@ export async function removeFriend(uid1: number, uid2: number) {
                 and(
                     eq(friendships.uid1, uid1),
                     eq(friendships.uid2, uid2),
-                    eq(friendships.status, FriendRequestStatus.friend)
+                    eq(friendships.status, FriendshipStatus.FRIEND)
                 )
             );
     } else {
@@ -303,10 +269,8 @@ export async function removeFriend(uid1: number, uid2: number) {
                 and(
                     eq(friendships.uid1, uid2),
                     eq(friendships.uid2, uid1),
-                    eq(friendships.status, FriendRequestStatus.friend)
+                    eq(friendships.status, FriendshipStatus.FRIEND)
                 )
             );
     }
 }
-
-export type UserFriend = InferSelectModel<typeof friendships>;

@@ -13,14 +13,14 @@ import {
 import { lt, sql } from 'drizzle-orm';
 import { enumToPgEnum } from '../utils/enum';
 
-export enum FriendRequestStatus {
+export enum FriendshipStatus {
     REQ_UID1 = 'REQ_UID1',
     REQ_UID2 = 'REQ_UID2',
-    friend = 'friend',
+    FRIEND = 'friend',
 }
 export const friendRequestStatus = pgEnum(
     'friend_request_status',
-    enumToPgEnum(FriendRequestStatus)
+    enumToPgEnum(FriendshipStatus)
 );
 
 export enum RelationshipStatus {
@@ -61,6 +61,7 @@ export const users = pgTable('users', {
     lastName: varchar('last_name', { length: 255 }),
     email: varchar({ length: 255 }),
     profilePicture: varchar('profile_picture', { length: 255 }),
+    backupProfilePicture: varchar('backup_profile_picture', { length: 255 }),
 });
 
 export const friendships = pgTable(
@@ -123,6 +124,7 @@ export const posts = pgTable(
 export const postLikes = pgTable(
     'post_likes',
     {
+        id: serial().primaryKey().notNull(),
         postId: integer('post_id')
             .notNull()
             .references(() => posts.id),
@@ -131,7 +133,6 @@ export const postLikes = pgTable(
             .references(() => users.id),
     },
     (table) => [
-        primaryKey({ columns: [table.postId, table.userId] }),
         unique('post_likes_post_id_user_id_key').on(table.postId, table.userId),
     ]
 );

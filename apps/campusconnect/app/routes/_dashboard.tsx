@@ -2,7 +2,7 @@ import { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { Outlet, useLoaderData } from '@remix-run/react';
 import { Dashboard } from '~/components/dashboard';
 import { ensureUserAuthenticated, user } from '~/utils/session.server';
-import { getUserById } from '@campusconnect/db';
+import { User, getUserById } from '@campusconnect/db';
 import { Box, Container } from '@radix-ui/themes';
 
 export const meta: MetaFunction = () => {
@@ -18,16 +18,11 @@ export const meta: MetaFunction = () => {
 
 export const loader: LoaderFunction = async ({ request }) => {
     const session = await ensureUserAuthenticated(request);
-    const id = user(session);
+    const userId = user(session);
 
-    const profile = await getUserById(id);
+    const loggedInUser: User = await getUserById(Number(userId));
 
-    return {
-        firstName: profile?.firstName,
-        lastName: profile?.lastName,
-        email: profile?.email,
-        profilePicture: profile?.profilePicture,
-    };
+    return loggedInUser;
 };
 
 export default function DashboardLayout() {

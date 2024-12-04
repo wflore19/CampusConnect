@@ -1,5 +1,5 @@
 import { createQueue, createWorker } from '~/utils/bullmq';
-import { sendFriendRequest } from '@campusconnect/db';
+import { insertFriendRequest } from '@campusconnect/db';
 
 const FRIEND_REQUEST_QUEUE = 'friendRequest';
 
@@ -15,26 +15,20 @@ export const friendRequestQueue = createQueue(FRIEND_REQUEST_QUEUE);
  * const result = await processFriendRequest(1, 2);
  */
 createWorker(FRIEND_REQUEST_QUEUE, async (job) => {
-    const { fromId, toId } = job.data;
+    const { uid1, uid2 } = job.data;
     try {
-        await sendFriendRequest(fromId, toId);
-        return { processed: true, fromId, toId };
+        await insertFriendRequest(uid1, uid2, uid1);
+        return { processed: true, uid1, uid2 };
     } catch (error) {
-        console.error('Error processing friend request:', error);
-        return {
-            processed: false,
-            fromId,
-            toId,
-            error: (error as Error).message,
-        };
+        throw new Error('Failed to process friend request');
     }
 });
 
 /**
  * Queue a friend request to be sent
- * @param fromId The ID of the user sending the request
- * @param toId The ID of the user receiving the request
+ * @param uid1 The user ID of the user sending the request
+ * @param uid2 The user ID of the user receiving the request
  */
-export async function queueFriendRequest(fromId: number, toId: number) {
-    return friendRequestQueue.add('send', { fromId, toId });
+export async function queueFriendRequest(uid1: number, uid2: number) {
+    return friendRequestQueue.add('send', { uid1, uid2 });
 }

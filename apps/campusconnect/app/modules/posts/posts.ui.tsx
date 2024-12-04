@@ -7,12 +7,11 @@ import {
     Separator,
     Text,
 } from '@radix-ui/themes';
-import { Post, User } from '@campusconnect/db';
+import { Post, FeedPost } from '@campusconnect/db';
 import React from 'react';
 import { getTimeAgo } from '~/utils/time';
 import { RiDeleteBinFill, RiEdit2Line, RiMore2Fill } from '@remixicon/react';
 
-type FeedPost = Partial<Post> & Partial<User>;
 type NewsFeedProps = {
     feedPosts: FeedPost[];
     userId: number;

@@ -15,7 +15,6 @@ import { GoogleButton } from '~/components/google-button';
 
 export async function loader() {
     return redirect('/login');
-    //  return {};
 }
 
 export default function Index() {

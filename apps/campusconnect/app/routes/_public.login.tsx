@@ -23,9 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function LoginPage() {
-    const { googleAuthUrl } = useRouteLoaderData('routes/_public') as {
-        googleAuthUrl: string;
-    };
+    const googleAuthURL = useRouteLoaderData('routes/_public') as string;
 
     return (
         <Flex align="center" justify="center">
@@ -35,7 +33,7 @@ export default function LoginPage() {
                 </Text>
 
                 <Flex mt="9" justify="end" gap="3" direction={'column'}>
-                    <GoogleButton href={googleAuthUrl}>
+                    <GoogleButton href={googleAuthURL}>
                         <Text>Sign in</Text>
                     </GoogleButton>
 

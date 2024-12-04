@@ -19,85 +19,36 @@ import {
 import { Modal } from '~/components/modal';
 import { Button, Flex, TextField, Text, Box, Select } from '@radix-ui/themes';
 import { RiEdit2Line } from '@remixicon/react';
+import { RelationshipStatus, SexEnum } from '@campusconnect/db/schema';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
     const id = user(session);
 
     try {
-        const userDetails = await getUserDetails(id);
+        const userDetails: UserDetails = await getUserDetails(id);
 
-        return {
-            userDetails: userDetails ? userDetails : {},
-        };
+        return userDetails;
     } catch (error) {
-        console.error(error);
+        throw new Error((error as Error).message);
     }
 }
-
-export async function action({ request }: ActionFunctionArgs) {
-    const session = await getSession(request);
-    const id = user(session);
-
-    try {
-        const formData = await request.formData();
-        const aboutMe = formData.get('aboutMe')?.toString() ?? null;
-        const sex = formData.get('sex')?.toString() ?? null;
-        const validatedSex =
-            sex === 'male' || sex === 'female' || sex === 'other' ? sex : null;
-
-        const age = formData.get('age')?.toString()
-            ? parseInt(formData.get('age')?.toString() ?? '', 10)
-            : null;
-        const birthday = formData.get('birthday')?.toString() ?? null;
-        const favoriteBooks = formData.get('favoriteBooks')?.toString() ?? null;
-        const favoriteMovies =
-            formData.get('favoriteMovies')?.toString() ?? null;
-        const favoriteMusic = formData.get('favoriteMusic')?.toString() ?? null;
-        const hometown = formData.get('hometown')?.toString() ?? null;
-        const interests = formData.get('interests')?.toString() ?? null;
-        const relationshipStatus = formData
-            .get('relationshipStatus')
-            ?.toString();
-        const validatedRelationshipStatus =
-            relationshipStatus === 'single' ||
-            relationshipStatus === 'taken' ||
-            relationshipStatus === 'married' ||
-            relationshipStatus === 'complicated'
-                ? relationshipStatus
-                : null;
-
-        const school = formData.get('school')?.toString() ?? null;
-        const work = formData.get('work')?.toString() ?? null;
-
-        await updateUserDetails(id, {
-            id: id,
-            userId: id,
-            aboutMe: aboutMe,
-            sex: validatedSex,
-            age: age,
-            birthday: birthday,
-            favoriteBooks: favoriteBooks,
-            favoriteMovies: favoriteMovies,
-            favoriteMusic: favoriteMusic,
-            hometown: hometown,
-            interests: interests,
-            relationshipStatus: validatedRelationshipStatus,
-            school: school,
-            work: work,
-        });
-        return redirect(`/profile`);
-    } catch (error) {
-        return { error: (error as Error).message };
-    }
-}
-
-type LoaderData = {
-    userDetails: Partial<UserDetails>;
-};
 
 export default function ProfileUpdate() {
-    const { userDetails } = useLoaderData<typeof loader>() as LoaderData;
+    const {
+        aboutMe,
+        age,
+        sex,
+        birthday,
+        favoriteBooks,
+        favoriteMovies,
+        favoriteMusic,
+        hometown,
+        interests,
+        relationshipStatus,
+        school,
+        work,
+    } = useLoaderData<typeof loader>();
 
     return (
         <Modal onCloseTo={`/profile`} size="600">
@@ -116,7 +67,7 @@ export default function ProfileUpdate() {
                                 About me
                             </Text>
                             <TextField.Root
-                                defaultValue={userDetails.aboutMe || ''}
+                                defaultValue={aboutMe || ''}
                                 placeholder="What do you want to share?"
                                 name="aboutMe"
                             />
@@ -131,9 +82,7 @@ export default function ProfileUpdate() {
                                 </Text>
                                 <Box width={'100%'}>
                                     <Select.Root
-                                        defaultValue={
-                                            userDetails.sex || undefined
-                                        }
+                                        defaultValue={sex || undefined}
                                         name="sex"
                                     >
                                         <Select.Trigger placeholder="Select" />
@@ -158,8 +107,7 @@ export default function ProfileUpdate() {
                                 <Box width={'100%'}>
                                     <Select.Root
                                         defaultValue={
-                                            userDetails.relationshipStatus ||
-                                            undefined
+                                            relationshipStatus || undefined
                                         }
                                         name="relationshipStatus"
                                     >
@@ -187,7 +135,7 @@ export default function ProfileUpdate() {
                                 Age
                             </Text>
                             <TextField.Root
-                                defaultValue={userDetails.age || undefined}
+                                defaultValue={age || undefined}
                                 placeholder="Your age"
                                 type="number"
                                 name="age"
@@ -198,7 +146,7 @@ export default function ProfileUpdate() {
                                 Birthday
                             </Text>
                             <TextField.Root
-                                defaultValue={userDetails.birthday || undefined}
+                                defaultValue={birthday || undefined}
                                 placeholder="Your birthday"
                                 name="birthday"
                             />
@@ -208,7 +156,7 @@ export default function ProfileUpdate() {
                                 Hometown
                             </Text>
                             <TextField.Root
-                                defaultValue={userDetails.hometown || undefined}
+                                defaultValue={hometown || undefined}
                                 placeholder="Your hometown"
                                 name="hometown"
                             />
@@ -218,9 +166,7 @@ export default function ProfileUpdate() {
                                 Interests
                             </Text>
                             <TextField.Root
-                                defaultValue={
-                                    userDetails.interests || undefined
-                                }
+                                defaultValue={interests || undefined}
                                 placeholder="Your interests"
                                 name="interests"
                             />
@@ -230,9 +176,7 @@ export default function ProfileUpdate() {
                                 Favorite Music
                             </Text>
                             <TextField.Root
-                                defaultValue={
-                                    userDetails.favoriteMusic || undefined
-                                }
+                                defaultValue={favoriteMusic || undefined}
                                 placeholder="Your favorite music"
                                 name="favoriteMusic"
                             />
@@ -242,9 +186,7 @@ export default function ProfileUpdate() {
                                 Favorite Movies
                             </Text>
                             <TextField.Root
-                                defaultValue={
-                                    userDetails.favoriteMovies || undefined
-                                }
+                                defaultValue={favoriteMovies || undefined}
                                 placeholder="Your favorite movies"
                                 name="favoriteMovies"
                             />
@@ -254,9 +196,7 @@ export default function ProfileUpdate() {
                                 Favorite Books
                             </Text>
                             <TextField.Root
-                                defaultValue={
-                                    userDetails.favoriteBooks || undefined
-                                }
+                                defaultValue={favoriteBooks || undefined}
                                 placeholder="Your favorite books"
                                 name="favoriteBooks"
                             />
@@ -266,7 +206,7 @@ export default function ProfileUpdate() {
                                 School
                             </Text>
                             <TextField.Root
-                                defaultValue={userDetails.school || undefined}
+                                defaultValue={school || undefined}
                                 placeholder="Your school"
                                 name="school"
                             />
@@ -276,7 +216,7 @@ export default function ProfileUpdate() {
                                 Work
                             </Text>
                             <TextField.Root
-                                defaultValue={userDetails.work || undefined}
+                                defaultValue={work || undefined}
                                 placeholder="Your work"
                                 name="work"
                             />
@@ -303,6 +243,66 @@ export default function ProfileUpdate() {
             </Form>
         </Modal>
     );
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+    const session = await getSession(request);
+    const userId = user(session);
+
+    try {
+        const formData = await request.formData();
+        const aboutMe = formData.get('aboutMe')?.toString() ?? null;
+        const sex = formData.get('sex')?.toString() ?? null;
+        const validatedSex =
+            sex === SexEnum.MALE ||
+            sex === SexEnum.FEMALE ||
+            sex === SexEnum.OTHER
+                ? (sex as SexEnum)
+                : null;
+
+        const age = formData.get('age')?.toString()
+            ? parseInt(formData.get('age')?.toString() ?? '', 10)
+            : null;
+        const birthday = formData.get('birthday')?.toString() ?? null;
+        const favoriteBooks = formData.get('favoriteBooks')?.toString() ?? null;
+        const favoriteMovies =
+            formData.get('favoriteMovies')?.toString() ?? null;
+        const favoriteMusic = formData.get('favoriteMusic')?.toString() ?? null;
+        const hometown = formData.get('hometown')?.toString() ?? null;
+        const interests = formData.get('interests')?.toString() ?? null;
+        const relationshipStatus = formData
+            .get('relationshipStatus')
+            ?.toString();
+        const validatedRelationshipStatus =
+            relationshipStatus === RelationshipStatus.SINGLE ||
+            relationshipStatus === RelationshipStatus.TAKEN ||
+            relationshipStatus === RelationshipStatus.MARRIED ||
+            relationshipStatus === RelationshipStatus.COMPLICATED
+                ? (relationshipStatus as RelationshipStatus)
+                : null;
+
+        const school = formData.get('school')?.toString() ?? null;
+        const work = formData.get('work')?.toString() ?? null;
+
+        await updateUserDetails(userId, {
+            userId: userId,
+            aboutMe: aboutMe,
+            sex: validatedSex,
+            age: age,
+            birthday: birthday,
+            favoriteBooks: favoriteBooks,
+            favoriteMovies: favoriteMovies,
+            favoriteMusic: favoriteMusic,
+            hometown: hometown,
+            interests: interests,
+            relationshipStatus: validatedRelationshipStatus,
+            school: school,
+            work: work,
+        });
+        return redirect(`/profile`);
+    } catch (error) {
+        return { error: (error as Error).message };
+    }
 }
 
 export function ErrorBoundary() {

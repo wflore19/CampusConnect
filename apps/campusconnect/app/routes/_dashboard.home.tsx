@@ -5,11 +5,10 @@ import {
     RiCompass3Line,
     RiTeamLine,
 } from '@remixicon/react';
+import { User } from '@campusconnect/db';
 
 export default function Home() {
-    const { firstName } = useRouteLoaderData('routes/_dashboard') as {
-        firstName: string;
-    };
+    const { firstName } = useRouteLoaderData('routes/_dashboard') as User;
 
     return (
         <>

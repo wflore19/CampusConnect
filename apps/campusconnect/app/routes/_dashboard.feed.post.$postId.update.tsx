@@ -3,7 +3,7 @@ import { ActionFunctionArgs, LoaderFunctionArgs } from '@remix-run/node';
 import { Form, Link, redirect, useLoaderData } from '@remix-run/react';
 import { RiEdit2Line } from '@remixicon/react';
 import { Modal } from '~/components/modal';
-import { type Post, getPostById, updatePost } from '@campusconnect/db';
+import { type FeedPost, getPostById, updatePost } from '@campusconnect/db';
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const postId = params.postId;
@@ -18,24 +18,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
     }
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
-    const postId = params.postId;
-    if (!postId) throw new Error('User ID not provided');
-
-    try {
-        const formData = await request.formData();
-        const content = String(formData.get('content')).trim();
-        await updatePost(Number(postId), content);
-
-        return redirect(`/feed`);
-    } catch (error) {
-        return { error: (error as Error).message };
-    }
-}
-
 export default function EditPostModal() {
     const { post } = useLoaderData<typeof loader>() as {
-        post: Post;
+        post: FeedPost;
     };
 
     return (
@@ -80,4 +65,19 @@ export default function EditPostModal() {
             </Form>
         </Modal>
     );
+}
+
+export async function action({ request, params }: ActionFunctionArgs) {
+    const postId = params.postId;
+    if (!postId) throw new Error('User ID not provided');
+
+    try {
+        const formData = await request.formData();
+        const content = String(formData.get('content')).trim();
+        await updatePost(Number(postId), content);
+
+        return redirect(`/feed`);
+    } catch (error) {
+        return { error: (error as Error).message };
+    }
 }

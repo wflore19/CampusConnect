@@ -49,3 +49,35 @@ export async function getUserByEmail(email: string) {
 
     return userData[0];
 }
+
+/**
+ * Create a new user
+ * @param email - User email
+ * @param firstName - User first name
+ * @param lastName - User last name
+ * @returns {Promise<{ insertedId: number }>} - The inserted user ID
+ */
+export async function createUser(
+    email: string,
+    firstName: string,
+    lastName: string
+) {
+    return await db
+        .insert(users)
+        .values({ email, firstName, lastName })
+        .returning({ insertedId: users.id });
+}
+
+/**
+ * Update a user
+ * @param id - User ID
+ * @param data - User data
+ */
+export async function updateUser(id: string, data: Partial<User>) {
+    if (Object.keys(data).length === 0) return;
+
+    await db
+        .update(users)
+        .set(data)
+        .where(eq(users.id, parseInt(id)));
+}

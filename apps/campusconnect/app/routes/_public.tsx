@@ -21,10 +21,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const session = await getSession(request);
 
     if (!session.has('user_id')) {
-        return { googleAuthUrl: getGoogleAuthURL() };
+        const googleAuthURL: string = await getGoogleAuthURL();
+        return googleAuthURL;
     }
 
-    return null;
+    return undefined;
 }
 
 export default function PublicLayout() {
