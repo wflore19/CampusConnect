@@ -1,5 +1,5 @@
-import { Form, useFetcher } from '@remix-run/react';
-import { Box, Button, Flex, Link, Spinner } from '@radix-ui/themes';
+import { Link, useFetcher } from '@remix-run/react';
+import { Box, Button, Flex, Spinner } from '@radix-ui/themes';
 import React from 'react';
 import {
     RiUserAddLine,
@@ -57,7 +57,7 @@ export function FriendshipStatusControl({
     if (isFriend) {
         return (
             <Box>
-                <Link href={`/user/${id}/remove`}>
+                <Link to={`/user/${id}/remove`}>
                     <Button color="red">
                         <RiUserMinusLine size={18} /> Remove Friend
                     </Button>

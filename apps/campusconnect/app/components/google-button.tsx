@@ -1,4 +1,5 @@
-import { Link, Button, Flex } from '@radix-ui/themes';
+import { Button, Flex } from '@radix-ui/themes';
+import { Link } from '@remix-run/react';
 import { PropsWithChildren } from 'react';
 
 interface GoogleButtonProps {
@@ -17,7 +18,7 @@ export function GoogleButton({
             style={{ padding: 0 }}
             size={'4'}
         >
-            <Link href={href} rel="noopener noreferrer" color="gray">
+            <Link to={href} rel="noopener noreferrer" color="gray">
                 <Flex align="center" gap="2">
                     <GoogleLogo />
                     {children}

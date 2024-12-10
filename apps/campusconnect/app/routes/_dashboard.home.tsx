@@ -1,5 +1,5 @@
-import { useRouteLoaderData } from '@remix-run/react';
-import { Box, Flex, Heading, Text, Card, Grid, Link } from '@radix-ui/themes';
+import { Link, useRouteLoaderData } from '@remix-run/react';
+import { Box, Flex, Heading, Text, Card, Grid } from '@radix-ui/themes';
 import {
     RiCalendarEventLine,
     RiCompass3Line,
@@ -39,7 +39,7 @@ export default function Home() {
                         Find study buddies, event companions, and friends who
                         share your interests.
                     </Text>
-                    <Link href="/profile/friends">
+                    <Link to="/profile/friends">
                         <Text>Explore Friends →</Text>
                     </Link>
                 </Card>
@@ -55,7 +55,7 @@ export default function Home() {
                         Join campus activities, workshops, and social gatherings
                         tailored to your interests.
                     </Text>
-                    <Link href="/events">
+                    <Link to="/events">
                         <Text>Browse Events →</Text>
                     </Link>
                 </Card>
@@ -67,17 +67,12 @@ export default function Home() {
                 </Heading>
                 <ul className="list-disc pl-6">
                     <li>
-                        <Link href="/profile" underline="always">
-                            Complete your profile
-                        </Link>{' '}
-                        and add your interests
+                        <Link to="/profile">Complete your profile</Link> and add
+                        your interests
                     </li>
                     <li>
-                        Browse{' '}
-                        <Link href="/events" underline="always">
-                            upcoming events
-                        </Link>{' '}
-                        and mark the ones you&apos;re interested in
+                        Browse <Link to="/events">upcoming events</Link> and
+                        mark the ones you&apos;re interested in
                     </li>
                     <li>
                         Connect with friends who share similar interests or are

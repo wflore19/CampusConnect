@@ -1,14 +1,6 @@
-import {
-    Flex,
-    Card,
-    Text,
-    Separator,
-    Box,
-    Button,
-    Link,
-} from '@radix-ui/themes';
+import { Flex, Card, Text, Separator, Box, Button } from '@radix-ui/themes';
 import type { LoaderFunctionArgs } from '@remix-run/node';
-import { redirect, useRouteLoaderData } from '@remix-run/react';
+import { Link, redirect, useRouteLoaderData } from '@remix-run/react';
 import { GoogleButton } from '~/components/google-button';
 import { getSession } from '~/utils/session.server';
 
@@ -57,7 +49,7 @@ export default function LoginPage() {
                         style={{ padding: 0 }}
                         size={'4'}
                     >
-                        <Link href={'/login'} rel="noopener noreferrer">
+                        <Link to={'/login'} rel="noopener noreferrer">
                             Sign In
                         </Link>
                     </Button>

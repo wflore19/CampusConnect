@@ -1,10 +1,11 @@
-import { Flex, Heading, Box, Link } from '@radix-ui/themes';
+import { Flex, Heading, Box } from '@radix-ui/themes';
+import { Link } from '@remix-run/react';
 
 export function Header() {
     return (
         <Box py="3" px="6">
             <Flex align="center" justify="between">
-                <Link href="/">
+                <Link to="/">
                     <Flex align="center" gap="3">
                         <img
                             src="/images/logo.png"

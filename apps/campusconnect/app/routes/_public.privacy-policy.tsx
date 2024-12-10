@@ -1,4 +1,5 @@
-import { Heading, Text, Container, Link } from '@radix-ui/themes';
+import { Heading, Text, Container } from '@radix-ui/themes';
+import { Link } from '@remix-run/react';
 
 export default function PrivacyPolicy() {
     return (
@@ -28,7 +29,7 @@ export default function PrivacyPolicy() {
                 Support
             </Heading>
             <Text as="p" mb="4">
-                Contact: <Link href="mailto:SUPPORT_EMAIL">SUPPORT_EMAIL</Link>
+                Contact: <Link to="mailto:SUPPORT_EMAIL">SUPPORT_EMAIL</Link>
             </Text>
 
             <Heading size="6" mt="6" mb="3">
@@ -312,7 +313,7 @@ export default function PrivacyPolicy() {
             <ul>
                 <li>
                     By email:{' '}
-                    <Link href="mailto:CONTACT_EMAIL">CONTACT_EMAIL</Link>
+                    <Link to="mailto:CONTACT_EMAIL">CONTACT_EMAIL</Link>
                 </li>
             </ul>
 
@@ -322,7 +323,7 @@ export default function PrivacyPolicy() {
             <Text as="p">In order to delete your account:</Text>
             <ul>
                 <li>
-                    Email <Link href="mailto:CONTACT_EMAIL">CONTACT_EMAIL</Link>{' '}
+                    Email <Link to="mailto:CONTACT_EMAIL">CONTACT_EMAIL</Link>{' '}
                     with the subject line: &quot;delete account&quot;. In the
                     body of your email, make sure to send us the email you
                     signed up with.
