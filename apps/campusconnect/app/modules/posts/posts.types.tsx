@@ -9,11 +9,12 @@ export type Posts = {
 }[];
 
 export type Post = {
-    id: number | null;
-    userId: number | null;
-    firstName: string | null;
-    lastName: string | null;
-    profilePicture: string | null;
-    content: string | null;
-    createdAt: Date | null;
-}
+    id: number; // Ensure 'id' is not nullable
+    userId: number;
+    firstName: string;
+    lastName: string;
+    profilePicture: string;
+    content: string;
+    createdAt: Date;
+};
+
