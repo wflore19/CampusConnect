@@ -1,4 +1,4 @@
-import { db } from "@campusconnect/db";
+import { db } from "db/src";
 
 /**
  * Get all posts from friends
@@ -8,7 +8,33 @@ import { db } from "@campusconnect/db";
  * @example
  * const posts = await getPosts(1);
  */
-export async function getPostsById(id: number) {
+/**
+ * Get the total number of posts for a user
+ * @param userId
+ * @returns {Promise<number>} - The total number of posts
+ *
+ * @example
+ * const totalPosts = await getTotalPostsCount(1);
+ */
+export async function getTotalPostsCount(userId: number): Promise<number> {
+    if (!userId) throw new Error('User ID not provided');
+
+    const result = await db
+        .selectFrom('posts')
+        .leftJoin('users', 'users.id', 'posts.userId')
+        .select(db.fn.count('posts.id').as('totalCount'))
+        .where('users.id', '=', userId)
+        .executeTakeFirst();
+
+    if (!result || !result.totalCount) {
+        throw new Error('Unable to fetch total posts count');
+    }
+
+    return parseInt(result.totalCount.toString(), 10);
+
+}
+
+export async function getPostsById(id: number, limit: number = 10, offset: number = 0) {
     if (!id) throw new Error('User ID not provided');
 
     const friendsPosts = await db
@@ -25,6 +51,8 @@ export async function getPostsById(id: number) {
         ])
         .where('users.id', '=', id)
         .orderBy('posts.createdAt', 'desc')
+        .limit(limit)
+        .offset(offset)
         .execute();
 
     if (!friendsPosts) throw new Error('Posts not found');
@@ -70,16 +98,33 @@ export async function getPostById(id: number) {
  * const post = await createPost(1, 'Hello', 'This is a post');
  */
 export async function createPost(userId: number, content: string) {
-    const post = await db
+    await db
         .insertInto('posts')
         .values({
-            userId: userId,
-            content: content,
+            userId,
+            content,
         })
+        .execute();
+
+    // Fetch the newly created post to include related fields
+    const post = await db
+        .selectFrom('posts')
+        .leftJoin('users', 'users.id', 'posts.userId')
+        .select([
+            'posts.id',
+            'posts.userId',
+            'users.firstName',
+            'users.lastName',
+            'users.profilePicture',
+            'posts.content',
+            'posts.createdAt',
+        ])
+        .orderBy('posts.createdAt', 'desc')
+        .limit(1)
         .executeTakeFirst();
 
     if (!post) {
-        throw new Error('Post not created');
+        throw new Error('Post creation failed');
     }
 
     return post;
